@@ -28,13 +28,13 @@ export const authOptions: NextAuthOptions = {
             role: "user",
             provider: "github",
           });
+          token.id = user_id;
           token.accessToken = session_token;
           token.user_id = user_id;
           token.github_username = profile?.login;
           token.email = profile?.email;
           token.role = "user"; // TODO: change to user role from backend when implemented
         } catch (error) {
-          token.id = undefined;
           console.error(error);
         }
       }
