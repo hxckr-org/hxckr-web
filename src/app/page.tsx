@@ -1,10 +1,11 @@
 import Image from "next/image";
 
 import { auth } from "@/auth";
+import TestSocket from "./test-socket";
 
 export default async function Home() {
   const session = await auth();
-  
+
   return (
     <main className="flex  flex-col items-center justify-between p-24">
       <section className="z-10 max-w-5xl w-2/4 items-center justify-between font-mono text-sm">
@@ -22,12 +23,13 @@ export default async function Home() {
           </picture>
         </div>
       </section>
-        <div className="flex flex-col items-center justify-center mt-10">
-          <p className="center w-full">name: {session?.user.github_username}</p>
-          <p className="center w-full">email: {session?.user.email}</p>
-          <p className="center w-full">role: {session?.user.role}</p>
-          <p className="center w-full">accessToken: {session?.accessToken}</p>
-        </div>
+      <div className="flex flex-col items-center justify-center mt-10">
+        <p className="center w-full">name: {session?.user.github_username}</p>
+        <p className="center w-full">email: {session?.user.email}</p>
+        <p className="center w-full">role: {session?.user.role}</p>
+        <p className="center w-full">accessToken: {session?.accessToken}</p>
+      </div>
+      <TestSocket />
     </main>
   );
 }

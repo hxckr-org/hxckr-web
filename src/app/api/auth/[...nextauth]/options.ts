@@ -5,8 +5,14 @@ import NextAuth, {
 } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
-import { githubClientID, githubClientSecret } from "@/config/process";
+import {
+  checkServerEnv,
+  githubClientID,
+  githubClientSecret,
+} from "@/config/process";
 import { signUp } from "@/services/core/auth";
+
+checkServerEnv();
 
 export const authOptions: NextAuthOptions = {
   providers: [
