@@ -1,0 +1,85 @@
+import Image from "next/image";
+
+const features = [
+  {
+    image: "/assets/images/features-coding-1.png",
+    title: "Automated Code Review",
+    description:
+      "Receive real-time feedback on your code through integrated CI/CD pipelines.",
+  },
+  {
+    image: "/assets/images/features-chart-2.png",
+    title: "Progress Tracker",
+    description: "Track your progress and get feedback on your code.",
+  },
+  {
+    image: "/assets/images/features-cubes-3.png",
+    title: "Project-based Learning",
+    description: "Dive into real-world projects to apply your skills.",
+  },
+];
+
+export default function FeaturesSection() {
+  return (
+    <section className="bg-white flex flex-col items-center pt-10 pb-40">
+      <div className="max-w-[1460px] h-[calc(100vh-50%)] w-full flex flex-col items-center gap-14">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-[2.85rem] font-p22mackinac font-bold text-center leading-[62px] tracking-[-2%] max-w-[750px]">
+            Explore Our Features
+          </p>
+          <p className="text-xl text-grey-text font-light text-center leading-[30px] tracking-[-2%] max-w-[650px]">
+            Explore our features and see how they can transform your development
+            journey
+          </p>
+        </div>
+        <div className="flex items-center gap-10">
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={index}
+              index={index}
+              image={feature.image}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeatureCard({
+  image,
+  title,
+  description,
+  index,
+}: {
+  image: string;
+  title: string;
+  description: string;
+  index: number;
+}) {
+  return (
+    <div
+      className="bg-purple-accent bg-contain bg-no-repeat overflow-hidden flex flex-col items-center gap-10 max-h-[300px] border-[0.5px] border-purple-secondary rounded-xl px-10 py-16"
+      style={{
+        backgroundImage: `url('/assets/images/feature-card-bg.webp')`,
+      }}
+    >
+      <div
+        key={index}
+        className="w-[60px] h-[60px] p-2 bg-purple-primary rounded-[4px]"
+      >
+        <Image src={image} width={60} height={60} alt="Feature" />
+      </div>
+      <div className="flex flex-col items-center gap-1">
+        <p className="text-2xl font-p22mackinac font-bold text-purple-primary text-center">
+          {title}
+        </p>
+        <p className="text-base text-grey-text font-light text-center leading-[28px] tracking-[-2%] max-w-[350px] pb-20">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}

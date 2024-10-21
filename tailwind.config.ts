@@ -13,6 +13,23 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        "purple-accent": "#FAFAFF",
+        "purple-accent-secondary": "#E9E5FF",
+        "purple-quaternary": "#F6F5FF",
+        "purple-primary": "#7762FF",
+        "purple-secondary": "#C8C2FF",
+        "purple-tertiary": "#CEC2FF",
+        "grey-accent": "#DBE2E8",
+        "grey-text": "#666666",
+        "grey-footer-text": "#B3B3B3",
+        "grey-footer-background": "#141414",
+        "grey-accordion-background": "#494949",
+        black: "#090909",
+      },
+      fontFamily: {
+        p22mackinac: ["P22Mackinac", "serif"],
+      },
     },
   },
   plugins: [],

@@ -31,3 +31,45 @@ body {
     text-wrap: balance;
   }
 }
+
+@font-face {
+  font-family: 'P22Mackinac';
+  src: url('/assets/font/P22Mackinac-Bold_23.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'P22Mackinac';
+  src: url('/assets/font/P22Mackinac-BoldItalic_7.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'P22Mackinac';
+  src: url('/assets/font/P22Mackinac-BoldItalicSC_10.otf') format('opentype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'P22Mackinac';
+  src: url('/assets/font/P22Mackinac-Medium_6.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'P22Mackinac';
+  src: url('/assets/font/P22MackinacPro-Medium_26.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'P22Mackinac';
+  src: url('/assets/font/P22Mackinac-MedItalic_22.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
