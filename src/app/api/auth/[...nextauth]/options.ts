@@ -21,6 +21,9 @@ export const authOptions: NextAuthOptions = {
       clientSecret: githubClientSecret,
     }),
   ],
+  pages: {
+    signIn: "/signin",
+  },
   callbacks: {
     async jwt({ token, account, ...response }) {
       const profile = response.profile as GhExtendedProfile | undefined;
