@@ -82,7 +82,7 @@ const AccordionTrigger = React.forwardRef<
     >
       {children}
       <MinusIcon
-        className="text-[#B3B3B3] text-[24px] w-[24px] h-[24px] transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:block"
+        className="text-[#B3B3B3] text-[24px] w-[24px] h-[24px] transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=closed]:hidden"
         aria-hidden
       />
       <PlusIcon
