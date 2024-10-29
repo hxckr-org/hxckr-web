@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import BTCMasterySection from '@/app/components/sections/landing-btc-mastery';
 
 const meta: Meta<typeof BTCMasterySection> = {
-  title: 'Sections/BTCMastery',
+  title: 'Sections/Landing/BTCMastery',
   component: BTCMasterySection,
   parameters: {
     layout: 'fullscreen',
