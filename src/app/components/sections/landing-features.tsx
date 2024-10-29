@@ -1,6 +1,18 @@
 import Image from "next/image";
 
-const features = [
+interface Feature {
+  image: string;
+  title: string;
+  description: string;
+}
+
+interface FeaturesSectionProps {
+  features?: Feature[];
+  title?: string;
+  subtitle?: string;
+}
+
+const defaultFeatures = [
   {
     image: "/assets/images/features-coding-1.png",
     title: "Automated Code Review",
@@ -19,17 +31,20 @@ const features = [
   },
 ];
 
-export default function FeaturesSection() {
+export default function FeaturesSection({
+  features = defaultFeatures,
+  title = "Explore Our Features",
+  subtitle = "Explore our features and see how they can transform your development journey",
+}: FeaturesSectionProps) {
   return (
     <section className="bg-white flex flex-col items-center pt-10 pb-40">
       <div className="max-w-[1460px] h-[calc(100vh-50%)] w-full flex flex-col items-center gap-14">
         <div className="flex flex-col items-center gap-4">
           <p className="text-[2.85rem] font-p22mackinac font-bold text-center leading-[62px] tracking-[-2%] max-w-[750px]">
-            Explore Our Features
+            {title}
           </p>
           <p className="text-xl text-grey-text font-light text-center leading-[30px] tracking-[-2%] max-w-[650px]">
-            Explore our features and see how they can transform your development
-            journey
+            {subtitle}
           </p>
         </div>
         <div className="flex items-center gap-10">
