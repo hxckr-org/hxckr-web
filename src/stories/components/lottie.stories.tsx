@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LottieComponent from './lottie';
+import LottieComponent from '@/app/components/primitives/lottie';
 
 const meta: Meta<typeof LottieComponent> = {
   title: 'Components/Primitives/Lottie',
