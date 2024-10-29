@@ -1,53 +1,54 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import Button from "@/app/components/primitives/button";
 import DiscordIcon from "@/public/assets/icons/discord";
 import LottieComponent from "../primitives/lottie";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  title?: string;
+  description?: string;
+  bannerText?: string;
+  signUpButtonText?: string;
+  discordButtonText?: string;
+}
+
+export default function HeroSection({
+  title = "Development at Your Own Pace.",
+  description = "Learn, build, and grow with hands-on tasks and instant code reviews. Join our pioneer program for hands-on learning and personalised code feedback loops.",
+  bannerText = "Technical Bitcoin Education For You",
+  signUpButtonText = "Sign up for updates",
+  discordButtonText = "Join Our Discord",
+}: HeroSectionProps) {
   return (
     <section className="bg-black w-full flex flex-col items-center">
-      <div
-        className="relative w-full flex flex-col items-center "
-        // style={{
-        //   backgroundImage: `url('/assets/images/hero-section-grid-line.png')`,
-        // }}
-      >
+      <div className="relative w-full flex flex-col items-center">
         <div className="absolute -top-96 left-0 w-full h-screen border border-red-500">
           <LottieComponent />
         </div>
-        <div
-          className="z-50 w-screen h-screen 2xl:h-[calc(100vh-130px)] flex flex-col items-center bg-contain bg-no-repeat bg-center object-cover bg-transparent"
-          // style={{
-          //   backgroundImage: `url('/assets/images/hero-section-image-no-grid.webp')`,
-          // }}
-        >
-          <Banner />
+        <div className="z-50 w-screen h-screen 2xl:h-[calc(100vh-130px)] flex flex-col items-center bg-contain bg-no-repeat bg-center object-cover bg-transparent">
+          <Banner text={bannerText} />
           <div className="flex flex-col items-center gap-6">
-            <p className="font-p22mackinac font-bold text-[3.5rem] text-center leading-[72px] max-w-[777px]">
+            <p className="font-p22mackinac font-bold text-[3.5rem] text-center leading-[72px] max-w-[777px] text-white">
               Learn <span className="italic text-purple-primary">Bitcoin</span>{" "}
-              Development at Your Own Pace.
+              {title}
             </p>
             <div className="relative flex flex-col items-center gap-2 max-w-[810px]">
               <p className="font-light text-base text-center text-grey-text leading-7 tracking-[-2%]">
-                Learn, build, and grow with hands-on tasks and instant code
-                reviews. Join our pioneer program for hands-on learning and
-                personalised code feedback loops.
+                {description}
               </p>
               <hr className="w-2/3 h-[1px] bg-grey-text absolute top-1/2" />
             </div>
           </div>
           <div className="flex items-center gap-4 text-black mt-10">
             <Button className="px-9 py-5 text-base font-normal hover:bg-purple-primary/90">
-              Sign up for updates
+              {signUpButtonText}
             </Button>
             <Link
               href="/"
-              className="bg-white text-purple-primary flex items-center gap-2 border border-grey-accent rounded-full px-9 py-5 text-base font-normal hover:border-purple-primary "
+              className="bg-white text-purple-primary flex items-center gap-2 border border-grey-accent rounded-full px-9 py-5 text-base font-normal hover:border-purple-primary"
             >
               <DiscordIcon />
-              Join Our Discord
+              {discordButtonText}
             </Link>
           </div>
         </div>
@@ -56,7 +57,11 @@ export default function HeroSection() {
   );
 }
 
-export const Banner = () => {
+interface BannerProps {
+  text?: string;
+}
+
+export const Banner = ({ text = "Technical Bitcoin Education For You" }: BannerProps) => {
   return (
     <div className="z-50 bg-white flex items-center gap-2 border border-grey-accent rounded-full px-6 py-3 mt-32 mb-8">
       <Image
@@ -66,8 +71,10 @@ export const Banner = () => {
         height={15}
       />
       <span className="italic font-p22mackinac font-normal text-base">
-        Technical Bitcoin Education For You
+        {text}
       </span>
     </div>
   );
 };
+
+HeroSection.Banner = Banner;
