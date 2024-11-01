@@ -1,38 +1,51 @@
 import Link from "next/link";
-
 import DiscordIcon from "@/public/assets/icons/discord";
 import GithubIcon from "@/public/assets/icons/github";
 import OpenSourceIcon from "@/public/assets/icons/open-source";
 
-export default function OpenSourceSection() {
+interface OpenSourceSectionProps {
+  title?: string;
+  description?: string;
+  githubText?: string;
+  githubLink?: string;
+  discordText?: string;
+  discordLink?: string;
+}
+
+export default function OpenSourceSection({
+  title = "It's Free & Open Source.",
+  description = "We believe in free education for all, and our open-source platform provides the resources to learn about Bitcoin, without any barriers.",
+  githubText = "GitHub",
+  githubLink = "https://github.com/hxckr-org",
+  discordText = "Join Our Discord",
+  discordLink = "/",
+}: OpenSourceSectionProps) {
   return (
     <section className="bg-white flex flex-col items-center py-40">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
         <div className="relative z-50 overflow-hidden flex justify-between items-center bg-purple-quaternary border-2 border-purple-secondary rounded-3xl p-16">
           <div className="z-50 flex flex-col items-left gap-y-4">
             <p className="text-[3rem] text-black font-p22mackinac font-bold leading-[68px] tracking-[-2%]">
-              It’s Free & Open Source.
+              {title}
             </p>
             <p className="text-xl text-grey-text font-light leading-[36px] tracking-[-2%] max-w-[600px]">
-              We believe in free education for all, and our open-source platform
-              provides the resources to learn about Bitcoin, without any
-              barriers.
+              {description}
             </p>
             <div className="mt-10 flex items-center gap-4">
               <Link
-                href="https://github.com/hxckr-org"
+                href={githubLink}
                 className="bg-purple-primary text-white text-xl px-9 py-5 hover:bg-purple-primary/90 flex items-center gap-2 rounded-full"
                 target="_blank"
               >
                 <GithubIcon />
-                <span>GitHub</span>
+                <span>{githubText}</span>
               </Link>
               <Link
-                href="/"
-                className="bg-white text-purple-primary flex items-center gap-2 border border-grey-accent rounded-full px-9 py-5 text-base font-normal hover:border-purple-primary "
+                href={discordLink}
+                className="bg-white text-purple-primary flex items-center gap-2 border border-grey-accent rounded-full px-9 py-5 text-base font-normal hover:border-purple-primary"
               >
                 <DiscordIcon />
-                Join Our Discord
+                {discordText}
               </Link>
             </div>
           </div>

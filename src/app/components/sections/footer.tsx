@@ -1,7 +1,27 @@
 import Link from "next/link";
 import AccordionComponent from "@/app/components/primitives/accordion";
 
-export default function Footer() {
+type FAQItem = {
+  title: string;
+  content: string;
+};
+
+interface FooterProps {
+  faqData?: FAQItem[];
+}
+
+const defaultFAQs = [
+  {
+    title: "Am I issued a certificate at the end of the course?",
+    content: "No. However, you earn badges for each milestone completed.",
+  },
+  {
+    title: "What do the courses entail?",
+    content: "Each course is a self-paced, interactive experience where you learn about the fundamentals of Bitcoin technology.",
+  },
+];
+
+export default function Footer({ faqData = defaultFAQs }: FooterProps) {
   return (
     <footer className="bg-grey-footer-background flex flex-col py-32">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
@@ -21,20 +41,7 @@ export default function Footer() {
             </Link>
           </div>
           <div className="flex flex-col items-left gap-4 text-white">
-            <AccordionComponent
-              data={[
-                {
-                  title: "Am I issued a certificate at the end of the course?",
-                  content:
-                    "No. However, you earn badges for each milestone completed.",
-                },
-                {
-                  title: "What do the courses entail?",
-                  content:
-                    "Each course is a self-paced, interactive experience where you learn about the fundamentals of Bitcoin technology.",
-                },
-              ]}
-            />
+            <AccordionComponent data={faqData} />
           </div>
         </div>
       </div>

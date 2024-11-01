@@ -1,6 +1,16 @@
 import Image from "next/image";
 
-export default function CurriculumSection() {
+interface CurriculumSectionProps {
+  title?: string;
+  subtitle?: string;
+  image?: string;
+}
+
+export default function CurriculumSection({
+  title = "Our Courses: Take a sneak-peek",
+  subtitle = "The courses are divided into three challenge categories: types, modes, and languages.",
+  image = "/assets/images/curriculum-section-image.webp",
+}: CurriculumSectionProps) {
   return (
     <section className="bg-purple-accent flex flex-col py-32">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
@@ -12,13 +22,12 @@ export default function CurriculumSection() {
             </span>
           </p>
           <p className="text-grey-text text-xl text-center font-light tracking-[-2%] leading-[36px] max-w-[700px]">
-            The courses are divided into three challenge categories: types,
-            modes, and languages.
+            {subtitle}
           </p>
         </div>
         <div className="flex flex-col w-full pt-10 px-20 overflow-hidden">
           <Image
-            src="/assets/images/curriculum-section-image.webp"
+            src={image}
             alt="Curriculum Overview"
             width={1460}
             height={700}
