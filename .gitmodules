@@ -1,0 +1,3 @@
+[submodule "public/courses"]
+	path = public/courses
+	url = https://github.com/hxckr-org/hxckr-courses.git
