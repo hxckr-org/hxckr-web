@@ -3,8 +3,8 @@ import React from "react";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="bg-grey-signin-background mx-auto px-4 py-8">
-      <div className="container mx-auto flex justify-center items-center h-full">
+    <div className="bg-grey-signin-background m-auto px-4 py-8 lg:h-screen">
+      <div className="container mx-auto flex justify-center items-center">
         <Card>
           <CardHeader>
             <CardTitle>Privacy Policy</CardTitle>
