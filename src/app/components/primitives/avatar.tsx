@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 
 export default function Avatar({
@@ -16,7 +16,7 @@ export default function Avatar({
       alt={alt}
       width={40}
       height={40}
-      className={clsx("rounded-full", className)}
+      className={twMerge("rounded-full", className)}
     />
   );
 }

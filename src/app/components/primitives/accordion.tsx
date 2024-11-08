@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 import React from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDownIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
@@ -22,27 +22,31 @@ export default function AccordionComponent({
 }) {
   return (
     <Accordion.Root
-      className={clsx(
-        "w-[624px] rounded-xl",
-        accordionRootClassName
-      )}
+      className={twMerge("w-[624px] rounded-xl", accordionRootClassName)}
       type="single"
       defaultValue="item-1"
       collapsible
     >
       {data.map((item, index) => (
         <AccordionItem
-          className={clsx(
+          className={twMerge(
             "bg-grey-accordion-background rounded-[16px] border border-grey-accordion-background",
             accordionItemClassName
           )}
           key={index}
           value={item.title}
         >
-          <AccordionTrigger className={clsx("p-5 data-[state=open]:bg-grey-accordion-background", accordionTriggerClassName)}>
+          <AccordionTrigger
+            className={twMerge(
+              "p-5 data-[state=open]:bg-grey-accordion-background",
+              accordionTriggerClassName
+            )}
+          >
             {item.title}
           </AccordionTrigger>
-          <AccordionContent className={clsx("", accordionContentClassName)}>
+          <AccordionContent
+            className={twMerge("p-5", accordionContentClassName)}
+          >
             {item.content}
           </AccordionContent>
         </AccordionItem>
@@ -56,7 +60,7 @@ const AccordionItem = React.forwardRef<
   ComponentPropsWithoutRef<typeof Accordion.Item>
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Item
-    className={clsx(
+    className={twMerge(
       "mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b focus-within:relative focus-within:z-10",
       className
     )}
@@ -73,7 +77,7 @@ const AccordionTrigger = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Header className="flex">
     <Accordion.Trigger
-      className={clsx(
+      className={twMerge(
         "group flex flex-1 cursor-default items-center justify-between bg-[#111111] text-xl leading-[30px] text-white outline-none",
         className
       )}
@@ -98,7 +102,7 @@ const AccordionContent = React.forwardRef<
   ComponentPropsWithoutRef<typeof Accordion.Content>
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Content
-    className={clsx(
+    className={twMerge(
       "overflow-hidden text-base font-light leading-[30px] text-grey-footer-text data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown",
       className
     )}

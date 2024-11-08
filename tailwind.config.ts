@@ -22,9 +22,12 @@ const config: Config = {
         "purple-tertiary": "#CEC2FF",
         "grey-accent": "#DBE2E8",
         "grey-text": "#666666",
+        "grey-button-text": "#F7F8F9",
         "grey-footer-text": "#B3B3B3",
         "grey-footer-background": "#141414",
         "grey-accordion-background": "#494949",
+        "grey-signin-background": "#D9D9D9",
+        "grey-button-border": "#DBE2E8",
         black: "#090909",
       },
       fontFamily: {
