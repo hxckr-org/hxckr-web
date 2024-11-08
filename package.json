@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--max-http-header-size=12800000' next dev",
+    "dev": "NODE_OPTIONS='--max-http-header-size=12800000' npm run submodules:update && next dev",
     "submodules:update": "git submodule update --init && git submodule update --remote",
     "build": "npm run submodules:update && next build",
     "start": "next start",

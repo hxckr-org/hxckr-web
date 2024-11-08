@@ -1,7 +1,9 @@
-import { defineDocumentType, ComputedFields, defineNestedType } from "contentlayer2/source-files";
+import {
+  defineDocumentType,
+  defineNestedType,
+} from "contentlayer2/source-files";
 import { makeSource } from "contentlayer2/source-files";
 
-import { writeFileSync } from "fs";
 import path from "path";
 
 // Remark packages
@@ -15,7 +17,7 @@ import {
 } from "pliny/mdx-plugins/index.js";
 
 const Author = defineNestedType(() => ({
-  name: "author",
+  name: "Author",
   fields: {
     name: { type: "string" },
     avatar: { type: "string" },
@@ -23,7 +25,7 @@ const Author = defineNestedType(() => ({
 }));
 
 const difficultyLevels = ["Beginner", "Intermediate", "Advanced"] as const;
-export type DifficultyLevel = typeof difficultyLevels[number];
+export type DifficultyLevel = (typeof difficultyLevels)[number];
 
 export const Course = defineDocumentType(() => ({
   name: "Course",
