@@ -81,3 +81,41 @@ export const Default: Story = {
 4. Run Storybook to see your new story in action.
 
 Using Storybook allows for rapid UI development and testing, independent of the backend implementation.
+
+## Docker Deployment
+
+This project includes Docker support for easy deployment on any VPS (Virtual Private Server) or cloud platform.
+
+1. Build the Docker image:
+
+```bash
+docker build -f Dockerfile -t hxckr-web .
+```
+
+2. Run the container:
+
+```bash
+docker run -p 3000:3000 hxckr-web
+```
+
+The app will be available at `http://your-server-ip:3000`.
+
+### Environment Variables
+
+When deploying with Docker, make sure to set up your environment variables. You can do this by:
+
+1. Creating a `.env` file as described in the Getting Started section
+2. Passing environment variables when running the container:
+
+```bash
+docker run -p 3000:3000 \
+  -e GITHUB_ID=your_github_id \
+  -e GITHUB_SECRET=your_github_secret \
+  -e NEXTAUTH_SECRET=your_nextauth_secret \
+  -e NEXTAUTH_URL=http://your-domain.com \
+  -e NEXT_PUBLIC_APP_CORE_BASE_URL=http://your-core-api-url \
+  -e NEXT_PUBLIC_APP_WEBSOCKET_URL=ws://your-websocket-url \
+  hxckr-web
+```
+
+This Docker setup enables easy deployment on any VPS, providing a consistent environment across different hosting platforms.

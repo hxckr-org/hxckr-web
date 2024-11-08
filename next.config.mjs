@@ -2,6 +2,7 @@
 import { withContentlayer } from "next-contentlayer2";
 
 const nextConfig = {
+  output: "standalone",
   images: {
     remotePatterns: [
       {
