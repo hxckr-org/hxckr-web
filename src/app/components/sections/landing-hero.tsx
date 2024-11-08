@@ -40,7 +40,7 @@ export default function HeroSection({
             </div>
           </div>
           <div className="flex items-center gap-4 text-black mt-10">
-            <Button className="px-9 py-5 text-base font-normal hover:bg-purple-primary/90">
+            <Button className="px-9 py-5 text-base text-white font-normal hover:bg-purple-primary/90">
               {signUpButtonText}
             </Button>
             <Link
