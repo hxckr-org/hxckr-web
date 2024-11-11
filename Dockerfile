@@ -2,7 +2,7 @@ FROM node:20-alpine AS base
 
 FROM base AS deps
 
-RUN apk add --no-cache libc6-compat git
+RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN \
 
 FROM base AS builder
 WORKDIR /app
-RUN apk add --no-cache git libc6-compat
+RUN apk add --no-cache libc6-compat
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -35,8 +35,8 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 
 # Automatically leverage output traces to reduce image size
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
