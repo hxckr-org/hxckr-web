@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "@/app/components/primitives/button";
 import DiscordIcon from "@/public/assets/icons/discord";
-import LottieComponent from "../primitives/lottie";
+import AnimatedSVG from '../primitives/animated-svg';
 
 interface HeroSectionProps {
   title?: string;
@@ -20,40 +20,38 @@ export default function HeroSection({
   discordButtonText = "Join Our Discord",
 }: HeroSectionProps) {
   return (
-    <section className="bg-black w-full flex flex-col items-center">
-      <div className="relative w-full flex flex-col items-center">
-        <div className="absolute -top-96 left-0 w-full h-screen border border-red-500">
-          <LottieComponent />
-        </div>
-        <div className="z-50 w-screen h-screen 2xl:h-[calc(100vh-130px)] flex flex-col items-center bg-contain bg-no-repeat bg-center object-cover bg-transparent">
-          <Banner text={bannerText} />
-          <div className="flex flex-col items-center gap-6">
-            <p className="font-p22mackinac font-bold text-[3.5rem] text-center leading-[72px] max-w-[777px] text-white">
-              Learn <span className="italic text-purple-primary">Bitcoin</span>{" "}
-              {title}
+    <div className="relative w-full min-h-[150vh] flex flex-col items-center">
+      <div className="absolute top-[60vh] left-0 w-full h-full -z-10">
+        <AnimatedSVG src="/assets/animations/hero.svg" />
+      </div>
+      <div className="w-screen min-h-screen 2xl:h-[calc(100vh-130px)] flex flex-col items-center pt-32">
+        <Banner text={bannerText} />
+        <div className="flex flex-col items-center gap-8 mb-16">
+          <p className="font-p22mackinac font-bold text-[3.5rem] text-center leading-[72px] max-w-[777px] text-black">
+            Learn <span className="italic text-purple-primary">Bitcoin</span>{" "}
+            {title}
+          </p>
+          <div className="relative flex flex-col items-center gap-2 max-w-[810px]">
+            <p className="font-light text-base text-center text-grey-text leading-7 tracking-[-2%]">
+              {description}
             </p>
-            <div className="relative flex flex-col items-center gap-2 max-w-[810px]">
-              <p className="font-light text-base text-center text-grey-text leading-7 tracking-[-2%]">
-                {description}
-              </p>
-              <hr className="w-2/3 h-[1px] bg-grey-text absolute top-1/2" />
-            </div>
+            <hr className="w-2/3 h-[1px] bg-grey-text absolute top-1/2" />
           </div>
-          <div className="flex items-center gap-4 text-black mt-10">
-            <Button className="px-9 py-5 text-base text-white font-normal hover:bg-purple-primary/90">
-              {signUpButtonText}
-            </Button>
-            <Link
-              href="/"
-              className="bg-white text-purple-primary flex items-center gap-2 border border-grey-accent rounded-full px-9 py-5 text-base font-normal hover:border-purple-primary"
-            >
-              <DiscordIcon />
-              {discordButtonText}
-            </Link>
-          </div>
+        </div>
+        <div className="flex items-center gap-4 text-black mt-16">
+          <Button className="px-9 py-5 text-base text-white font-normal hover:bg-purple-primary/90">
+            {signUpButtonText}
+          </Button>
+          <Link
+            href="/"
+            className="bg-white text-purple-primary flex items-center gap-2 border border-grey-accent rounded-full px-9 py-5 text-base font-normal hover:border-purple-primary"
+          >
+            <DiscordIcon />
+            {discordButtonText}
+          </Link>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
