@@ -47,7 +47,7 @@ export default function FeaturesSection({
             {subtitle}
           </p>
         </div>
-        <div className="flex items-center gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 items-stretch gap-10 px-4 md:px-8 lg:px-16">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}
@@ -76,7 +76,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className="bg-purple-accent bg-contain bg-no-repeat overflow-hidden flex flex-col items-center gap-10 max-h-[300px] border-[0.5px] border-purple-secondary rounded-xl px-10 py-16"
+      className="bg-purple-accent bg-contain bg-no-repeat flex flex-col items-center gap-10 h-full w-full border-[0.5px] border-purple-secondary rounded-xl px-10 py-16"
       style={{
         backgroundImage: `url('/assets/images/feature-card-bg.webp')`,
       }}
@@ -91,7 +91,7 @@ function FeatureCard({
         <p className="text-2xl font-p22mackinac font-bold text-purple-primary text-center">
           {title}
         </p>
-        <p className="text-base text-grey-text font-light text-center leading-[28px] tracking-[-2%] max-w-[350px] pb-20">
+        <p className="text-base text-grey-text font-light text-center leading-[28px] tracking-[-2%] max-w-[350px]">
           {description}
         </p>
       </div>
