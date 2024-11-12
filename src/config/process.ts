@@ -17,9 +17,9 @@ if (!coreBaseUrl || !websocketUrl) {
   throw new Error("Missing client-side environment variables");
 }
 
-// Function to check server-side variables (call this only on the server)
-export function checkServerEnv() {
+// Do not run server-side checks during the build
+if (typeof window === "undefined") {
   if (!githubClientID || !githubClientSecret) {
-    throw new Error("Missing server-side environment variables");
+    console.warn("Missing server-side environment variables for GitHub OAuth.");
   }
 }
