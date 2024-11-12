@@ -30,7 +30,7 @@ export default function AccordionComponent({
       {data.map((item, index) => (
         <AccordionItem
           className={twMerge(
-            "bg-grey-accordion-background rounded-[16px] border border-grey-accordion-background",
+            "mt-px overflow-hidden rounded-2xl focus-within:relative focus-within:z-10",
             accordionItemClassName
           )}
           key={index}
@@ -61,7 +61,7 @@ const AccordionItem = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Item
     className={twMerge(
-      "mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b focus-within:relative focus-within:z-10",
+      "mt-px overflow-hidden rounded-2xl focus-within:relative focus-within:z-10",
       className
     )}
     {...props}
@@ -78,7 +78,8 @@ const AccordionTrigger = React.forwardRef<
   <Accordion.Header className="flex">
     <Accordion.Trigger
       className={twMerge(
-        "group flex flex-1 cursor-default items-center justify-between bg-[#111111] text-xl leading-[30px] text-white outline-none",
+        "group flex flex-1 cursor-default items-center justify-between bg-white text-xl leading-[30px] text-black outline-none",
+        "data-[state=open]:bg-grey-accordion-background",
         className
       )}
       {...props}
@@ -86,11 +87,11 @@ const AccordionTrigger = React.forwardRef<
     >
       {children}
       <MinusIcon
-        className="text-[#B3B3B3] text-[24px] w-[24px] h-[24px] transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=closed]:hidden"
+        className="text-purple-primary text-[24px] w-[24px] h-[24px] transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=closed]:hidden"
         aria-hidden
       />
       <PlusIcon
-        className="text-[#B3B3B3] text-[24px] w-[24px] h-[24px] transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:hidden"
+        className="text-purple-primary text-[24px] w-[24px] h-[24px] transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:hidden"
         aria-hidden
       />
     </Accordion.Trigger>
@@ -103,13 +104,13 @@ const AccordionContent = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Content
     className={twMerge(
-      "overflow-hidden text-base font-light leading-[30px] text-grey-footer-text data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown",
+      "overflow-hidden text-base font-light leading-[30px] text-gray-700 bg-grey-accordion-background data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown",
       className
     )}
     {...props}
     ref={forwardedRef}
   >
-    <div className="px-5 py-[15px]">{children}</div>
+    <div className="py-[15px]">{children}</div>
   </Accordion.Content>
 ));
 
