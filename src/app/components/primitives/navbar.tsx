@@ -18,9 +18,10 @@ export default function Navbar() {
           <Link href="#faqs" className="hover:text-purple-primary">
             FAQs
           </Link>
-          <Link href="#contact" className="hover:text-purple-primary">
+          {/* TODO: @extheo should confirm what contact is */}
+          {/* <Link href="#contact" className="hover:text-purple-primary">
             Contact Us
-          </Link>
+          </Link> */}
         </nav>
         <Link
           href="https://github.com/hxckr-org"
