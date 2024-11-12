@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AccordionComponent from "@/app/components/primitives/accordion";
+import Image from "next/image";
 
 type FAQItem = {
   title: string;
@@ -80,7 +81,17 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
 
         {/* Footer Bottom */}
         <div className="flex flex-col gap-4 border-t border-grey-accordion-background pt-10 mt-10">
-          <div className="text-xl md:text-2xl font-bold text-white px-6 md:pl-10">LOGO</div>
+          <div className="px-6 md:pl-10 -ml-6">
+            <Link href="/">
+              <Image 
+                src="/assets/images/logo.svg"
+                alt="Logo"
+                width={116}
+                height={88}
+                priority
+              />
+            </Link>
+          </div>
           <p className="text-grey-footer-text max-w-[500px] px-6 md:pl-10 text-sm md:text-base">
             Learn, build, and grow with hands-on tasks and instant code reviews. Join our pioneer
             program for hands-on learning and personalised code feedback loops.

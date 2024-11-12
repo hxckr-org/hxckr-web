@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import GithubIcon from "@/public/assets/icons/github";
 
@@ -9,7 +10,15 @@ export default function Navbar() {
     <header className="z-50 bg-purple-accent flex flex-col justify-between items-center">
       <div className="z-50 w-full max-w-[1062px] h-[77px] m-auto mt-12 py-4 px-8 flex justify-between items-center rounded-[80px] border-[1.5px] border-grey-accent">
         <div className="text-2xl font-bold">
-          <Link href="/">LOGO</Link>
+          <Link href="/">
+            <Image 
+              src="/assets/images/logo.svg"
+              alt="Logo"
+              width={116}
+              height={88}
+              priority
+            />
+          </Link>
         </div>
         <nav className="flex gap-10 text-grey-text font-light items-center">
           <Link href="#features" className="hover:text-purple-primary">
