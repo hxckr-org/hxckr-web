@@ -4,11 +4,13 @@ import AnimatedSVG from "../primitives/animated-svg";
 interface CurriculumSectionProps {
   subtitle?: string;
   image?: string;
+  mobileSvg?: string;
 }
 
 export default function CurriculumSection({
   subtitle = "The challenges would be divided into three challenge categories: types, modes, and languages.",
   image = "/assets/animations/curriculum.svg",
+  mobileSvg = "/assets/images/curriculum-mobile.svg",
 }: CurriculumSectionProps) {
   return (
     <section className="bg-purple-accent flex flex-col pt-10 pb-10" id="curriculum">
@@ -25,10 +27,21 @@ export default function CurriculumSection({
           </p>
         </div>
         <div className="w-full mt-[-100px] sm:mt-[-150px] md:mt-[-200px] lg:mt-[-300px]">
-          <AnimatedSVG
-            src={image}
-            className="w-full h-full"
-          />
+          <div className="hidden sm:block">
+            <AnimatedSVG
+              src={image}
+              className="w-full h-full"
+            />
+          </div>
+          <div className="block sm:hidden py-20 px-4">
+            <Image 
+              src={mobileSvg}
+              alt="Curriculum mobile view"
+              width={353}
+              height={964}
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       </div>
     </section>
