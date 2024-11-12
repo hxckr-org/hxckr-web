@@ -11,9 +11,9 @@ import JedeIcon from "@/public/assets/icons/jede";
 export default function SignIn() {
   return (
     <div className="xl:px-16 lg:py-12 bg-white h-screen w-screen">
-      <div className="w-full max-w-[1920px] mx-auto flex justify-between lg:space-x-16 h-[calc(100vh-120px)]">
+      <div className="w-full max-w-[1500px] mx-auto flex items-center justify-center lg:space-x-12 h-[calc(100vh-120px)]">
         <div
-          className="border-[1.5px] border-grey-button-border rounded-3xl relative w-full xl:w-[60%] 2xl:w-[68%] h-[100%] hidden xl:block bg-cover object-cover bg-no-repeat bg-center"
+          className="border-[1.5px] border-grey-button-border rounded-3xl relative w-full xl:w-[60%] 2xl:w-[60%] h-[100%] hidden xl:block bg-cover object-cover bg-no-repeat bg-center"
           style={{
             backgroundImage: "url('/assets/images/sign-up-image-grid.webp')",
           }}
@@ -23,12 +23,12 @@ export default function SignIn() {
             alt="Signin Background"
             width={1000}
             height={1000}
-            className="object-contain object-center w-[85%] xl:w-[68%] h-full absolute -top-1/2 translate-y-1/2 -right-0"
+            className="object-contain object-center xl:w-[83.5%] h-full absolute -top-1/2 translate-y-1/2 -right-0"
           />
         </div>
-        <div className="flex flex-col items-center justify-center space-y-12 px-4 h-full xl:h-full w-full xl:w-1/3 text-black">
+        <div className="flex flex-col items-center justify-center space-y-10 px-4 h-full xl:h-full w-full xl:w-1/3 text-black">
           <h1 className="text-5xl font-bold font-p22mackinac">
-            <JedeIcon className="w-16 h-16" />
+            <JedeIcon className="w-40 h-40" withText />
           </h1>
           <div className="flex flex-col items-center mx-auto space-y-4 lg:space-y-8 w-full">
             <h2 className="text-2xl lg:text-[32px] leading-[42px] font-semibold">
