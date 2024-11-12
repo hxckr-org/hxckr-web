@@ -51,6 +51,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
             <div className="flex flex-col items-left gap-4 text-white px-6 lg:pr-10">
               <AccordionComponent 
                 data={faqData} 
+                theme="dark"
                 accordionRootClassName="w-full lg:w-[624px]"
               />
             </div>
