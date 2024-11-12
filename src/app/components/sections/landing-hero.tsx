@@ -20,13 +20,12 @@ export default function HeroSection({
   discordButtonText = "Join Our Discord",
 }: HeroSectionProps) {
   return (
-    <div className="relative w-full min-h-[150vh] flex flex-col items-center">
-      <div className="absolute top-[60vh] left-0 w-full h-full -z-10">
-        <AnimatedSVG src="/assets/animations/hero.svg" />
-      </div>
-      <div className="w-screen min-h-screen 2xl:h-[calc(100vh-130px)] flex flex-col items-center pt-32">
+    <div className="relative w-full flex flex-col items-center bg-[#FAFAFF]">
+
+
+      <div className="w-screen flex flex-col items-center">
         <Banner text={bannerText} />
-        <div className="flex flex-col items-center gap-8 mb-16">
+        <div className="flex flex-col items-center gap-8 mb-4">
           <p className="font-p22mackinac font-bold text-[3.5rem] text-center leading-[72px] max-w-[777px] text-black">
             Learn <span className="italic text-purple-primary">Bitcoin</span>{" "}
             {title}
@@ -38,7 +37,7 @@ export default function HeroSection({
             <hr className="w-2/3 h-[1px] bg-grey-text absolute top-1/2" />
           </div>
         </div>
-        <div className="flex items-center gap-4 text-black mt-16">
+        <div className="flex items-center gap-4 text-black mt-4 z-50">
           <Button className="px-9 py-5 text-base text-white font-normal hover:bg-purple-primary/90">
             {signUpButtonText}
           </Button>
@@ -50,6 +49,13 @@ export default function HeroSection({
             {discordButtonText}
           </Link>
         </div>
+        <div className="w-full mt-[-200px] sm:mt-[-250px] md:mt-[-300px] lg:mt-[-400px]">
+          <AnimatedSVG 
+            src="/assets/animations/hero.svg" 
+            className="w-full h-full"
+          />
+        </div>
+
       </div>
     </div>
   );
@@ -61,7 +67,7 @@ interface BannerProps {
 
 export const Banner = ({ text = "Technical Bitcoin Education For You" }: BannerProps) => {
   return (
-    <div className="z-50 bg-white flex items-center gap-2 border border-grey-accent rounded-full px-6 py-3 mt-32 mb-8">
+    <div className="z-50 bg-white flex items-center gap-2 border border-grey-accent rounded-full px-6 py-3 mt-8 mb-8">
       <Image
         src="/assets/images/filled-star.png"
         alt="filled-star"

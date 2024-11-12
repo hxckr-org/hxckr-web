@@ -9,13 +9,12 @@ export default function AnimatedSVG({
 }) {
   return (
     <div 
-      className={`w-full h-full ${className}`}
+      className={`w-full ${className}`}
       dangerouslySetInnerHTML={{
         __html: `
           <object
             type="image/svg+xml"
             data="${src}"
-            class="w-full h-full"
           >
           </object>
         `
