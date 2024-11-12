@@ -4,6 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 
 import { SessionContext } from "@/contexts/session";
+import SiteLayout from "@/app/components/layout/site-layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionContext>{children}</SessionContext>
+        <SessionContext>
+          <SiteLayout>{children}</SiteLayout>
+        </SessionContext>
       </body>
     </html>
   );

@@ -24,7 +24,7 @@ export default function Navbar() {
           <Link href="#features" className="hover:text-purple-primary">
             Features
           </Link>
-          <Link href="#faqs" className="hover:text-purple-primary">
+          <Link href="/faqs" className="hover:text-purple-primary">
             FAQs
           </Link>
           {/* TODO: @extheo should confirm what contact is */}

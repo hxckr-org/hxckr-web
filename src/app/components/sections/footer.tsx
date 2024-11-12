@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import AccordionComponent from "@/app/components/primitives/accordion";
 import Image from "next/image";
 
@@ -23,32 +26,37 @@ const defaultFAQs = [
 ];
 
 export default function Footer({ faqData = defaultFAQs }: FooterProps) {
+  const pathname = usePathname();
+  const showFAQSection = pathname !== '/faqs';
+
   return (
     <footer className="bg-grey-footer-background flex flex-col py-32">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
-        {/* FAQ Section */}
-        <div className="flex flex-col lg:flex-row justify-between mb-10 lg:mb-20">
-          <div className="flex flex-col items-left gap-4 px-6 lg:pl-10 mb-8 lg:mb-0">
-            <p className="text-[2rem] lg:text-[2.5rem] text-white font-p22mackinac font-bold leading-[48px] lg:leading-[60px] tracking-[-2%]">
-              Frequently Asked Questions
-            </p>
-            <p className="text-grey-footer-text text-lg lg:text-xl font-light tracking-[-2%] leading-[30px] lg:leading-[34px]">
-              Answers to your questions.
-            </p>
-            <Link
-              href="/faq"
-              className="text-white text-lg lg:text-xl font-light tracking-[-2%] leading-[34px] w-fit mt-6 lg:mt-10 bg-purple-primary px-8 lg:px-10 py-3 lg:py-4 rounded-full"
-            >
-              See All FAQs
-            </Link>
+        {/* FAQ Section - Only show if not on FAQ page */}
+        {showFAQSection && (
+          <div className="flex flex-col lg:flex-row justify-between mb-10 lg:mb-20">
+            <div className="flex flex-col items-left gap-4 px-6 lg:pl-10 mb-8 lg:mb-0">
+              <p className="text-[2rem] lg:text-[2.5rem] text-white font-p22mackinac font-bold leading-[48px] lg:leading-[60px] tracking-[-2%]">
+                Frequently Asked Questions
+              </p>
+              <p className="text-grey-footer-text text-lg lg:text-xl font-light tracking-[-2%] leading-[30px] lg:leading-[34px]">
+                Answers to your questions.
+              </p>
+              <Link
+                href="/faq"
+                className="text-white text-lg lg:text-xl font-light tracking-[-2%] leading-[34px] w-fit mt-6 lg:mt-10 bg-purple-primary px-8 lg:px-10 py-3 lg:py-4 rounded-full"
+              >
+                See All FAQs
+              </Link>
+            </div>
+            <div className="flex flex-col items-left gap-4 text-white px-6 lg:pr-10">
+              <AccordionComponent 
+                data={faqData} 
+                accordionRootClassName="w-full lg:w-[624px]"
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-left gap-4 text-white px-6 lg:pr-10">
-            <AccordionComponent 
-              data={faqData} 
-              accordionRootClassName="w-full lg:w-[624px]"
-            />
-          </div>
-        </div>
+        )}
 
         {/* Footer Links Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-20 text-white border-t border-grey-accordion-background pt-10 md:pt-20 px-6 md:px-0">
