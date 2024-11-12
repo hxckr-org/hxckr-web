@@ -5,7 +5,7 @@ import { faqCategories } from "@/data/faq-content";
 export default function FAQPage() {
   return (
     <div className="bg-purple-accent w-full">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pt-48">
         {/* Header Image */}
         <div className="flex justify-center mb-12">
           <Image
