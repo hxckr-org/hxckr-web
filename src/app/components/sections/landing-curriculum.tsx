@@ -2,13 +2,11 @@ import Image from "next/image";
 import AnimatedSVG from "../primitives/animated-svg";
 
 interface CurriculumSectionProps {
-  title?: string;
   subtitle?: string;
   image?: string;
 }
 
 export default function CurriculumSection({
-  title = "Our Curriculum: Take a sneak-peek",
   subtitle = "The challenges would be divided into three challenge categories: types, modes, and languages.",
   image = "/assets/animations/curriculum.svg",
 }: CurriculumSectionProps) {
@@ -17,7 +15,7 @@ export default function CurriculumSection({
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
         <div className="flex flex-col items-center gap-4">
           <p className="text-[2.85rem] text-grey-text italic font-p22mackinac font-normal text-center leading-[62px] tracking-[-2%]">
-            Our Courses:{" "}
+            Our Curriculum:{" "}
             <span className="text-black font-p22mackinac font-bold">
               Take a sneak-peek
             </span>
