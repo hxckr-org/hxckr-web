@@ -1,4 +1,5 @@
 import Image from "next/image";
+import AnimatedSVG from "../primitives/animated-svg";
 
 interface CurriculumSectionProps {
   title?: string;
@@ -9,7 +10,7 @@ interface CurriculumSectionProps {
 export default function CurriculumSection({
   title = "Our Curriculum: Take a sneak-peek",
   subtitle = "The challenges would be divided into three challenge categories: types, modes, and languages.",
-  image = "/assets/images/curriculum-section-image.webp",
+  image = "/assets/animations/curriculum.svg",
 }: CurriculumSectionProps) {
   return (
     <section className="bg-purple-accent flex flex-col py-32">
@@ -25,13 +26,10 @@ export default function CurriculumSection({
             {subtitle}
           </p>
         </div>
-        <div className="flex flex-col w-full pt-10 px-20 overflow-hidden">
-          <Image
+        <div className="w-full mt-[-100px] sm:mt-[-150px] md:mt-[-200px] lg:mt-[-300px]">
+          <AnimatedSVG
             src={image}
-            alt="Curriculum Overview"
-            width={1460}
-            height={700}
-            className="w-[1440px] 2xl:w-full object-cover"
+            className="w-full h-full"
           />
         </div>
       </div>
