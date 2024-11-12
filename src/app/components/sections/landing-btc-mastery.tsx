@@ -38,20 +38,20 @@ export default function BTCMasterySection({
             <div className="flex flex-col items-center gap-6">
               <div className="flex items-center">
                 <AvatarImageCollection avatars={avatars} />
-                <p className="text-base font-normal text-center">
+                <p className="text-sm sm:text-base font-normal text-center">
                   {launchingText}
                 </p>
               </div>
               <div className="flex flex-col items-center gap-4">
-                <p className="font-p22mackinac font-bold text-[2.85rem] text-center leading-[62px] tracking-[-2%] max-w-[750px]">
+                <p className="font-p22mackinac font-bold text-xl sm:text-2xl md:text-3xl lg:text-[2.85rem] text-center leading-[1.4] lg:leading-[62px] tracking-[-2%] max-w-[750px]">
                   {title}
                 </p>
-                <p className="text-xl text-grey-text font-light text-center leading-[32px] tracking-[-2%] max-w-[650px]">
+                <p className="text-base sm:text-lg md:text-xl text-grey-text font-light text-center leading-[1.6] md:leading-[32px] tracking-[-2%] max-w-[650px]">
                   {description}
                 </p>
                 <Link
                   href={ctaLink}
-                  className="bg-purple-primary text-white flex items-center gap-2 rounded-full px-9 py-5 mt-12 text-base leading-[24px] tracking-[-2%] font-normal hover:bg-purple-primary/90"
+                  className="bg-purple-primary text-white flex items-center gap-2 rounded-full px-6 sm:px-9 py-4 sm:py-5 mt-8 sm:mt-12 text-sm sm:text-base leading-[24px] tracking-[-2%] font-normal hover:bg-purple-primary/90"
                 >
                   {ctaText}
                 </Link>
@@ -63,7 +63,6 @@ export default function BTCMasterySection({
                 />
               </div>
             </div>
-
           </div>
         </div>
       </div>
