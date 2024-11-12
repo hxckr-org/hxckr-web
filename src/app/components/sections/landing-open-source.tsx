@@ -18,7 +18,7 @@ export default function OpenSourceSection({
   githubText = "GitHub",
   githubLink = "https://github.com/hxckr-org",
   discordText = "Join Our Discord",
-  discordLink = "/",
+  discordLink = "https://discord.com/channels/1189471179967315968/1275042830028505088",
 }: OpenSourceSectionProps) {
   return (
     <section className="bg-white flex flex-col items-center px-4 sm:px-8 md:px-20 pb-20 md:pb-60">
@@ -43,6 +43,8 @@ export default function OpenSourceSection({
               <Link
                 href={discordLink}
                 className="w-full sm:w-auto bg-white text-purple-primary flex items-center justify-center gap-2 border border-grey-accent rounded-full px-6 md:px-9 py-4 md:py-5 text-base font-normal hover:border-purple-primary"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <DiscordIcon />
                 {discordText}
