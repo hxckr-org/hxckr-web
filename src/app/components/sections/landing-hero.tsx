@@ -21,8 +21,6 @@ export default function HeroSection({
 }: HeroSectionProps) {
   return (
     <div className="relative w-full flex flex-col items-center bg-[#FAFAFF]">
-
-
       <div className="w-screen flex flex-col items-center">
         <Banner text={bannerText} />
         <div className="flex flex-col items-center gap-8 mb-4">

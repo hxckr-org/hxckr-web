@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Avatar from "../primitives/avatar";
+import AnimatedSVG from "../primitives/animated-svg";
 
 interface BTCMasterySectionProps {
   avatars?: string[];
@@ -33,18 +34,6 @@ export default function BTCMasterySection({
     <section className="bg-white pt-32 flex flex-col items-center m-auto">
       <div className="max-w-[1460px] w-full flex flex-col items-center">
         <div className="w-[88%] relative">
-          {/* Image Container - Adjust 'top-60' value to move image up/down */}
-          <div className="absolute w-full aspect-[16/9] top-60">
-            <Image
-              src={image}
-              alt="Bitcoin Mastery"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-
-          {/* Content Container */}
           <div className="relative z-10">
             <div className="flex flex-col items-center gap-6">
               <div className="flex items-center">
@@ -67,11 +56,15 @@ export default function BTCMasterySection({
                   {ctaText}
                 </Link>
               </div>
+              <div className="w-full mt-[-100px] sm:mt-[-200px] md:mt-[-300px] lg:mt-[-400px]">
+                <AnimatedSVG
+                  src="/assets/animations/btc-mastery.svg"
+                  className="w-full h-full"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Spacer for image visibility */}
-          <div className="h-[700px]" />
+          </div>
         </div>
       </div>
     </section>
