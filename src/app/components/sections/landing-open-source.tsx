@@ -52,7 +52,9 @@ export default function OpenSourceSection({
             </div>
           </div>
           <div className="z-50 flex items-center gap-2 mt-8 md:mt-0">
-            <OpenSourceIcon />
+            <OpenSourceIcon 
+              className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] lg:w-[250px] lg:h-[250px]"
+            />
           </div>
 
           <div className="absolute z-[5] -bottom-[70px] -left-[100px] hidden md:flex items-center justify-center w-[440px] h-[440px] bg-[#EDEBFF] shadow-[0px_-0.83px_16.67px_0px_#7762FF1A_inset] rounded-full">
