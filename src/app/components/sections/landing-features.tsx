@@ -37,7 +37,7 @@ export default function FeaturesSection({
   subtitle = "Explore our features and see how they can transform your development journey",
 }: FeaturesSectionProps) {
   return (
-    <section className="bg-white flex flex-col items-center pt-10 pb-10">
+    <section className="bg-white flex flex-col items-center pt-10 pb-10" id="features">
       <div className="max-w-[1460px] h-[calc(100vh-50%)] w-full flex flex-col items-center gap-14">
         <div className="flex flex-col items-center gap-4">
           <p className="text-[2.85rem] font-p22mackinac font-bold text-center leading-[62px] tracking-[-2%] max-w-[750px]">

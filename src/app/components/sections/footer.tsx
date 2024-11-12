@@ -64,8 +64,20 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
           <div className="flex flex-col gap-6 relative">
             <h3 className="text-xl font-semibold">Menu</h3>
             <div className="flex flex-col gap-4">
-              <Link href="#features" className="text-grey-footer-text hover:text-white">Our Features</Link>
-              <Link href="#curriculum" className="text-grey-footer-text hover:text-white">Our Curriculum</Link>
+              <Link 
+                href="/#features" 
+                className="text-grey-footer-text hover:text-white"
+                scroll={true}
+              >
+                Our Features
+              </Link>
+              <Link 
+                href="/#curriculum" 
+                className="text-grey-footer-text hover:text-white"
+                scroll={true}
+              >
+                Our Curriculum
+              </Link>
             </div>
             <div className="hidden md:block absolute right-0 top-0 h-full w-[1px] bg-grey-accordion-background"></div>
           </div>
