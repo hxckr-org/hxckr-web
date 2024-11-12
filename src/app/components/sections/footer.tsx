@@ -31,8 +31,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
 
   return (
     <footer className="bg-grey-footer-background flex flex-col py-32">
-      <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
-        {/* FAQ Section - Only show if not on FAQ page */}
+      <div className="max-w-[1460px] w-full flex flex-col m-auto">
         {showFAQSection && (
           <div className="flex flex-col lg:flex-row justify-between mb-10 lg:mb-20">
             <div className="flex flex-col items-left gap-4 px-6 lg:pl-10 mb-8 lg:mb-0">
@@ -43,7 +42,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
                 Answers to your questions.
               </p>
               <Link
-                href="/faq"
+                href="/faqs"
                 className="text-white text-lg lg:text-xl font-light tracking-[-2%] leading-[34px] w-fit mt-6 lg:mt-10 bg-purple-primary px-8 lg:px-10 py-3 lg:py-4 rounded-full"
               >
                 See All FAQs
@@ -59,12 +58,14 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
         )}
 
         {/* Footer Links Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-20 text-white border-t border-grey-accordion-background pt-10 md:pt-20 px-6 md:px-0">
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-20 text-white ${
+          showFAQSection ? 'border-t border-grey-accordion-background pt-10 md:pt-20' : ''
+        } px-6 md:px-0`}>
           <div className="flex flex-col gap-6 relative md:pl-10">
             <h3 className="text-xl font-semibold">Contact</h3>
             <div className="flex flex-col gap-4">
               <Link href="https://twitter.com" className="text-grey-footer-text hover:text-white">Twitter</Link>
-              <Link href="https://discord.com" className="text-grey-footer-text hover:text-white">Discord</Link>
+              <Link href="https://discord.com/channels/1189471179967315968/1275042830028505088" className="text-grey-footer-text hover:text-white" target="_blank" rel="noopener noreferrer">Discord</Link>
             </div>
             <div className="hidden md:block absolute right-0 top-0 h-full w-[1px] bg-grey-accordion-background"></div>
           </div>
@@ -93,7 +94,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
           <div className="flex flex-col gap-6">
             <h3 className="text-xl font-semibold">Resources</h3>
             <div className="flex flex-col gap-4">
-              <Link href="/faq" className="text-grey-footer-text hover:text-white">FAQs</Link>
+              <Link href="/faqs" className="text-grey-footer-text hover:text-white">FAQs</Link>
               {/* TODO: @extheo should confirm what contact is */}
               {/* <Link href="/contact" className="text-grey-footer-text hover:text-white">Contact Us</Link> */}
             </div>
@@ -118,7 +119,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
             program for hands-on learning and personalised code feedback loops.
           </p>
           <div className="flex gap-4 text-grey-footer-text text-xs md:text-sm mt-4 px-6 md:pl-10">
-            <span>© Product Name 2024</span>
+            <span>© Jede 2024</span>
             <span>•</span>
             <Link href="/terms" className="hover:text-white">Terms & Privacy</Link>
           </div>
