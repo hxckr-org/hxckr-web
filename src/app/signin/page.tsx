@@ -1,14 +1,22 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import Button from "@/app/components/primitives/button";
 import GithubIcon from "@/public/assets/icons/github";
 import JedeIcon from "@/public/assets/icons/jede";
 
 export default function SignIn() {
+  const session = useSession();
+  const isAuthenticated = session.status === "authenticated";
+
+  if (isAuthenticated) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="xl:px-16 lg:py-12 bg-white h-screen w-screen">
       <div className="w-full max-w-[1500px] mx-auto flex items-center justify-center lg:space-x-12 h-[calc(100vh-120px)]">
