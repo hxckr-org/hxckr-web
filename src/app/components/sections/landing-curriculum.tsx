@@ -11,7 +11,7 @@ export default function CurriculumSection({
   image = "/assets/animations/curriculum.svg",
 }: CurriculumSectionProps) {
   return (
-    <section className="bg-purple-accent flex flex-col py-32">
+    <section className="bg-purple-accent flex flex-col pt-10 pb-10">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
         <div className="flex flex-col items-center gap-4">
           <p className="text-[2.85rem] text-grey-text italic font-p22mackinac font-normal text-center leading-[62px] tracking-[-2%]">

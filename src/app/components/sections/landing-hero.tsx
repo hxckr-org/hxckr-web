@@ -20,7 +20,7 @@ export default function HeroSection({
   discordButtonText = "Join Our Discord",
 }: HeroSectionProps) {
   return (
-    <div className="relative w-full flex flex-col items-center bg-[#FAFAFF]">
+    <div className="relative w-full flex flex-col items-center bg-[#FAFAFF] pt-10 pb-10">
       <div className="w-screen flex flex-col items-center">
         <Banner text={bannerText} />
         <div className="flex flex-col items-center gap-8 mb-4">

@@ -21,7 +21,7 @@ export default function OpenSourceSection({
   discordLink = "/",
 }: OpenSourceSectionProps) {
   return (
-    <section className="bg-white flex flex-col items-center px-4 sm:px-8 md:px-20 py-20 md:py-60">
+    <section className="bg-white flex flex-col items-center px-4 sm:px-8 md:px-20 pb-20 md:pb-60">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-8 md:gap-14">
         <div className="relative z-50 overflow-hidden flex flex-col md:flex-row justify-between items-center bg-purple-quaternary border-2 border-purple-secondary rounded-3xl p-6 md:p-16">
           <div className="z-50 flex flex-col items-left gap-y-4">

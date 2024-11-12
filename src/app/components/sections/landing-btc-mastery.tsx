@@ -31,7 +31,7 @@ export default function BTCMasterySection({
   image = "/assets/images/code-to-prtcl-image.webp",
 }: BTCMasterySectionProps) {
   return (
-    <section className="bg-white pt-32 flex flex-col items-center m-auto">
+    <section className="bg-white pt-10 pb-10 flex flex-col items-center m-auto">
       <div className="max-w-[1460px] w-full flex flex-col items-center">
         <div className="w-[88%] relative">
           <div className="relative z-10">
