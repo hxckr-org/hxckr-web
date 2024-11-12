@@ -57,10 +57,21 @@ export default function BTCMasterySection({
                 </Link>
               </div>
               <div className="w-full mt-[-100px] sm:mt-[-200px] md:mt-[-300px] lg:mt-[-400px]">
-                <AnimatedSVG
-                  src="/assets/animations/btc-mastery.svg"
-                  className="w-full h-full"
-                />
+                <div className="block sm:hidden">
+                  <Image 
+                    src="/assets/images/btc-mastery-mobile.svg"
+                    alt="Bitcoin Mastery"
+                    width={361}
+                    height={524}
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="hidden sm:block">
+                  <AnimatedSVG
+                    src="/assets/animations/btc-mastery.svg"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
           </div>
