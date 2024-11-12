@@ -7,8 +7,8 @@ interface CurriculumSectionProps {
 }
 
 export default function CurriculumSection({
-  title = "Our Courses: Take a sneak-peek",
-  subtitle = "The courses are divided into three challenge categories: types, modes, and languages.",
+  title = "Our Curriculum: Take a sneak-peek",
+  subtitle = "The challenges would be divided into three challenge categories: types, modes, and languages.",
   image = "/assets/images/curriculum-section-image.webp",
 }: CurriculumSectionProps) {
   return (
