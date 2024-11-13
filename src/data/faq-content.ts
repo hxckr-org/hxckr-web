@@ -12,7 +12,7 @@ export const faqCategories: FAQCategory[] = [
     items: [
       {
         question: "What prerequisites do I need before starting?",
-        answer: "Basic programming experience with JavaScript/TypeScript is recommended. While prior Bitcoin knowledge is helpful, it's not required as our courses start with fundamentals.",
+        answer: "Basic programming experience in any language supported by Jede is recommended. While prior Bitcoin knowledge is helpful, it's not required as our courses start with fundamentals.",
       },
       {
         question: "How is the learning content structured?",
