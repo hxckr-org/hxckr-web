@@ -41,7 +41,7 @@ export const faqCategories: FAQCategory[] = [
       },
       {
         question: "How do I submit my solutions?",
-        answer: "Solutions are submitted through GitHub. Our automated system runs tests against your code and provides immediate feedback on your implementation.",
+        answer: "Solutions are submitted from your local terminal using your preferred development environment. Our automated system runs tests against your code and provides immediate feedback on your implementation.",
       },
       {
         question: "Can I get help if I'm stuck on a challenge?",
