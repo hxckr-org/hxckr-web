@@ -9,7 +9,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed w-full z-[999] bg-purple-accent flex flex-col justify-between items-center">
+    <header className="fixed w-full z-[999] bg-purple-accent flex flex-col justify-between items-center px-4">
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-[998] md:hidden" 
           onClick={() => setIsMenuOpen(false)}
@@ -17,7 +17,7 @@ export default function Navbar() {
       )}
       
       <div className="relative z-[999] w-full max-w-[1062px] h-[77px] m-auto mt-12 py-4 px-8 flex justify-between items-center rounded-[80px] border-[1.5px] border-grey-accent">
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold -ml-8">
           <Link href="/">
             <Image 
               src="/assets/images/logo.svg"
