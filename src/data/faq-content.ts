@@ -58,7 +58,7 @@ export const faqCategories: FAQCategory[] = [
       },
       {
         question: "What types of badges are available?",
-        answer: "We offer badges for different skill levels (Beginner, Intermediate, Advanced) and specializations (Transaction Scripts, Lightning Network, Smart Contracts, etc.).",
+        answer: "We offer badges for different skill levels (Beginner, Intermediate, Advanced) and specializations (Transaction Scripts, Lightning Network, etc.).",
       },
       {
         question: "Are badges visible on my GitHub profile?",
