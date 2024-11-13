@@ -33,7 +33,7 @@ export const faqCategories: FAQCategory[] = [
     items: [
       {
         question: "How do the coding challenges work?",
-        answer: "Each challenge provides a GitHub repository with broken or incomplete Bitcoin-related code. Your task is to fix or implement the missing functionality while passing all test cases.",
+        answer: "Each challenge provides a unique git repository with broken or incomplete Bitcoin-related code. Your task is to fix or implement the missing functionality while passing all test cases.",
       },
       {
         question: "What types of challenges are available?",
