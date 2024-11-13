@@ -62,7 +62,7 @@ export const faqCategories: FAQCategory[] = [
       },
       {
         question: "Are badges visible on my GitHub profile?",
-        answer: "Yes! Earned badges can be displayed on your GitHub profile, showcasing your Bitcoin development expertise to the community.",
+        answer: "No! Earned badges are only displayed on your profile in the app.",
       },
       {
         question: "Do badges expire?",
