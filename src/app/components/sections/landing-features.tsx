@@ -37,17 +37,17 @@ export default function FeaturesSection({
   subtitle = "Explore our features and see how they can transform your development journey",
 }: FeaturesSectionProps) {
   return (
-    <section className="bg-white flex flex-col items-center pt-10 pb-40">
+    <section className="bg-white flex flex-col items-center pt-10 pb-10" id="features">
       <div className="max-w-[1460px] h-[calc(100vh-50%)] w-full flex flex-col items-center gap-14">
         <div className="flex flex-col items-center gap-4">
-          <p className="text-[2.85rem] font-p22mackinac font-bold text-center leading-[62px] tracking-[-2%] max-w-[750px]">
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-[2.85rem] font-p22mackinac font-bold text-center leading-[1.4] lg:leading-[62px] tracking-[-2%] max-w-[750px]">
             {title}
           </p>
-          <p className="text-xl text-grey-text font-light text-center leading-[30px] tracking-[-2%] max-w-[650px]">
+          <p className="text-base sm:text-lg md:text-xl text-grey-text font-light text-center leading-[1.6] md:leading-[30px] tracking-[-2%] max-w-[650px]">
             {subtitle}
           </p>
         </div>
-        <div className="flex items-center gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 items-stretch gap-10 px-1 md:px-8 lg:px-16">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}
@@ -76,7 +76,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className="bg-purple-accent bg-contain bg-no-repeat overflow-hidden flex flex-col items-center gap-10 max-h-[300px] border-[0.5px] border-purple-secondary rounded-xl px-10 py-16"
+      className="bg-purple-accent bg-contain bg-no-repeat flex flex-col items-center gap-10 h-full w-full border-[0.5px] border-purple-secondary rounded-xl px-6 sm:px-8 md:px-10 py-16"
       style={{
         backgroundImage: `url('/assets/images/feature-card-bg.webp')`,
       }}
@@ -88,10 +88,10 @@ function FeatureCard({
         <Image src={image} width={60} height={60} alt="Feature" />
       </div>
       <div className="flex flex-col items-center gap-1">
-        <p className="text-2xl font-p22mackinac font-bold text-purple-primary text-center">
+        <p className="text-xl sm:text-2xl font-p22mackinac font-bold text-purple-primary text-center">
           {title}
         </p>
-        <p className="text-base text-grey-text font-light text-center leading-[28px] tracking-[-2%] max-w-[350px] pb-20">
+        <p className="text-sm sm:text-base text-grey-text font-light text-center leading-[1.6] sm:leading-[28px] tracking-[-2%] max-w-[350px]">
           {description}
         </p>
       </div>

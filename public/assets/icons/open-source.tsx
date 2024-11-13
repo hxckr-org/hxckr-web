@@ -1,17 +1,19 @@
 export default function OpenSourceIcon({
   fill = "none",
+  className,
   props,
 }: {
   fill?: string;
+  className?: string;
   props?: React.SVGProps<SVGSVGElement>;
 }) {
   return (
     <svg
-      width="420"
-      height="420"
-      viewBox="0 0 420 420"
+      width="400"
+      height="400"
+      viewBox="0 0 400 400"
       fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
+      className={className}
       {...props}
     >
       <path

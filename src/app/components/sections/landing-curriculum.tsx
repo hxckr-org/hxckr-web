@@ -1,38 +1,47 @@
 import Image from "next/image";
+import AnimatedSVG from "../primitives/animated-svg";
 
 interface CurriculumSectionProps {
-  title?: string;
   subtitle?: string;
   image?: string;
+  mobileSvg?: string;
 }
 
 export default function CurriculumSection({
-  title = "Our Courses: Take a sneak-peek",
-  subtitle = "The courses are divided into three challenge categories: types, modes, and languages.",
-  image = "/assets/images/curriculum-section-image.webp",
+  subtitle = "The challenges would be divided into three challenge categories: types, modes, and languages.",
+  image = "/assets/animations/curriculum.svg",
+  mobileSvg = "/assets/images/curriculum-mobile.svg",
 }: CurriculumSectionProps) {
   return (
-    <section className="bg-purple-accent flex flex-col py-32">
+    <section className="bg-purple-accent flex flex-col pt-10 pb-10" id="curriculum">
       <div className="max-w-[1460px] w-full flex flex-col m-auto gap-14">
         <div className="flex flex-col items-center gap-4">
-          <p className="text-[2.85rem] text-grey-text italic font-p22mackinac font-normal text-center leading-[62px] tracking-[-2%]">
-            Our Courses:{" "}
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-[2.85rem] text-grey-text italic font-p22mackinac font-normal text-center leading-[1.4] lg:leading-[62px] tracking-[-2%]">
+            Our Curriculum:{" "}
             <span className="text-black font-p22mackinac font-bold">
               Take a sneak-peek
             </span>
           </p>
-          <p className="text-grey-text text-xl text-center font-light tracking-[-2%] leading-[36px] max-w-[700px]">
+          <p className="text-grey-text text-base sm:text-lg md:text-xl text-center font-light tracking-[-2%] leading-[1.6] sm:leading-[36px] max-w-[700px]">
             {subtitle}
           </p>
         </div>
-        <div className="flex flex-col w-full pt-10 px-20 overflow-hidden">
-          <Image
-            src={image}
-            alt="Curriculum Overview"
-            width={1460}
-            height={700}
-            className="w-[1440px] 2xl:w-full object-cover"
-          />
+        <div className="w-full mt-[-100px] sm:mt-[-150px] md:mt-[-200px] lg:mt-[-300px]">
+          <div className="hidden sm:block">
+            <AnimatedSVG
+              src={image}
+              className="w-full h-full"
+            />
+          </div>
+          <div className="block sm:hidden py-20 px-4">
+            <Image 
+              src={mobileSvg}
+              alt="Curriculum mobile view"
+              width={353}
+              height={964}
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       </div>
     </section>
