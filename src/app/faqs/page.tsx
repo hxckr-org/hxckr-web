@@ -1,9 +1,11 @@
 import Image from "next/image";
 import FAQContent from "@/app/components/sections/faq-content";
 import { faqCategories } from "@/data/faq-content";
+import LandingPageLayout from "../components/layout/landing-page-layout";
 
 export default function FAQPage() {
   return (
+    <LandingPageLayout>
     <div className="bg-purple-accent w-full">
       <div className="container mx-auto px-4 py-8 pt-48">
         {/* Header Image */}
@@ -26,5 +28,6 @@ export default function FAQPage() {
         <FAQContent categories={faqCategories} />
       </div>
     </div>
+    </LandingPageLayout>
   );
 }
