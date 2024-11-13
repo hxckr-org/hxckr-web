@@ -32,7 +32,6 @@ export default function HeroSection({
             <p className="font-light text-base sm:text-lg md:text-xl lg:text-2xl text-center text-grey-text leading-[1.6] md:leading-7 tracking-[-2%] px-4 sm:px-6">
               {description}
             </p>
-            <hr className="w-2/3 h-[1px] bg-grey-text absolute top-1/2" />
           </div>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-4 text-black mt-4 z-50">
