@@ -11,7 +11,10 @@ interface SubscriptionModalProps {
 
 type SubscriptionStatus = "idle" | "loading" | "success" | "error";
 
-export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
+export default function SubscriptionModal({
+  isOpen,
+  onClose,
+}: SubscriptionModalProps) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<SubscriptionStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,37 +22,41 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (status === "loading") return;
-    
+
     setStatus("loading");
     setErrorMessage("");
 
     try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.error?.includes('Member Exists')) {
-          throw new Error('You are already subscribed to our waiting list!');
-        } else if (data.error?.includes('Invalid Resource')) {
-          throw new Error('Please enter a valid email address.');
+        if (data.error?.includes("Member Exists")) {
+          throw new Error("You are already subscribed to our waiting list!");
+        } else if (data.error?.includes("Invalid Resource")) {
+          throw new Error("Please enter a valid email address.");
         } else {
-          throw new Error(data.error || 'Failed to subscribe. Please try again.');
+          throw new Error(
+            data.error || "Failed to subscribe. Please try again."
+          );
         }
       }
-      
+
       setSubmittedEmail(email);
       setStatus("success");
       setEmail("");
     } catch (error) {
       setStatus("error");
-      setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred');
+      setErrorMessage(
+        error instanceof Error ? error.message : "An unexpected error occurred"
+      );
     }
   };
 
@@ -58,16 +65,32 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
       {status === "success" ? (
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              className="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold">We've added you to our waiting list!</h2>
-          <p className="text-gray-600">We will let you know when Jede is live.</p>
+          <h2 className="text-2xl font-bold">
+            We&apos;ve added you to our waiting list!
+          </h2>
+          <p className="text-gray-600">
+            We will let you know when Jede is live.
+          </p>
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <p className="text-gray-500">{submittedEmail}</p>
             <p className="text-purple-600 mt-2">Jede is coming to you soon!</p>
-            <p className="text-gray-600 text-sm mt-1">Built to help you learn Bitcoin Development at your own pace💜</p>
+            <p className="text-gray-600 text-sm mt-1">
+              Built to help you learn Bitcoin Development at your own pace💜
+            </p>
           </div>
         </div>
       ) : (
@@ -80,14 +103,18 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className={`w-full px-6 py-4 rounded-full border focus:outline-none text-center
-                ${status === "error" ? "border-red-500" : "border-grey-accent focus:border-purple-primary"}`}
+                ${
+                  status === "error"
+                    ? "border-red-500"
+                    : "border-grey-accent focus:border-purple-primary"
+                }`}
               required
               disabled={status === "loading"}
             />
             {status === "error" && (
               <p className="text-red-500 text-sm px-4">{errorMessage}</p>
             )}
-            <Button 
+            <Button
               type="submit"
               disabled={status === "loading"}
               className="w-full px-6 py-4 text-base text-white font-normal hover:bg-purple-primary/90 text-center justify-center"
