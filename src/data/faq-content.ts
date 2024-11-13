@@ -24,7 +24,7 @@ export const faqCategories: FAQCategory[] = [
       },
       {
         question: "How long does it typically take to complete a challenge?",
-        answer: "Most challenges take 1-2 hours to complete, though more complex ones might require several hours spread across multiple sessions.",
+        answer: "Beginner challenges take approximately 2 - 4 hours to complete, though more complex ones might require several hours spread across multiple sessions.",
       },
     ],
   },
