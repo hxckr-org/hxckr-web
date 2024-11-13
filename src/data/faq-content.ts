@@ -37,7 +37,7 @@ export const faqCategories: FAQCategory[] = [
       },
       {
         question: "What types of challenges are available?",
-        answer: "Challenges range from implementing basic Bitcoin transactions to building multi-signature wallets, Lightning Network applications, and smart contract systems.",
+        answer: "Challenges range from implementing basic Bitcoin transactions to building multi-signature wallets, and Lightning Network applications.",
       },
       {
         question: "How do I submit my solutions?",
