@@ -1,4 +1,5 @@
 import LandingPageLayout from "../components/layout/landing-page-layout";
+import Link from "next/link";
 
 export default function TermsPage() {
   return (
@@ -46,62 +47,12 @@ export default function TermsPage() {
             <div>
               <h2 className="text-xl font-semibold mb-3">6. Privacy Policy</h2>
               <p className="text-gray-700">
-                At Jede, we are committed to protecting your privacy and ensuring the security of your personal information. This privacy policy explains how we collect, use, and protect your data.
+                At Jede, we are committed to protecting your privacy and ensuring the security of your personal information. Please review our{' '}
+                <Link href="/privacy-policy" className="text-blue-600 hover:underline">
+                  Privacy Policy
+                </Link>{' '}
+                for detailed information about how we collect, use, and protect your data.
               </p>
-              
-              <h3 className="text-lg font-semibold mt-4 mb-2">Data Collection</h3>
-              <p className="text-gray-700">
-                We collect the following types of information:
-              </p>
-              <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
-                <li>Account information (GitHub profile data during sign-up)</li>
-                <li>Learning progress and course completion data</li>
-                <li>Usage analytics to improve our platform</li>
-                <li>Technical information for security and functionality</li>
-              </ul>
-
-              <h3 className="text-lg font-semibold mt-4 mb-2">Data Usage</h3>
-              <p className="text-gray-700">
-                Your data is used for the following purposes:
-              </p>
-              <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
-                <li>Providing and improving our educational services</li>
-                <li>Tracking your learning progress</li>
-                <li>Personalizing your learning experience</li>
-                <li>Ensuring platform security and preventing abuse</li>
-              </ul>
-
-              <h3 className="text-lg font-semibold mt-4 mb-2">Data Protection</h3>
-              <p className="text-gray-700">
-                We implement industry-standard security measures to protect your data, including:
-              </p>
-              <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
-                <li>Secure data encryption in transit and at rest</li>
-                <li>Regular security audits and updates</li>
-                <li>Strict access controls and authentication</li>
-                <li>Secure data backup and recovery procedures</li>
-              </ul>
-
-              <h3 className="text-lg font-semibold mt-4 mb-2">Data Sharing</h3>
-              <p className="text-gray-700">
-                We do not sell your personal information to third parties. We may share your data only in the following circumstances:
-              </p>
-              <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
-                <li>With your explicit consent</li>
-                <li>To comply with legal obligations</li>
-                <li>With service providers who assist in platform operations</li>
-              </ul>
-
-              <h3 className="text-lg font-semibold mt-4 mb-2">Your Rights</h3>
-              <p className="text-gray-700">
-                You have the right to:
-              </p>
-              <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
-                <li>Access your personal data</li>
-                <li>Request corrections to your data</li>
-                <li>Request deletion of your data</li>
-                <li>Opt-out of certain data collection</li>
-              </ul>
             </div>
 
             <div>

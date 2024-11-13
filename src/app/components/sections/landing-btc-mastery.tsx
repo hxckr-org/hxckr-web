@@ -27,7 +27,7 @@ export default function BTCMasterySection({
   description = "Dive into the Bitcoin world through hands-on projects and a thoughtfully designed curriculum.",
   launchingText = "We are launching soon",
   ctaText = "See our curriculum",
-  ctaLink = "/",
+  ctaLink = "/#curriculum",
   image = "/assets/images/code-to-prtcl-image.webp",
 }: BTCMasterySectionProps) {
   return (
@@ -51,7 +51,7 @@ export default function BTCMasterySection({
                 </p>
                 <Link
                   href={ctaLink}
-                  className="bg-purple-primary text-white flex items-center gap-2 rounded-full px-6 sm:px-9 py-4 sm:py-5 mt-8 sm:mt-12 text-sm sm:text-base leading-[24px] tracking-[-2%] font-normal hover:bg-purple-primary/90"
+                  className="bg-purple-primary text-white flex items-center gap-2 rounded-full px-6 sm:px-9 py-4 sm:py-5 mt-8 sm:mt-12 text-sm sm:text-base leading-[24px] tracking-[-2%] font-normal hover:bg-purple-primary/90 z-10"
                 >
                   {ctaText}
                 </Link>
