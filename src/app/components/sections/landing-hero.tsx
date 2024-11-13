@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import Button from "@/app/components/primitives/button";
 import DiscordIcon from "@/public/assets/icons/discord";
 import AnimatedSVG from '../primitives/animated-svg';
+import SubscribeButton from "../primitives/subscribe-button";
 
 interface HeroSectionProps {
   title?: string;
@@ -35,9 +35,10 @@ export default function HeroSection({
           </div>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-4 text-black mt-4 z-50">
-          <Button className="w-full sm:w-auto px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg text-white font-normal hover:bg-purple-primary/90">
-            {signUpButtonText}
-          </Button>
+          <SubscribeButton
+            signUpButtonText={signUpButtonText}
+            className="w-full sm:w-auto px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg text-white font-normal hover:bg-purple-primary/90"
+          />
           <Link
             href="/"
             className="w-full sm:w-auto bg-white text-purple-primary flex items-center justify-center gap-2 border border-grey-accent rounded-full px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg font-normal hover:border-purple-primary"
