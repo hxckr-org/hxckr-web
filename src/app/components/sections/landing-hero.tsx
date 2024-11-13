@@ -46,7 +46,7 @@ export default function HeroSection({
             {discordButtonText}
           </Link>
         </div>
-        <div className="w-full mt-[-150px] sm:mt-[-200px] md:mt-[-300px] lg:mt-[-400px]">
+        <div className="w-full mt-[-150px] sm:mt-[-200px] md:mt-[-300px] lg:mt-[-400px] xl:mt-[-500px] 2xl:mt-[-600px]">
           <AnimatedSVG 
             src="/assets/animations/hero.svg" 
             className="w-full h-full"
