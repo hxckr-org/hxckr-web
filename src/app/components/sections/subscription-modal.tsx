@@ -63,10 +63,10 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
             </svg>
           </div>
           <h2 className="text-2xl font-bold">We've added you to our waiting list!</h2>
-          <p className="text-gray-600">We will let you know when HXCKR is live.</p>
+          <p className="text-gray-600">We will let you know when Jede is live.</p>
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <p className="text-gray-500">{submittedEmail}</p>
-            <p className="text-purple-600 mt-2">HXCKR is coming to you soon!</p>
+            <p className="text-purple-600 mt-2">Jede is coming to you soon!</p>
             <p className="text-gray-600 text-sm mt-1">Built to help you learn Bitcoin Development at your own pace💜</p>
           </div>
         </div>

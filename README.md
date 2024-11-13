@@ -1,6 +1,6 @@
-# HXCKR WEB
+# Jede WEB
 
-This is the frontend for HXCKR - a modular Learning Management System (LMS) designed to facilitate bitcoin technical education through structured challenges and exercises.
+This is the frontend for Jede - a modular Learning Management System (LMS) designed to facilitate bitcoin technical education through structured challenges and exercises.
 
 ## Getting Started
 
