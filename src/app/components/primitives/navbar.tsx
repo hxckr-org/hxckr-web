@@ -56,6 +56,8 @@ export default function Navbar() {
           <Link href="/faqs" className="hover:text-purple-primary">
             FAQs
           </Link>
+          <Link href="mailto:isahtheophilus@gmail.com" className="hover:text-purple-primary" target="_blank" rel="noopener noreferrer">Contact Us</Link>
+
         </nav>
 
         <Link

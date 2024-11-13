@@ -98,7 +98,7 @@ export default function PrivacyPolicy() {
                 If you have any questions about this privacy policy or our
                 handling of your GitHub data, please contact us at{" "}
                 <a
-                  href="mailto:info@jede.com"
+                  href="mailto:isahtheophilus@gmail.com"
                   className="text-blue-600 hover:underline dark:text-blue-400"
                 >
                   info@jede.com

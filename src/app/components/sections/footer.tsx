@@ -96,8 +96,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
             <h3 className="text-xl font-semibold">Resources</h3>
             <div className="flex flex-col gap-4">
               <Link href="/faqs" className="text-grey-footer-text hover:text-white">FAQs</Link>
-              {/* TODO: @extheo should confirm what contact is */}
-              {/* <Link href="/contact" className="text-grey-footer-text hover:text-white">Contact Us</Link> */}
+              <Link href="mailto:isahtheophilus@gmail.com" className="text-grey-footer-text hover:text-white" target="_blank" rel="noopener noreferrer">Contact Us</Link>
             </div>
           </div>
         </div>
