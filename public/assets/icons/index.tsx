@@ -1,10 +1,12 @@
 import { BadgeIcon } from "./badge";
 import { BellOutlineIcon, BellSolidIcon } from "./bell";
 import { ChevronDownIcon } from "./chevron-down";
+import { CrossIcon } from "./cross";
 import DiscordIcon from "./discord";
 import DoubleChevronLeft from "./double-chevron-left";
 import { GearIcon } from "./gear";
 import GithubIcon from "./github";
+import { HamburgerIcon } from "./hamburger";
 import JedeIcon from "./jede";
 import LogoutIcon from "./logout";
 import OpenSourceIcon from "./open-source";
@@ -33,4 +35,6 @@ export {
   OpenSourceIcon,
   LogoutIcon,
   GearIcon,
+  HamburgerIcon,
+  CrossIcon,
 };
