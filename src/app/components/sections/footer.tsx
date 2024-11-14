@@ -65,7 +65,7 @@ export default function Footer({ faqData = defaultFAQs }: FooterProps) {
           <div className="flex flex-col gap-6 relative md:pl-10">
             <h3 className="text-xl font-semibold">Contact</h3>
             <div className="flex flex-col gap-4">
-              <Link href="https://twitter.com" className="text-grey-footer-text hover:text-white">Twitter</Link>
+              <Link href="https://x.com/Jede_dev" className="text-grey-footer-text hover:text-white" target="_blank" rel="noopener noreferrer">X</Link>
               <Link href="https://discord.com/channels/1189471179967315968/1275042830028505088" className="text-grey-footer-text hover:text-white" target="_blank" rel="noopener noreferrer">Discord</Link>
             </div>
             <div className="hidden md:block absolute right-0 top-0 h-full w-[1px] bg-grey-accordion-background"></div>
