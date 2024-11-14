@@ -146,7 +146,7 @@ export default function Sidebar({
         ))}
       </nav>
 
-      <div className="border-t">
+      <div>
         <NavItem
           href="/logout"
           icon={<LogoutIcon />}

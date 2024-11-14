@@ -1,7 +1,7 @@
 import { Session } from "next-auth";
-import Avatar from "./avatar";
+
+import ProfileDropdown from "@/app/components/primitives/profile-dropdown";
 import { BellOutlineIcon } from "@/public/assets/icons";
-import { ChevronDownIcon } from "@/public/assets/icons/chevron-down";
 
 export const DashboardNav = ({
   pathname,
@@ -28,13 +28,11 @@ export const DashboardNav = ({
         <button className="flex items-center justify-center h-[44px] w-[44px] border-[1.5px] border-grey-button-border rounded-full transition-colors hover:bg-purple-quinary">
           <BellOutlineIcon />
         </button>
-        <button className="flex items-center justify-center h-[44px] space-x-3 transition-colors">
-          <Avatar
-            src={session.user.image!}
-            alt={session.user.name || "profile image"}
-          />
-          <ChevronDownIcon />
-        </button>
+        <ProfileDropdown
+          name={session.user.name || ""}
+          email={session.user.email || ""}
+          avatar={session.user.image || ""}
+        />
       </div>
     </header>
   );
