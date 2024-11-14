@@ -66,7 +66,7 @@ export default function SubscriptionModal({
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
             <svg
-              className="w-8 h-8 text-white"
+              className="w-8 h-8 text-black"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

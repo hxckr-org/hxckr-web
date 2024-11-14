@@ -40,8 +40,9 @@ export default function HeroSection({
             className="w-full sm:w-auto px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg text-white font-normal hover:bg-purple-primary/90"
           />
           <Link
-            href="/"
             className="w-full sm:w-auto bg-white text-purple-primary flex items-center justify-center gap-2 border border-grey-accent rounded-full px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg font-normal hover:border-purple-primary"
+            href="https://discord.com/channels/1189471179967315968/1275042830028505088"
+            target="_blank" rel="noopener noreferrer"
           >
             <DiscordIcon />
             {discordButtonText}
