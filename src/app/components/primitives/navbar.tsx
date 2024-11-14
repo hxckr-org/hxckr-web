@@ -50,7 +50,7 @@ export default function Navbar() {
           ${isMenuOpen ? 'max-md:flex' : 'max-md:hidden'}
           max-md:z-[1000]
         `}>
-          <Link href="#features" className="hover:text-purple-primary">
+          <Link href="/#features" className="hover:text-purple-primary">
             Features
           </Link>
           <Link href="/faqs" className="hover:text-purple-primary">
