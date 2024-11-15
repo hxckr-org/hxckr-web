@@ -180,7 +180,7 @@ export default function Sidebar({
               key={item.href}
               href={item.href}
               icon={item.icon}
-              label={isOpen || window.innerWidth < 1024 ? item.label : ""}
+              label={isOpen ? item.label : ""}
               isActive={pathname
                 .toLowerCase()
                 .startsWith(item.href.toLowerCase())}
