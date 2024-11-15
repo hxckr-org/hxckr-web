@@ -20,6 +20,7 @@ const config: Config = {
         "purple-primary": "#7762FF",
         "purple-secondary": "#C8C2FF",
         "purple-tertiary": "#CEC2FF",
+        "purple-quinary": "#F8F2FF",
         "grey-accent": "#DBE2E8",
         "grey-text": "#666666",
         "grey-button-text": "#F7F8F9",

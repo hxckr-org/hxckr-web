@@ -64,7 +64,9 @@ interface BannerProps {
   text?: string;
 }
 
-export const Banner = ({ text = "Technical Bitcoin Education For You" }: BannerProps) => {
+export const Banner = ({
+  text = "Technical Bitcoin Education For You",
+}: BannerProps) => {
   return (
     <div className="z-50 bg-white flex items-center gap-2 border border-grey-accent rounded-full px-4 sm:px-6 py-2 sm:py-3 mt-6 sm:mt-8 mb-6 sm:mb-8">
       <Image
