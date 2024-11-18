@@ -34,7 +34,7 @@ export const DashboardLayout = ({
           isOpen={isHamburgerOpen}
           setIsOpen={setIsHamburgerOpen}
         />
-        <div className="bg-grey-button-text flex flex-col flex-1 p-10 overflow-y-auto text-black">
+        <div className="bg-grey-button-text flex flex-col flex-1 p-6 overflow-y-auto text-black">
           {children}
         </div>
       </div>

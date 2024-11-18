@@ -4,6 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 
 import { SessionContext } from "@/contexts/session";
+import TanstackProvider from "@/contexts/tanstack";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionContext>
-          {children}
+          <TanstackProvider>{children}</TanstackProvider>
         </SessionContext>
       </body>
     </html>
