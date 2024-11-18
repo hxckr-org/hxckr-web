@@ -95,14 +95,14 @@ export default function SubscriptionModal({
         </div>
       ) : (
         <div className="flex flex-col gap-6">
-          <h2 className="text-2xl font-bold">Join Our Waiting List</h2>
+          <h2 className="text-2xl font-bold text-black">Join Our Waiting List</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className={`w-full px-6 py-4 rounded-full border focus:outline-none text-center
+              className={`w-full px-6 py-4 rounded-full border focus:outline-none text-center text-black
                 ${
                   status === "error"
                     ? "border-red-500"
