@@ -43,8 +43,12 @@ export const ChallengeCard = ({
             {challenge.module_count} tasks
           </span>
           <span className="text-[#888888] text-sm font-light">
-            {Math.round(
-              (challenge.progress.current_step / challenge.module_count) * 100
+            {Math.min(
+              100,
+              Math.round(
+                (challenge.progress.current_step * 100) /
+                  Math.max(1, challenge.module_count)
+              )
             )}
             % Done
           </span>
@@ -53,9 +57,11 @@ export const ChallengeCard = ({
           <div
             className="h-full rounded-full bg-[#9747FF] transition-all duration-500"
             style={{
-              width: `${
-                (challenge.progress.current_step / challenge.module_count) * 100
-              }%`,
+              width: `${Math.min(
+                100,
+                (challenge.progress.current_step * 100) /
+                  Math.max(1, challenge.module_count)
+              )}%`,
             }}
           />
         </div>

@@ -40,7 +40,7 @@ export const useGetUserRepositories = ({
   status,
 }: QueryParams): UseQueryResult<RepositoryResponse> => {
   const queryResult = useQuery({
-    queryKey: ["user-repositories"],
+    queryKey: ["user-repositories", per_page, page, repo_url, status],
     queryFn: () => fetchUserRepositories({ per_page, page, repo_url, status }),
   });
   return queryResult;

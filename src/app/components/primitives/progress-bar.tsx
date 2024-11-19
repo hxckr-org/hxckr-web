@@ -18,6 +18,10 @@ export function ProgressBar({
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
+    if (max === 0) {
+      setWidth(0);
+      return;
+    }
     if (animate) {
       setWidth(0);
       const timeout = setTimeout(() => {

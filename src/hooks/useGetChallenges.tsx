@@ -41,7 +41,7 @@ export const useGetChallenges = ({
   mode,
 }: QueryParams): UseQueryResult<Challenge[]> => {
   return useQuery({
-    queryKey: ["challenges"],
+    queryKey: ["challenges", id, repo_url, difficulty, mode],
     queryFn: () => fetchChallenges({ id, repo_url, difficulty, mode }),
   });
 };
