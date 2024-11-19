@@ -21,6 +21,13 @@ export function Pagination({
   const router = useRouter();
   const currentPage = Number(searchParams.get("page")) || 1;
 
+  const safeTotal = Math.max(totalItems, 0);
+  const safeTotalPages = Math.max(Math.ceil(safeTotal / itemsPerPage), 1);
+  const safeCurrentPage = Math.min(Math.max(currentPage, 1), safeTotalPages);
+
+  const startItem = Math.max((safeCurrentPage - 1) * itemsPerPage + 1, 1);
+  const endItem = Math.min(safeCurrentPage * itemsPerPage, safeTotal);
+
   const handlePageChange = useCallback(
     (page: number) => {
       const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -30,58 +37,58 @@ export function Pagination({
     [searchParams]
   );
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startItem = (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-
   const getPageNumbers = () => {
     const pages = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
+    if (safeTotalPages <= 7) {
+      for (let i = 1; i <= safeTotalPages; i++) {
         pages.push(i);
       }
     } else {
-      if (currentPage <= 3) {
-        pages.push(1, 2, 3, 4, "...", totalPages);
-      } else if (currentPage >= totalPages - 2) {
+      if (safeCurrentPage <= 3) {
+        pages.push(1, 2, 3, 4, "...", safeTotalPages);
+      } else if (safeCurrentPage >= safeTotalPages - 2) {
         pages.push(
           1,
           "...",
-          totalPages - 3,
-          totalPages - 2,
-          totalPages - 1,
-          totalPages
+          safeTotalPages - 3,
+          safeTotalPages - 2,
+          safeTotalPages - 1,
+          safeTotalPages
         );
       } else {
         pages.push(
           1,
           "...",
-          currentPage - 1,
-          currentPage,
-          currentPage + 1,
+          safeCurrentPage - 1,
+          safeCurrentPage,
+          safeCurrentPage + 1,
           "...",
-          totalPages
+          safeTotalPages
         );
       }
     }
     return pages;
   };
 
+  if (safeTotal === 0) {
+    return null;
+  }
+
   return (
     <div className={twMerge("flex items-center justify-between", className)}>
       <div className="text-sm text-gray-600">
-        {startItem}-{endItem} of {totalItems} items
+        {startItem}-{endItem} of {safeTotal} items
       </div>
       <div className="flex items-center gap-1">
         <button
           onClick={() => {
-            router.push(pathname + "?" + handlePageChange(currentPage - 1));
+            router.push(pathname + "?" + handlePageChange(safeCurrentPage - 1));
           }}
-          disabled={currentPage === 1}
+          disabled={safeCurrentPage === 1}
           className="rounded p-1 mr-6 text-gray-500 border border-gray-200 hover:border-purple-primary hover:text-purple-primary disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Previous page"
         >
-          <ChevronLeftIcon className={`h-7 w-7`} />
+          <ChevronLeftIcon className="h-7 w-7" />
         </button>
 
         {getPageNumbers().map((page, index) => (
@@ -96,7 +103,7 @@ export function Pagination({
             className={`
               min-w-[32px] rounded px-2 py-1 text-sm
               ${
-                typeof page === "number" && page === currentPage
+                typeof page === "number" && page === safeCurrentPage
                   ? "text-purple-primary font-medium"
                   : "text-gray-600 hover:border hover:border-purple-primary hover:text-purple-primary"
               }
@@ -109,13 +116,13 @@ export function Pagination({
 
         <button
           onClick={() => {
-            router.push(pathname + "?" + handlePageChange(currentPage + 1));
+            router.push(pathname + "?" + handlePageChange(safeCurrentPage + 1));
           }}
-          disabled={currentPage === totalPages}
+          disabled={safeCurrentPage === safeTotalPages}
           className="rounded p-1 ml-6 text-gray-500 border border-gray-200 hover:text-purple-primary hover:border-purple-primary disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Next page"
         >
-          <ChevronLeftIcon className={`h-7 w-7 rotate-180`} />
+          <ChevronLeftIcon className="h-7 w-7 rotate-180" />
         </button>
       </div>
     </div>

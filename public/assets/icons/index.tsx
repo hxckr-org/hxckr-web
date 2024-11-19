@@ -15,10 +15,14 @@ import OpenSourceIcon from "./open-source";
 import { OverviewOutlineIcon, OverviewSolidIcon } from "./overview";
 import { PlayIcon } from "./play";
 import { PuzzlePieceOutlineIcon, PuzzlePieceSolidIcon } from "./puzzle-piece";
+import { SearchIcon } from "./search";
 import { TrophyOutlineIcon, TrophySolidIcon } from "./trophy";
 import { UserOutlineIcon, UserSolidIcon } from "./user";
+import { FunnelIcon } from "./funnel";
 
 export {
+  FunnelIcon,
+  SearchIcon,
   PlayIcon,
   ArrowLeftIcon,
   BadgeIcon,

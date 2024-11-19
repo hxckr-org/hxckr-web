@@ -10,6 +10,14 @@ type Challenge = {
   updated_at: string;
 };
 
+type ChallengeWithProgress = Challenge & {
+  progress: {
+    status: string;
+    current_step: number;
+    completion_percentage: number;
+  };
+};
+
 type Progress = {
   id: string;
   status: string;
@@ -52,4 +60,5 @@ export type {
   RepositoryResponse,
   Progress,
   Status,
+  ChallengeWithProgress,
 };
