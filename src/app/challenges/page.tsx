@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { DashboardLayout } from "@/app/components/layout/dashboard";
+import { ChallengesUI } from "@/app/components/sections/challenges";
 import { auth } from "@/auth";
 
 export default async function Challenges() {
@@ -8,5 +9,9 @@ export default async function Challenges() {
   if (!session) {
     redirect("/signin");
   }
-  return <DashboardLayout session={session}>Challenges</DashboardLayout>;
+  return (
+    <DashboardLayout session={session}>
+      <ChallengesUI />
+    </DashboardLayout>
+  );
 }
