@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
+
 import { DashboardLayout } from "@/app/components/layout/dashboard";
+import Achievements from "@/app/components/primitives/ProfileAchievements";
+import ActivityCalendar from "@/app/components/primitives/ProfileActivityCalendar";
+import ProfileChallenges from "@/app/components/primitives/ProfileChallenges";
+import DeleteAccount from "@/app/components/primitives/ProfileDeleteAccount";
+import GitHubIntegration from "@/app/components/primitives/ProfileGithubIntegration";
+import PersonalInformation from "@/app/components/primitives/ProfilePersonalInformation";
 import { auth } from "@/auth";
-import ProfileChallenges from "../components/mdxComponents/ProfileChallenges";
-import PersonalInformation from "../components/mdxComponents/ProfilePersonalInformation";
-import ActivityCalendar from "../components/mdxComponents/ProfileActivityCalendar";
-import GitHubIntegration from "../components/mdxComponents/ProfileGithubIntegration";
-import Achievements from "../components/mdxComponents/ProfileAchievements";
-import DeleteAccount from "../components/mdxComponents/ProfileDeleteAccount";
 
 export default async function ProfilePage() {
   const session = await auth();
