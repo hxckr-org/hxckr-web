@@ -67,7 +67,7 @@ export const ChallengeCard = ({
         </div>
       </div>
       <Link
-        href={`/challenge/${challenge.id}`}
+        href={`/challenges/${challenge.title.toLowerCase().replaceAll(" ", "-")}`}
         className="mt-4 flex w-full items-center justify-center gap-2 font-semibold text-[#4C2480] rounded-full bg-[#F8F2FF] px-4 py-3 border border-[#DAC2FF] transition-colors group hover:bg-[#4C2480]/20"
       >
         {challenge.progress.status.toLowerCase() === "inprogress"
