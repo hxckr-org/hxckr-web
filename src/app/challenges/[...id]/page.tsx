@@ -4,6 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import { DashboardLayout } from "@/app/components/layout/dashboard";
 import NestedChallanges from "@/app/components/sections/nested-challenges";
 import { allDocuments } from "contentlayer/generated";
+import { MDXLayoutRenderer } from "pliny/mdx-components.js";
+import { mdxComponents } from "@/app/components/mdxComponents";
 
 export default async function page({ params }: { params: { id: string[] } }) {
   const slug = params.id;
@@ -18,24 +20,54 @@ export default async function page({ params }: { params: { id: string[] } }) {
 
   const extractPageData = () => {
     const courses = allDocuments;
-    const sluggify = (str: string) => str.toLowerCase().replaceAll(" ", "-");
 
-    const challenge = courses.find((doc) => sluggify(doc.title) === slug[0]);
-    const challengeSlugs = challenge?.slugAsParams;
+    // Find the correct base slug by matching the title
+    const titleToMatch = slug[0].replaceAll("-", " ");
 
-    const challengeModules = courses.filter((doc) => doc.slugAsParams.includes(challengeSlugs[0]) && doc.slugAsParams.length > 2);
+    const baseSlug = courses.find(
+      (doc) =>
+        doc.title.toLowerCase().replace(/-|\s/g, "") ===
+        titleToMatch.toLowerCase().replace(/-|\s/g, "")
+    )?.slugAsParams[0];
+
+    console.log("Found base slug:", baseSlug);
+
+    if (!baseSlug) {
+      return { baseChallenge: [], modulesChallenges: [], title: slug[0] };
+    }
+
+    // Get the base challenge (without modules)
+    const baseChallenge = courses.filter(
+      (doc) => doc.slugAsParams.length === 2 && doc.slugAsParams[0] === baseSlug
+    );
+
+    // Get all module challenges
+    const modulesChallenges = courses.filter(
+      (doc) =>
+        doc.slugAsParams.length === 3 &&
+        doc.slugAsParams[0] === baseSlug &&
+        doc.action
+    );
 
     return {
-      challenge,
-      challengeModules,
+      baseChallenge: baseChallenge.length > 0 ? [baseChallenge[0]] : [],
+      modulesChallenges,
+      title: slug[0],
     };
   };
 
-  const { challenge, challengeModules } = extractPageData();
+  const { baseChallenge, modulesChallenges, title } = extractPageData();
+  // console.log({ baseChallenge, modulesChallenges });
+  console.log(baseChallenge[0]?.body.raw);
 
   return (
     <DashboardLayout session={session}>
-      <NestedChallanges data={data} title={slug[0]} challengeModules={challengeModules} challenge={challenge!} />
+      <NestedChallanges
+        data={data}
+        title={title}
+        challengeModules={modulesChallenges}
+        challenge={baseChallenge[0]!}
+      />
     </DashboardLayout>
   );
 }

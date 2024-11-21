@@ -9,7 +9,7 @@ export const ChallengeCard = ({
 }: {
   challenge: ChallengeWithProgress;
 }) => (
-  <div className="overflow-hidden rounded-lg min-w-[357px] max-w-[400px] h-[427px] border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+  <div className="flex flex-col justify-between overflow-hidden rounded-lg min-w-[357px] max-w-[400px] h-[470px] border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
     <div className="relative px-4 pt-4">
       <Image
         src={"/assets/images/jig-block.webp"}
@@ -67,8 +67,13 @@ export const ChallengeCard = ({
         </div>
       </div>
       <Link
-        href={`/challenges/${challenge.title.toLowerCase().replaceAll(" ", "-")}`}
-        className="mt-4 flex w-full items-center justify-center gap-2 font-semibold text-[#4C2480] rounded-full bg-[#F8F2FF] px-4 py-3 border border-[#DAC2FF] transition-colors group hover:bg-[#4C2480]/20"
+        href={`/challenges/${challenge.title
+          .toLowerCase()
+          .replaceAll(" ", "-")}?rid=${challenge.repository_id}`}
+        onClick={() => {
+          localStorage.setItem("challenge", JSON.stringify(challenge));
+        }}
+        className="bottom-0 mt-4 flex w-full items-center justify-center gap-2 font-semibold text-[#4C2480] rounded-full bg-[#F8F2FF] px-4 py-3 border border-[#DAC2FF] transition-colors group hover:bg-[#4C2480]/20"
       >
         {challenge.progress.status.toLowerCase() === "inprogress"
           ? "Continue"

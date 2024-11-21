@@ -14,17 +14,18 @@ import {
   ChevronRightIcon,
   PlayIcon,
 } from "@/public/assets/icons";
-import { Repository } from "@/types";
+import { Repository, RepositoryResponse, Status } from "@/types";
 
 export const RecentChallenges = () => {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const { data, isLoading, error, isError } = useGetUserRepositories({
-    status: "InProgress",
+    status: Status.InProgress,
     page: currentPage,
     per_page: 5,
   });
+  const response = data as RepositoryResponse;
   const [isSeeAllVisible, setIsSeeAllVisible] = useState(false);
 
   return (
@@ -32,16 +33,16 @@ export const RecentChallenges = () => {
       <Header
         isSeeAllVisible={isSeeAllVisible}
         setIsSeeAllVisible={setIsSeeAllVisible}
-        challengesCount={data?.data.length || 0}
+        challengesCount={response?.data.length || 0}
       />
       <ChallengeBody
-        recentChallenges={data?.data || []}
+        recentChallenges={response?.data || []}
         isSeeAllVisible={isSeeAllVisible}
       />
       <div className="absolute bottom-0 w-full mb-2">
         <Pagination
-          totalItems={data?.total || 0}
-          itemsPerPage={data?.per_page || 0}
+          totalItems={response?.total || 0}
+          itemsPerPage={response?.per_page || 0}
           className={`${!isSeeAllVisible && "hidden"}`}
         />
       </div>

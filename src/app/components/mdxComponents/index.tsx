@@ -10,6 +10,7 @@ import SecurityNote from "./SecurityNote";
 import SetupSteps from "./SetupSteps";
 import StudyTopics from "./StudyTopics";
 import TopicCard from "./TopicCard";
+import { Stages, Stage, StageTitle, StageDifficulty, StageDescription } from "./Stages";
 
 // load all mdx components
 // all possible components from the every mdx file must be exported here else an error is thrown
@@ -26,4 +27,9 @@ export const mdxComponents = {
   SetupSteps,
   StudyTopics,
   TopicCard,
+  Stage,
+  StageDescription,
+  StageDifficulty,
+  StageTitle,
+  Stages,
 };

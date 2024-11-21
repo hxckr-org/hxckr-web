@@ -16,6 +16,7 @@ type ChallengeWithProgress = Challenge & {
     current_step: number;
     completion_percentage: number;
   };
+  repository_id: string;
 };
 
 type Progress = {
@@ -48,9 +49,15 @@ type RepositoryResponse = {
   total_pages: number;
 };
 
+const Status = {
+  NotStarted: "NotStarted",
+  InProgress: "InProgress",
+  Completed: "Completed",
+} as const;
+
 type ChallengeMode = "functional_test" | "project";
 type ChallengeDifficulty = "easy" | "medium" | "hard";
-type Status = "NotStarted" | "InProgress" | "Completed";
+type ChallengeStatus = (typeof Status)[keyof typeof Status];
 
 export type {
   Challenge,
@@ -59,6 +66,8 @@ export type {
   Repository,
   RepositoryResponse,
   Progress,
-  Status,
+  ChallengeStatus,
   ChallengeWithProgress,
 };
+
+export { Status };
