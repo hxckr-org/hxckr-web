@@ -49,6 +49,11 @@ type RepositoryResponse = {
   total_pages: number;
 };
 
+type CreateRepoResponse = {
+  repo_name: string;
+  repo_url: string;
+};
+
 const Status = {
   NotStarted: "NotStarted",
   InProgress: "InProgress",
@@ -68,6 +73,7 @@ export type {
   Progress,
   ChallengeStatus,
   ChallengeWithProgress,
+  CreateRepoResponse,
 };
 
 export { Status };
