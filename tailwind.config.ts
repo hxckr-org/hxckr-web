@@ -26,6 +26,7 @@ const config: Config = {
         "grey-accordion-background": "#F6F5FF",
         "grey-signin-background": "#D9D9D9",
         "grey-button-border": "#DBE2E8",
+        "grey-card-border": "#f5f5f5",
         black: "#090909",
       },
       fontFamily: {
