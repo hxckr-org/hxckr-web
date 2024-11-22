@@ -1,10 +1,8 @@
 import axios from "axios";
 import { getSession, signOut } from "next-auth/react";
 
-import { coreBaseUrl } from "@/config/process";
-
 const axiosInstance = axios.create({
-  baseURL: coreBaseUrl,
+  baseURL: process.env.NEXT_PUBLIC_APP_CORE_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
