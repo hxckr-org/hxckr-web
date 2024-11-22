@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { MDXLayoutRenderer } from "pliny/mdx-components.js";
 import React, { useEffect, useState } from "react";
 
+import Button from "@/app/components/primitives/button";
+import useGetChallengeAttempts from "@/hooks/useGetChallengeAttempts";
 import { useGetUserRepositories } from "@/hooks/useGetRepo";
 import { PadlockIcon } from "@/public/assets/icons/padlock";
 import { RoundedCheckIcon } from "@/public/assets/icons/rounded-check-icon";
@@ -11,12 +14,8 @@ import { ChallengeAttempt, ChallengePeriod, ChallengeWithProgress, Period, Repos
 import { ArrowLeftIcon, ArrowRightIcon, CaretRightIcon } from "@radix-ui/react-icons";
 
 import { Course } from "../../../../.contentlayer/generated/types";
-import { LoadingSpinner } from "../primitives/loading-spinner";
 import { mdxComponents } from "../mdxComponents";
-import { MDXLayoutRenderer } from "pliny/mdx-components.js";
-import Button from "@/app/components/primitives/button";
-import useCreateRepo from "@/hooks/useCreateRepo";
-import useGetChallengeAttempts from "@/hooks/useGetChallengeAttempts";
+import { LoadingSpinner } from "../primitives/loading-spinner";
 import SelectDropdown from "../primitives/select-dropdown";
 
 const NestedChallenges = ({ challenge, challengeModules }: { challenge: Course; challengeModules: Course[] }) => {
@@ -26,7 +25,6 @@ const NestedChallenges = ({ challenge, challengeModules }: { challenge: Course; 
   const [challengeDetails, setChallengeDetails] = useState<ChallengeWithProgress>({} as ChallengeWithProgress);
   const [period, setPeriod] = useState<ChallengePeriod>(Period.AllTime);
 
-  const { mutate: createRepo } = useCreateRepo(challengeDetails.repo_url);
   const repo_id = searchParams.get("rid") || challengeDetails.repository_id;
   const { data: repo, isLoading, error } = useGetUserRepositories({ id: repo_id });
   const { data: attempts, isLoading: attemptsLoading } = useGetChallengeAttempts({

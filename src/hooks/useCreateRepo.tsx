@@ -1,6 +1,5 @@
-import axios from "axios";
-
 import { CREATE_REPO } from "@/config/endpoints";
+import axios from "@/services/axios";
 import { CreateRepoResponse } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 

@@ -39,7 +39,7 @@ export const Course = defineDocumentType(() => ({
     difficulty: { type: "enum", options: difficultyLevels },
     timeEstimate: { type: "number" },
     prerequisites: { type: "list", of: { type: "string" } },
-    starterCode: { type: "string" },
+    starterCode: { type: "json" },
   },
   computedFields: {
     url: {

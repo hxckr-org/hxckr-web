@@ -52,6 +52,7 @@ type RepositoryResponse = {
 type CreateRepoResponse = {
   repo_name: string;
   repo_url: string;
+  id: string;
 };
 
 type ChallengeAttempt = {
