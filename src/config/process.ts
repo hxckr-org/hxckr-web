@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Client-side environment variables
-export const coreBaseUrl = process.env.APP_CORE_BASE_URL;
-export const websocketUrl = process.env.APP_WEBSOCKET_URL;
+export const coreBaseUrl = process.env.NEXT_PUBLIC_APP_CORE_BASE_URL;
+export const websocketUrl = process.env.NEXT_PUBLIC_APP_WEBSOCKET_URL;
 
 // Server-side environment variables
 export const githubClientID = process.env.GITHUB_ID as string;
