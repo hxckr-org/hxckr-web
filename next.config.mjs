@@ -3,6 +3,10 @@ import { withContentlayer } from "next-contentlayer2";
 
 const nextConfig = {
   output: "standalone",
+  env: {
+    NEXT_PUBLIC_APP_CORE_BASE_URL: process.env.NEXT_PUBLIC_APP_CORE_BASE_URL,
+    NEXT_PUBLIC_APP_WEBSOCKET_URL: process.env.NEXT_PUBLIC_APP_WEBSOCKET_URL,
+  },
   images: {
     remotePatterns: [
       {
