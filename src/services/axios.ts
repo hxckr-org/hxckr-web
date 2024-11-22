@@ -1,8 +1,13 @@
 import axios from "axios";
 import { getSession, signOut } from "next-auth/react";
+import { coreBaseUrl, validateClientEnv } from "@/config/process";
+
+if (!validateClientEnv()) {
+  throw new Error("Core Base URL is not configured. Please check your environment variables.");
+}
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_APP_CORE_BASE_URL,
+  baseURL: coreBaseUrl,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
