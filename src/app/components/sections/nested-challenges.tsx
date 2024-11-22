@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { useGetUserRepositories } from "@/hooks/useGetRepo";
@@ -20,6 +20,7 @@ import useCreateRepo from "@/hooks/useCreateRepo";
 const NestedChallenges = ({ challenge, challengeModules }: { challenge: Course; challengeModules: Course[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const urlParams = new URLSearchParams(searchParams);
   const [isActive, setIsActive] = useState(false);
   const [challengeDetails, setChallengeDetails] = useState<ChallengeWithProgress>({} as ChallengeWithProgress);
   const { mutate: createRepo } = useCreateRepo(challengeDetails.repo_url);
@@ -32,8 +33,12 @@ const NestedChallenges = ({ challenge, challengeModules }: { challenge: Course; 
     repoDetails?.progress?.status === Status.Completed ||
     repoDetails?.progress?.progress_details.current_step > 0;
 
-  const [userStarted, setUserStarted] = useState(hasStarted);
-  // const [userStarted, setUserStarted] = useState(hasStarted);
+  useEffect(() => {
+    urlParams.set("started", JSON.stringify(hasStarted));
+  }, []);
+
+  const hasUserStarted = urlParams.get("started") === "true";
+  const [userStarted, setUserStarted] = useState(hasUserStarted);
 
   useEffect(() => {
     const storedChallenge = localStorage.getItem("challenge");
@@ -56,9 +61,12 @@ const NestedChallenges = ({ challenge, challengeModules }: { challenge: Course; 
 };
 
 const ContentListItem = ({ isActive, text, url, repoId }: { isActive: boolean; text: string; url: string; repoId: string }) => {
+  const searchParams = useSearchParams();
+  const urlParams = new URLSearchParams(searchParams);
+
   return (
     <Link
-      href={`/challenges${url}?rid=${repoId}`}
+      href={`/challenges${url + "?" + urlParams.toString()}`}
       className={`${isActive ? "border border-purple-secondary bg-purple-quaternary" : ""} flex gap-2 items-center p-3 rounded`}
     >
       {isActive ? <ArrowRightIcon className='h-5 w-5 text-purple-primary' /> : <PadlockIcon />}
@@ -83,10 +91,6 @@ const NavigationBlock = () => {
           <ArrowRightIcon className='w-6 h-6 text-purple-primary' />
         </button>
       </section>
-      {/* 
-      <button className='border border-grey-accent rounded p-3'>
-        <Cross1Icon className='w-6 h-6' />
-      </button> */}
     </div>
   );
 };
@@ -103,6 +107,15 @@ const IntroductionContentSection = ({
   setUserStarted: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const urlParams = new URLSearchParams(searchParams);
+
+  const saveIsStartedState = () => {
+    urlParams.set("started", "true");
+    setUserStarted(true);
+    router.push(pathname + "?" + urlParams.toString());
+  };
 
   return (
     <div className={`flex flex-col gap-3 p-8 pb-6 ${userStarted ? "hidden" : "flex-1"}`}>
@@ -129,7 +142,13 @@ const IntroductionContentSection = ({
               <p className='text-grey-secondary-text font-light'>{challenge.description}</p>
             </section>
 
-            <Button onClick={() => setUserStarted(true)} className='text-base font-medium text-white rounded-full px-5 flex items-center gap-1'>
+            <Button
+              onClick={() => saveIsStartedState()}
+              // onClick={() => {
+              //   return setUserStarted(true);
+              // }}
+              className='text-base font-medium text-white rounded-full px-5 flex items-center gap-1'
+            >
               <p>Start Challenge</p>
               <CaretRightIcon className='w-6 h-6' />
             </Button>

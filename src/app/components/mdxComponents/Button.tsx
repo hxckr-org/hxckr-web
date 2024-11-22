@@ -25,7 +25,6 @@ const MdxButton = ({ title, link, children }: { title: string; link: string; chi
       return item;
     });
     newLink = newLinkArray.join("/") + "?" + searchParams.toString();
-    console.log({ newLink });
   }
 
   return (

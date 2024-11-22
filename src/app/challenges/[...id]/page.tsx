@@ -7,7 +7,6 @@ import { allDocuments } from "contentlayer/generated";
 
 export default async function page({ params }: { params: { id: string[] } }) {
   const slug = params.id;
-  console.log({ slug });
 
   const session = await auth();
   if (!session) {

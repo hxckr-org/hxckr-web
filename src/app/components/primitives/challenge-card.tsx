@@ -9,7 +9,6 @@ export const ChallengeCard = ({ challenge }: { challenge: ChallengeWithProgress 
   const sluggify = (str: string) => str.toLowerCase().replaceAll(" ", "-");
   const title = sluggify(challenge.title);
   const challengeKey = allDocuments.find((doc) => sluggify(doc.title) === title)?.url;
-  console.log({ challengeKey });
 
   return (
     <div className='flex flex-col justify-between overflow-hidden rounded-lg min-w-[357px] max-w-[400px] h-[470px] border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md'>
