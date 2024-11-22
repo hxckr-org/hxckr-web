@@ -15,11 +15,18 @@ const createRepo = async (repo_url: string) => {
   }
 };
 
-export const useCreateRepo = (repo_url: string) => {
+export const useCreateRepo = ({
+  repo_url,
+  callback,
+}: {
+  repo_url: string;
+  callback: (data: CreateRepoResponse) => void;
+}) => {
   return useMutation({
     mutationFn: () => createRepo(repo_url),
     onSuccess: (data) => {
-      console.log(data);
+      console.log("Mutation succeeded with data:", data);
+      callback(data);
     },
   });
 };
