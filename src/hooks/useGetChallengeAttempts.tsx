@@ -1,6 +1,5 @@
-import axios from "axios";
-
 import { GET_CHALLENGE_ATTEMPTS } from "@/config/endpoints";
+import axios from "@/services/axios";
 import { ChallengePeriod, Period } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -27,6 +26,8 @@ export const useGetChallengeAttempts = ({
   return useQuery({
     queryKey: ["challenge-attempts", challenge_id, period],
     queryFn: () => fetchChallengeAttempts({ challenge_id, period }),
+    refetchOnWindowFocus: true,
+    refetchInterval: 200000, // 2 minutes
   });
 };
 
