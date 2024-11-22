@@ -20,12 +20,40 @@ export const RecentChallenges = () => {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  const { data, isLoading, error, isError } = useGetUserRepositories({
-    status: Status.InProgress,
-    page: currentPage,
-    per_page: 5,
+  const { data: inProgressData, isLoading: isLoadingInProgress } =
+    useGetUserRepositories({
+      status: Status.InProgress,
+      page: currentPage,
+      per_page: 5,
+    });
+
+  const { data: notStartedData, isLoading: isLoadingNotStarted } =
+    useGetUserRepositories(
+      {
+        status: Status.NotStarted,
+        page: currentPage,
+        per_page: 5,
+      },
+      {
+        enabled: true,
+      }
+    );
+
+  console.log({
+    inProgressData,
+    notStartedData,
+    isLoadingInProgress,
+    isLoadingNotStarted,
   });
+
+  const data =
+    (inProgressData as RepositoryResponse)?.data?.length > 0
+      ? inProgressData
+      : notStartedData;
+
+  const isLoading = isLoadingInProgress || isLoadingNotStarted;
   const response = data as RepositoryResponse;
+  console.log("response", response);
   const [isSeeAllVisible, setIsSeeAllVisible] = useState(false);
 
   return (
