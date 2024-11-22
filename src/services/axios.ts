@@ -2,8 +2,10 @@ import axios from "axios";
 import { getSession, signOut } from "next-auth/react";
 import { coreBaseUrl, isBrowser } from "@/config/process";
 
-// Create a base axios instance
-const axiosInstance = axios.create();
+// Create a base axios instance with default config
+const axiosInstance = axios.create({
+  baseURL: coreBaseUrl || process.env.NEXT_PUBLIC_APP_CORE_BASE_URL || '',
+});
 
 // Configure baseURL dynamically for each request to ensure we always have the latest value
 axiosInstance.interceptors.request.use(async (config) => {
@@ -13,10 +15,7 @@ axiosInstance.interceptors.request.use(async (config) => {
     config.headers["x-session-token"] = session.accessToken;
   }
 
-  // Always set the baseURL from the current environment
-  config.baseURL = process.env.NEXT_PUBLIC_APP_CORE_BASE_URL || coreBaseUrl;
-
-  // Validate baseURL on client-side only
+  // Only log error in browser environment
   if (isBrowser && !config.baseURL) {
     console.error("Core Base URL is not configured. Please check your environment variables.");
   }
