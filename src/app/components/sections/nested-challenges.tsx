@@ -454,24 +454,13 @@ const StagesContentSection = ({
       {/* body section */}
       <div className="flex justify-between w-full h-full flex-1 gap-6 overflow-scroll">
         {/* left */}
-        <section className={`flex flex-col overflow-scroll rounded-b-lg `}>
+        <section
+          className={`flex flex-col overflow-scroll rounded-b-lg `}
+        >
           <MDXLayoutRenderer
             code={challenge.body.code}
             components={mdxComponents}
-            repo_url={"http"}
           />
-          {
-            // Todo: buttons to be moveed below content box
-            <div className="flex flex-col w-full items-center justify-center rounded-b-lg ">
-              <button className="py-[19px] border border-grey-accent w-full bg-grey-card-border">
-                Listening for Git push...
-              </button>
-              <button className="py-[19px] border border-grey-accent w-full bg-grey-bottom-card text-grey-bottom-card-text flex items-center gap-2 justify-center">
-                Continue to next stage
-                <CaretRightIcon className="w-6 h-6" />
-              </button>
-            </div>
-          }
         </section>
 
         <AttemptsBoard

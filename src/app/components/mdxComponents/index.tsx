@@ -18,6 +18,9 @@ import { Terminal } from "./Terminal";
 import { ContentBox } from "./ContentBox";
 import { Step } from "./Step";
 import { Text } from "./Text";
+import { GitPushButton } from "./GitPushButton";
+import { GitPushText } from "./GitPushText";
+import { GitPushContainer } from "./GitPushContainer";
 
 // load all mdx components
 // all possible components from the every mdx file must be exported here else an error is thrown
@@ -47,6 +50,9 @@ export const mdxComponents = {
   ContentBox,
   Step,
   Text,
+  GitPushButton,
+  GitPushText,
+  GitPushContainer,
 };
 
 export const contentMdxComponents = {
