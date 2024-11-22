@@ -12,7 +12,7 @@ export default async function Dashboard() {
   }
 
   return (
-    <DashboardLayout session={session}>
+    <DashboardLayout session={session} className='p-8 pb-7'>
       <RecentChallenges />
     </DashboardLayout>
   );

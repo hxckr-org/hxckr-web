@@ -2,7 +2,6 @@ import React from "react";
 
 const LearningObjectives = ({ title, children }: { title: string; children: React.ReactNode }) => {
   const objectives = React.Children.toArray(children);
-  console.log({ objectives });
 
   return (
     <div className='pt-[34px] flex flex-col gap-2'>
