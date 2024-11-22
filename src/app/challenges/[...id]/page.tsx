@@ -1,8 +1,8 @@
 import React from "react";
 import { auth } from "@/auth";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { DashboardLayout } from "@/app/components/layout/dashboard";
-import NestedChallanges from "@/app/components/sections/nested-challenges";
+import NestedChallenges from "@/app/components/sections/nested-challenges";
 import { allDocuments } from "contentlayer/generated";
 
 export default async function page({ params }: { params: { id: string[] } }) {
@@ -16,16 +16,7 @@ export default async function page({ params }: { params: { id: string[] } }) {
 
   const extractPageData = () => {
     const courses = allDocuments;
-
-    // Find the correct base slug by matching the title
-    const titleToMatch = slug[0].replaceAll("-", " ");
-
     const sluggify = (str: string) => str.toLowerCase().replaceAll(" ", "-");
-
-    // const baseSlug = courses.find((doc) => doc.title.toLowerCase().replace(/-|\s/g, "") === titleToMatch.toLowerCase().replace(/-|\s/g, ""))
-    //   ?.slugAsParams[0];
-
-    // console.log("Found base slug:", baseSlug);
 
     // Get the base challenge (without modules)
     const baseChallenge = courses.filter((doc) => sluggify(doc.url) === `/${slug.join("/")}`);
@@ -34,13 +25,11 @@ export default async function page({ params }: { params: { id: string[] } }) {
     if (!baseChallenge) {
       return { baseChallenge: [], modulesChallenges: [], title: slug[0] };
     }
-    // const baseChallenge = courses.filter((doc) => doc.slugAsParams.length === 2 && doc.slugAsParams[0] === baseSlug);
 
     // Get all module challenges
     const modulesChallenges = courses.filter((doc) => doc.slugAsParams.includes(challengeSlugs[0]) && doc.slugAsParams.length > 2);
 
     return {
-      // baseChallenge: baseChallenge !== undefined ? baseChallenge : null,
       baseChallenge: baseChallenge.length > 0 ? [baseChallenge[0]] : [],
       modulesChallenges,
       title: slug[0],
@@ -51,8 +40,7 @@ export default async function page({ params }: { params: { id: string[] } }) {
 
   return (
     <DashboardLayout session={session}>
-      {/* <NestedChallanges challengeModules={modulesChallenges} challenge={baseChallenge!} /> */}
-      <NestedChallanges challengeModules={modulesChallenges} challenge={baseChallenge[0]!} />
+      <NestedChallenges challengeModules={modulesChallenges} challenge={baseChallenge[0]!} />
     </DashboardLayout>
   );
 }

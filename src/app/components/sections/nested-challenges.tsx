@@ -17,7 +17,7 @@ import { MDXLayoutRenderer } from "pliny/mdx-components.js";
 import Button from "../primitives/button";
 import useCreateRepo from "@/hooks/useCreateRepo";
 
-const NestedChallanges = ({ challenge, challengeModules }: { challenge: Course; challengeModules: Course[] }) => {
+const NestedChallenges = ({ challenge, challengeModules }: { challenge: Course; challengeModules: Course[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isActive, setIsActive] = useState(false);
@@ -32,7 +32,7 @@ const NestedChallanges = ({ challenge, challengeModules }: { challenge: Course; 
     repoDetails?.progress?.status === Status.Completed ||
     repoDetails?.progress?.progress_details.current_step > 0;
 
-  const [userStarted, setUserStarted] = useState(true);
+  const [userStarted, setUserStarted] = useState(hasStarted);
   // const [userStarted, setUserStarted] = useState(hasStarted);
 
   useEffect(() => {
@@ -240,4 +240,4 @@ const StagesContentSection = ({
   );
 };
 
-export default NestedChallanges;
+export default NestedChallenges;
