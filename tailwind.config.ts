@@ -20,6 +20,8 @@ const config: Config = {
         "grey-text": "#666666",
         "grey-secondary-text": "#5A5A5A",
         "grey-tertiary-text": "#5A5B5C",
+        "grey-bottom-card": "#DEDEDE",
+        "grey-bottom-card-text": "#929293",
         "grey-button-text": "#F7F8F9",
         "grey-footer-text": "#B3B3B3",
         "grey-footer-background": "#141414",
