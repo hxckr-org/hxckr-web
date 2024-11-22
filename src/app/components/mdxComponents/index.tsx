@@ -10,6 +10,17 @@ import SecurityNote from "./SecurityNote";
 import SetupSteps from "./SetupSteps";
 import StudyTopics from "./StudyTopics";
 import TopicCard from "./TopicCard";
+import { Stages, Stage, StageTitle, StageDifficulty, StageDescription } from "./Stages";
+import IntroductionCard from "./IntroductionCard";
+import { Dropdown, DropdownItem } from "./Dropdown";
+import Button from "./Button";
+import { Terminal } from "./Terminal";
+import { ContentBox } from "./ContentBox";
+import { Step } from "./Step";
+import { Text } from "./Text";
+import { GitPushButton } from "./GitPushButton";
+import { GitPushText } from "./GitPushText";
+import { GitPushContainer } from "./GitPushContainer";
 
 // load all mdx components
 // all possible components from the every mdx file must be exported here else an error is thrown
@@ -26,4 +37,27 @@ export const mdxComponents = {
   SetupSteps,
   StudyTopics,
   TopicCard,
+  Stage,
+  StageDescription,
+  StageDifficulty,
+  StageTitle,
+  Stages,
+  IntroductionCard,
+  Dropdown,
+  DropdownItem,
+  Button,
+  Terminal,
+  ContentBox,
+  Step,
+  Text,
+  GitPushButton,
+  GitPushText,
+  GitPushContainer,
+};
+
+export const contentMdxComponents = {
+  IntroductionCard,
+  Dropdown,
+  DropdownItem,
+  ChallengeBrief,
 };

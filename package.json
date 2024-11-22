@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--max-http-header-size=12800000' npm run submodules:update && next dev",
+    "dev": "NODE_OPTIONS='--max-http-header-size=12800000' npm run delete:contentlayer && npm run submodules:update && next dev",
     "submodules:update": "git submodule update --init && git submodule update --remote",
-    "build": "next build",
+    "delete:contentlayer": "rm -rf .contentlayer",
+    "build": "npm run delete:contentlayer && next build",
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",

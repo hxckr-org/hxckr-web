@@ -16,6 +16,7 @@ type ChallengeWithProgress = Challenge & {
     current_step: number;
     completion_percentage: number;
   };
+  repository_id: string;
 };
 
 type Progress = {
@@ -48,9 +49,36 @@ type RepositoryResponse = {
   total_pages: number;
 };
 
+type CreateRepoResponse = {
+  repo_name: string;
+  repo_url: string;
+  id: string;
+};
+
+type ChallengeAttempt = {
+  challenge_id: string;
+  username: string;
+  total_score: number;
+  module_count: number;
+};
+
+const Status = {
+  NotStarted: "NotStarted",
+  InProgress: "InProgress",
+  Completed: "Completed",
+} as const;
+
+const Period = {
+  Today: "Today",
+  ThisWeek: "ThisWeek",
+  ThisMonth: "ThisMonth",
+  AllTime: "AllTime",
+} as const;
+
 type ChallengeMode = "functional_test" | "project";
 type ChallengeDifficulty = "easy" | "medium" | "hard";
-type Status = "NotStarted" | "InProgress" | "Completed";
+type ChallengeStatus = (typeof Status)[keyof typeof Status];
+type ChallengePeriod = (typeof Period)[keyof typeof Period];
 
 export type {
   Challenge,
@@ -59,6 +87,11 @@ export type {
   Repository,
   RepositoryResponse,
   Progress,
-  Status,
+  ChallengeStatus,
   ChallengeWithProgress,
+  CreateRepoResponse,
+  ChallengePeriod,
+  ChallengeAttempt,
 };
+
+export { Status, Period };
