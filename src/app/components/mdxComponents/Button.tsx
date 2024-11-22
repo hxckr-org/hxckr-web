@@ -35,6 +35,16 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
       return key.toLowerCase() === language?.toLowerCase();
     })
     .map(([key, value]) => value);
+  const currentRouteArray = pathname.split("/");
+  const nextModule = link
+    .split("/")
+    .find((item, idx) => item.includes("module"));
+  const clx = currentRouteArray.find((item) => item.includes("module"));
+
+  const challenge = JSON.parse(
+    window.localStorage.getItem("challenge") || "{}"
+  ) as ChallengeWithProgress;
+  console.log("challenge", challenge);
 
   console.log("languageMatch", languageMatch);
 
@@ -92,14 +102,49 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
 
   const disabled = !language || !proficiency || !frequency || isCreatingRepo;
 
+  // Add effect to check localStorage on mount
+  React.useEffect(() => {
+    const challenge = JSON.parse(
+      window.localStorage.getItem("challenge") || "{}"
+    ) as ChallengeWithProgress;
+
+    if (challenge.repository_id && !rid) {
+      const urlParams = new URLSearchParams(searchParams.toString());
+      urlParams.set("rid", challenge.repository_id);
+      urlParams.set("started", "true");
+
+      const newPath = `${pathname}?${urlParams.toString()}`;
+      router.replace(newPath);
+    }
+  }, [pathname, rid, router, searchParams]);
+
   return (
-    <div className="flex items-end justify-end w-full pb-6">
+    <div className="flex items-end justify-end w-full pb-6 mt-8">
       <Button
         disabled={disabled}
         onClick={() => {
-          handleCreateRepo();
+          if (challenge.repository_id) {
+            if (clx && nextModule) {
+              const newLinkArray = currentRouteArray.map((item) => {
+                if (item === clx) {
+                  return nextModule;
+                }
+                return item;
+              });
+
+              const urlParams = new URLSearchParams();
+              urlParams.set("rid", challenge.repository_id);
+              urlParams.set("started", "true");
+
+              const newLink =
+                newLinkArray.join("/") + "?" + urlParams.toString();
+              router.push(newLink);
+            }
+          } else {
+            handleCreateRepo();
+          }
         }}
-        className={`bg-purple-primary text-sm px-5 py-3 flex items-center gap-2 rounded-full font-normal hover:bg-purple-primary/90 text-white w-fit ${
+        className={`bg-purple-primary text-sm px-10 py-3 flex items-center gap-2 rounded-full font-normal hover:bg-purple-primary/90 text-white w-fit ${
           disabled ? "cursor-not-allowed opacity-50" : ""
         }`}
       >

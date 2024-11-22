@@ -15,6 +15,7 @@ type QueryParams = {
   per_page?: number;
   page?: number;
   repo_url?: string;
+  softServeUrl?: string;
   status?: ChallengeStatus;
 };
 
@@ -24,6 +25,7 @@ const fetchUserRepositories = async ({
   repo_url,
   status = Status.NotStarted,
   id,
+  softServeUrl,
 }: QueryParams) => {
   const params = new URLSearchParams();
   params.append("per_page", per_page.toString());
@@ -39,6 +41,7 @@ const fetchUserRepositories = async ({
     }
   }
   if (repo_url) params.append("repo_url", repo_url);
+  if (softServeUrl) params.append("soft_serve_url", softServeUrl);
   if (status) params.append("status", status);
 
   try {
@@ -56,11 +59,19 @@ export const useGetUserRepositories = ({
   repo_url,
   status,
   id,
+  softServeUrl,
 }: QueryParams): UseQueryResult<RepositoryResponse | Repository> => {
   const queryResult = useQuery({
     queryKey: ["user-repositories", per_page, page, repo_url, status, id],
     queryFn: () =>
-      fetchUserRepositories({ per_page, page, repo_url, status, id }),
+      fetchUserRepositories({
+        per_page,
+        page,
+        repo_url,
+        status,
+        id,
+        softServeUrl,
+      }),
   });
   return queryResult;
 };
