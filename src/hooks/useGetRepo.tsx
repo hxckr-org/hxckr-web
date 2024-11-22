@@ -8,7 +8,7 @@ import {
   RepositoryResponse,
   Status,
 } from "@/types";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { useQuery, UseQueryResult, UseQueryOptions } from "@tanstack/react-query";
 
 type QueryParams = {
   id?: string;
@@ -20,7 +20,7 @@ type QueryParams = {
 };
 
 const fetchUserRepositories = async ({
-  per_page = 10,
+  per_page = 5,
   page = 1,
   repo_url,
   status = Status.NotStarted,
@@ -53,16 +53,12 @@ const fetchUserRepositories = async ({
   }
 };
 
-export const useGetUserRepositories = ({
-  per_page,
-  page,
-  repo_url,
-  status,
-  id,
-  softServeUrl,
-}: QueryParams): UseQueryResult<RepositoryResponse | Repository> => {
-  const queryResult = useQuery({
-    queryKey: ["user-repositories", per_page, page, repo_url, status, id],
+export const useGetUserRepositories = (
+  { per_page, page, repo_url, status, id, softServeUrl }: QueryParams,
+  options?: Partial<UseQueryOptions<RepositoryResponse | Repository, Error>>
+): UseQueryResult<RepositoryResponse | Repository> => {
+  const queryResult = useQuery<RepositoryResponse | Repository, Error>({
+    queryKey: ["user-repositories", status, { per_page, page, repo_url, id }],
     queryFn: () =>
       fetchUserRepositories({
         per_page,
@@ -72,6 +68,7 @@ export const useGetUserRepositories = ({
         id,
         softServeUrl,
       }),
+    ...options
   });
   return queryResult;
 };

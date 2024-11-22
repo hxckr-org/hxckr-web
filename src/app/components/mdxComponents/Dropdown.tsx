@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { CaretDownIcon, CheckCircledIcon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

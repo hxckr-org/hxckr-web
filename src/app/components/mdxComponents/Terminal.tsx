@@ -1,3 +1,5 @@
+"use client";
+
 import { useGetUserRepositories } from "@/hooks/useGetRepo";
 import { CommandIcon } from "@/public/assets/icons/command-icon";
 import { ChallengeWithProgress, Repository } from "@/types";
@@ -7,13 +9,9 @@ import React, { useEffect, useState } from "react";
 
 export const Terminal = ({
   children,
-  repo_url = "https://github.com/example-repo",
-  repo_name = "example-repo",
   language_specific_install_command = "npm install",
 }: {
   children: React.ReactNode;
-  repo_url?: string;
-  repo_name?: string;
   language_specific_install_command?: string;
 }) => {
   const [isCopied, setIsCopied] = useState(false);
