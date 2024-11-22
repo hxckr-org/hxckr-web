@@ -64,46 +64,37 @@ const NestedChallenges = ({
     repoDetails?.progress?.progress_details.current_step > 0;
 
   useEffect(() => {
-    urlParams.set("started", JSON.stringify(hasStarted));
-  }, []);
-
-  const hasUserStarted = urlParams.get("started") === "true";
-  const [userStarted, setUserStarted] = useState(hasUserStarted);
-
-  useEffect(() => {
     const storedChallenge = window.localStorage.getItem("challenge");
     if (storedChallenge) {
       setChallengeDetails(JSON.parse(storedChallenge));
     }
   }, []);
 
+  const hasUserStarted = urlParams.get("started") === "true" || hasStarted;
+
   return (
     <div className="flex h-full">
       <ContentSideBar
-        userStarted={userStarted}
+        userStarted={hasUserStarted}
         isActive={isActive}
         challenge={challenge}
         challengeModules={challengeModules}
-        repoId={repo_id}
       />
       {/* content */}
-      {userStarted ? (
+      {hasUserStarted ? (
         <StagesContentSection
-          userStarted={userStarted}
           isLoading={isLoading}
           challenge={challenge}
-          setUserStarted={setUserStarted}
           attempts={attempts}
           attemptsLoading={attemptsLoading}
           period={period}
           setPeriod={setPeriod}
+          repoDetails={repoDetails}
         />
       ) : (
         <IntroductionContentSection
-          userStarted={userStarted}
           isLoading={isLoading}
           challenge={challenge}
-          setUserStarted={setUserStarted}
           attempts={attempts}
           attemptsLoading={attemptsLoading}
           period={period}
@@ -114,14 +105,24 @@ const NestedChallenges = ({
   );
 };
 
-const ContentListItem = ({ isActive, text, url, repoId }: { isActive: boolean; text: string; url: string; repoId: string }) => {
+const ContentListItem = ({
+  isActive,
+  text,
+  url,
+}: {
+  isActive: boolean;
+  text: string;
+  url: string;
+}) => {
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams(searchParams);
 
   return (
     <Link
       href={`/challenges${url + "?" + urlParams.toString()}`}
-      className={`${isActive ? "border border-purple-secondary bg-purple-quaternary" : ""} flex gap-2 items-center p-3 rounded`}
+      className={`${
+        isActive ? "border border-purple-secondary bg-purple-quaternary" : ""
+      } flex gap-2 items-center p-3 rounded`}
     >
       {isActive ? (
         <ArrowRightIcon className="h-5 w-5 text-purple-primary" />
@@ -142,17 +143,16 @@ const ContentListItem = ({ isActive, text, url, repoId }: { isActive: boolean; t
 };
 
 const NavigationBlock = () => {
+  const router = useRouter();
   return (
     <div className="flex justify-between max-h-12">
-      <section className="flex items-center border border-grey-accent rounded bg-white">
-        <button className="flex items-center gap-1 p-3 px-2.5">
-          <ArrowLeftIcon className="w-6 h-6 text-grey-footer-text" />
-          <p className="text-grey-footer-text">Back</p>
-        </button>
-        <div className="border-r h-full border-r-grey-accent"></div>
-        <button className="flex items-center gap-1 p-3 px-2.5">
-          <p className="text-purple-primary">Next</p>
-          <ArrowRightIcon className="w-6 h-6 text-purple-primary" />
+      <section className="flex items-center border border-grey-accent rounded bg-white hover:bg-purple-quaternary">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-1 p-3 px-2.5"
+        >
+          <ArrowLeftIcon className="w-6 h-6 text-purple-primary" />
+          <p className="text-purple-primary">Back</p>
         </button>
       </section>
     </div>
@@ -160,39 +160,35 @@ const NavigationBlock = () => {
 };
 
 const IntroductionContentSection = ({
-  userStarted,
   isLoading,
   challenge,
-  setUserStarted,
   attempts,
   attemptsLoading,
   period,
   setPeriod,
 }: {
-  userStarted: boolean;
   isLoading: boolean;
   challenge: Course;
-  setUserStarted: React.Dispatch<React.SetStateAction<boolean>>;
   attempts: ChallengeAttempt[];
   attemptsLoading: boolean;
   period: ChallengePeriod;
   setPeriod: React.Dispatch<React.SetStateAction<ChallengePeriod>>;
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const started = searchParams.get("started");
   const urlParams = new URLSearchParams(searchParams);
 
-  const saveIsStartedState = () => {
-    urlParams.set("started", "true");
-    setUserStarted(true);
-    router.push(pathname + "?" + urlParams.toString());
-  };
+  const moduleUrl = `/challenges/${
+    challenge.sourceAsParams[0]
+  }/module-1/${challenge.slugAsParams.slice(1).join("/")}${
+    urlParams.toString() ? "?" + urlParams.toString() + "&started=true" : ""
+  }`;
 
   return (
     <div
-      className={`flex flex-col gap-3 p-8 pb-6 ${
-        userStarted ? "hidden" : "flex-1"
+      className={`flex-col gap-3 p-8 pb-6 ${
+        started === "true" ? "hidden" : "flex"
       }`}
     >
       <div
@@ -219,23 +215,20 @@ const IntroductionContentSection = ({
           <div className="flex justify-between pt-4 pb-6">
             <section className="flex flex-col gap-1">
               <p className="text-black text-2xl leading-[36px]">
-                {challenge.title}
+                {challenge?.title}
               </p>
               <p className="text-grey-secondary-text font-light">
                 {challenge.description}
               </p>
             </section>
 
-            <Button
-              onClick={() => saveIsStartedState()}
-              // onClick={() => {
-              //   return setUserStarted(true);
-              // }}
-              className='text-base font-medium text-white rounded-full px-5 flex items-center gap-1'
+            <Link
+              href={moduleUrl}
+              className=" bg-purple-primary text-sm px-5 py-3 flex items-center gap-2 rounded-full font-normal hover:bg-purple-primary/90 text-white w-fit"
             >
               <p>Start Challenge</p>
               <CaretRightIcon className="w-6 h-6" />
-            </Button>
+            </Link>
           </div>
 
           <section>
@@ -253,7 +246,9 @@ const IntroductionContentSection = ({
         {/* body section */}
         <div className="flex justify-between w-full h-full flex-1 gap-6 pt-3 overflow-scroll">
           {/* left */}
-          <section className="border-[1.5px] border-grey-accent bg-white w-full rounded-lg p-5 overflow-scroll">
+          <section
+            className={`border-[1.5px] border-grey-accent bg-white w-full rounded-lg p-5 overflow-scroll`}
+          >
             <MDXLayoutRenderer
               code={challenge.body.code}
               components={mdxComponents}
@@ -363,7 +358,11 @@ const AttemptsBoard = ({
             </div>
           ))
         ) : (
-          <div className="flex justify-center items-center h-full text-black font-light text-center">
+          <div
+            className={`flex justify-center items-center h-full text-black font-light text-center ${
+              attemptsLoading ? "hidden" : "block"
+            }`}
+          >
             <p>No attempts found. Be the first to attempt this challenge!</p>
           </div>
         )}
@@ -377,13 +376,11 @@ const ContentSideBar = ({
   isActive,
   challenge,
   challengeModules,
-  repoId,
 }: {
   userStarted: boolean;
   isActive: boolean;
   challenge: Course;
   challengeModules: Course[];
-  repoId: string;
 }) => {
   return (
     <div
@@ -414,7 +411,6 @@ const ContentSideBar = ({
             text={`${index + 1}`}
             key={module.url}
             url={module.url}
-            repoId={repoId}
           />
         ))}
       </div>
@@ -423,24 +419,25 @@ const ContentSideBar = ({
 };
 
 const StagesContentSection = ({
-  userStarted,
   isLoading,
   challenge,
-  setUserStarted,
   attempts,
   attemptsLoading,
   period,
   setPeriod,
+  repoDetails,
 }: {
-  userStarted: boolean;
   isLoading: boolean;
   challenge: Course;
-  setUserStarted: React.Dispatch<React.SetStateAction<boolean>>;
   attempts: ChallengeAttempt[];
   attemptsLoading: boolean;
   period: ChallengePeriod;
   setPeriod: React.Dispatch<React.SetStateAction<ChallengePeriod>>;
+  repoDetails: Repository;
 }) => {
+  const currentStep = repoDetails?.progress?.progress_details.current_step;
+  const challengeModules = challenge.body
+  console.log({ currentStep, challengeModules });
   return (
     <div className="flex flex-col p-6 pb-6 w-full">
       <NavigationBlock />
@@ -456,12 +453,13 @@ const StagesContentSection = ({
       </div>
 
       {/* body section */}
-      <div className="flex justify-between w-full h-full flex-1 gap-6 overflow-scroll ">
+      <div className="flex justify-between w-full h-full flex-1 gap-6 overflow-scroll">
         {/* left */}
-        <section className="flex flex-col gap-6 overflow-scroll">
+        <section className={`flex flex-col gap-6 overflow-scroll`}>
           <MDXLayoutRenderer
             code={challenge.body.code}
             components={mdxComponents}
+            repo_url={"http"}
           />
         </section>
 

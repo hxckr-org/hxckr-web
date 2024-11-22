@@ -1,6 +1,9 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 import {
   BellOutlineIcon,
@@ -17,7 +20,6 @@ import {
   UserOutlineIcon,
   UserSolidIcon,
 } from "@/public/assets/icons";
-import { signOut } from "next-auth/react";
 
 interface NavItemProps {
   href: string;
@@ -86,6 +88,14 @@ export default function Sidebar({
   isHamburgerOpen: boolean;
   setIsHamburgerOpen: (isHamburgerOpen: boolean) => void;
 }) {
+  const searchParams = useSearchParams();
+  const started = searchParams.get("started");
+  useEffect(() => {
+    if (started) {
+      setIsOpen(false);
+    }
+  }, [started]);
+
   const navItems = [
     {
       href: "/dashboard",
