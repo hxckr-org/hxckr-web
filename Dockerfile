@@ -2,8 +2,8 @@ FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+# Install git and other dependencies
+RUN apk add --no-cache libc6-compat git
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -15,12 +15,15 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
+RUN apk add --no-cache git
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Initialize git submodules
+RUN git submodule update --init --recursive
 
 # Add environment variables for build time
 ARG NEXT_PUBLIC_APP_CORE_BASE_URL
@@ -28,17 +31,18 @@ ARG NEXT_PUBLIC_APP_WEBSOCKET_URL
 ENV NEXT_PUBLIC_APP_CORE_BASE_URL=$NEXT_PUBLIC_APP_CORE_BASE_URL
 ENV NEXT_PUBLIC_APP_WEBSOCKET_URL=$NEXT_PUBLIC_APP_WEBSOCKET_URL
 
-# Create the contentlayer directory
+# Create the contentlayer directory and ensure courses directory exists
 RUN mkdir -p .contentlayer
+RUN mkdir -p public/courses
 
 # Next.js collects completely anonymous telemetry data about general usage.
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Modified build command to ensure contentlayer is generated
+# Build with explicit contentlayer generation
 RUN \
-  if [ -f yarn.lock ]; then yarn run delete:contentlayer && yarn run build; \
-  elif [ -f package-lock.json ]; then npm run delete:contentlayer && npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run delete:contentlayer && pnpm run build; \
+  if [ -f yarn.lock ]; then yarn run submodules:update && yarn run build; \
+  elif [ -f package-lock.json ]; then npm run submodules:update && npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run submodules:update && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
