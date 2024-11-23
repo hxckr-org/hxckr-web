@@ -2,8 +2,7 @@ FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Install git for submodule initialization
-RUN apk add --no-cache libc6-compat git
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -20,18 +19,12 @@ FROM base AS builder
 RUN apk add --no-cache git
 WORKDIR /app
 
-# Copy git-related files first
-COPY .gitmodules ./.gitmodules
-COPY .git ./.git
-
-# Initialize git submodules
-RUN git init && \
-    git submodule init && \
-    git submodule update --init --recursive
-
-# Copy the rest of the files
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Clone courses repository directly
+RUN rm -rf public/courses && \
+    git clone https://github.com/hxckr-org/hxckr-courses.git public/courses
 
 # Debug: List contents and ensure directories exist
 RUN echo "=== Initial directory contents ===" && \
