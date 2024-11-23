@@ -17,7 +17,10 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = [...config.externals, 'contentlayer2'];
+    }
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
