@@ -6,7 +6,7 @@
     "dev": "NODE_OPTIONS='--max-http-header-size=12800000' npm run delete:contentlayer && npm run submodules:update && next dev",
     "submodules:update": "git submodule update --init && git submodule update --remote",
     "delete:contentlayer": "rm -rf .contentlayer",
-    "build": "npm run delete:contentlayer && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",

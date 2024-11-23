@@ -36,9 +36,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Modified build command to ensure contentlayer is generated
 RUN \
-  if [ -f yarn.lock ]; then yarn run delete:contentlayer && yarn run build; \
-  elif [ -f package-lock.json ]; then npm run delete:contentlayer && npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run delete:contentlayer && pnpm run build; \
+  if [ -f yarn.lock ]; then yarn run build; \
+  elif [ -f package-lock.json ]; then npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
