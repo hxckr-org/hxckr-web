@@ -2,7 +2,8 @@ FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# Install git for submodule initialization
+RUN apk add --no-cache libc6-compat git
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -16,14 +17,30 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM base AS builder
+RUN apk add --no-cache git
 WORKDIR /app
+
+# Copy git-related files first
+COPY .gitmodules ./.gitmodules
+COPY .git ./.git
+
+# Initialize git submodules
+RUN git init && \
+    git submodule init && \
+    git submodule update --init --recursive
+
+# Copy the rest of the files
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Debug: List contents and ensure directories exist
 RUN echo "=== Initial directory contents ===" && \
     ls -la && \
-    mkdir -p .contentlayer && \
+    echo "=== Courses directory contents ===" && \
+    ls -la public/courses
+
+# Create contentlayer directory
+RUN mkdir -p .contentlayer && \
     chmod 755 .contentlayer && \
     chmod -R 755 public/courses
 
