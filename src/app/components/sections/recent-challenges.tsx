@@ -1,13 +1,16 @@
 "use client";
 
+import { allDocuments } from "contentlayer/generated";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "@/app/components/primitives/button";
 import { Pagination } from "@/app/components/primitives/pagination";
 import { ProgressBar } from "@/app/components/primitives/progress-bar";
+import { useStore } from "@/contexts/store";
+import { getChallengeDocument } from "@/helpers";
 import { useGetUserRepositories } from "@/hooks/useGetRepo";
 import {
   ArrowLeftIcon,
@@ -16,7 +19,10 @@ import {
 } from "@/public/assets/icons";
 import { Repository, RepositoryResponse, Status } from "@/types";
 
+import { LoadingSpinner } from "../primitives/loading-spinner";
+
 export const RecentChallenges = () => {
+  const { addRepository } = useStore();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
@@ -39,13 +45,6 @@ export const RecentChallenges = () => {
       }
     );
 
-  console.log({
-    inProgressData,
-    notStartedData,
-    isLoadingInProgress,
-    isLoadingNotStarted,
-  });
-
   const data =
     (inProgressData as RepositoryResponse)?.data?.length > 0
       ? inProgressData
@@ -53,20 +52,33 @@ export const RecentChallenges = () => {
 
   const isLoading = isLoadingInProgress || isLoadingNotStarted;
   const response = data as RepositoryResponse;
-  console.log("response", response);
   const [isSeeAllVisible, setIsSeeAllVisible] = useState(false);
+
+  useEffect(() => {
+    if (response?.data) {
+      response?.data.forEach((repo) => {
+        addRepository(repo);
+      });
+    }
+  }, [response?.data, addRepository]);
 
   return (
     <div className="relative h-full">
       <Header
         isSeeAllVisible={isSeeAllVisible}
         setIsSeeAllVisible={setIsSeeAllVisible}
-        challengesCount={response?.data.length || 0}
+        challengesCount={isLoading ? 0 : response?.data.length || 0}
       />
-      <ChallengeBody
-        recentChallenges={response?.data || []}
-        isSeeAllVisible={isSeeAllVisible}
-      />
+      {isLoading ? (
+        <div className="flex items-center justify-center h-1/2">
+          <LoadingSpinner size="large" />
+        </div>
+      ) : (
+        <ChallengeBody
+          recentChallenges={response?.data || []}
+          isSeeAllVisible={isSeeAllVisible}
+        />
+      )}
       <div className="absolute bottom-0 w-full mb-2">
         <Pagination
           totalItems={response?.total || 0}
@@ -159,8 +171,9 @@ const ChallengeBody = ({
             key={challenge.id}
             isSeeAllVisible={isSeeAllVisible}
             title={challenge.challenge.title}
-            module_count={challenge.challenge.module_count}
-            current_step={challenge.progress.progress_details.current_step}
+            repoId={challenge.id}
+            moduleCount={challenge.challenge.module_count}
+            currentStep={challenge.progress.progress_details.current_step}
           />
         ))
       ) : (
@@ -188,15 +201,32 @@ const ChallengeBody = ({
 
 const RecentChallengeCard = ({
   title,
-  module_count,
-  current_step,
+  moduleCount,
+  currentStep,
+  repoId,
   isSeeAllVisible,
 }: {
   title: string;
-  module_count: number;
-  current_step: number;
+  moduleCount: number;
+  currentStep: number;
+  repoId: string;
   isSeeAllVisible: boolean;
 }) => {
+  const router = useRouter();
+  const challengeDocument = getChallengeDocument({ title });
+
+  const moduleCountPlusOne = moduleCount + 1; // +1 because the first step is the introduction
+  const currentModule = `module-${currentStep + 1}`; // +1 because the first step is the introduction
+  const challengeKey = `${challengeDocument?.url.replace(
+    "/instructions",
+    `/${currentModule}`
+  )}/instructions`;
+
+  const searchParams = new URLSearchParams();
+  searchParams.set("rid", repoId);
+  searchParams.set("started", "true");
+  const challengeUrl = `/challenges${challengeKey}?${searchParams.toString()}`;
+
   return (
     <div
       className={`flex items-center gap-4 h-[148px] px-4 py-8 group relative ${
@@ -219,14 +249,19 @@ const RecentChallengeCard = ({
           {title}
         </h4>
         <ProgressBar
-          value={current_step}
-          max={module_count}
+          value={currentStep}
+          max={moduleCountPlusOne}
           className="w-full h-2 bg-grey-border rounded-full"
         />
-        <span className="text-sm text-[#5A5A5A] font-extralight">{`${current_step}/${module_count} stages done`}</span>
+        <span className="text-sm text-[#5A5A5A] font-extralight">{`${currentStep}/${moduleCountPlusOne} stages done`}</span>
       </div>
       <div className="flex items-center gap-4 absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <Button className="bg-[#F8F2FF] text-[#4C2480] text-base px-7 py-4 hover:bg-[#F8F2FF]/90 hover:cursor-pointer hover:border-[1.5px] hover:border-[#4C2480]/50 items-center gap-4 rounded-lg">
+        <Button
+          onClick={() => {
+            router.push(challengeUrl);
+          }}
+          className="bg-[#F8F2FF] text-[#4C2480] text-base px-7 py-4 hover:bg-[#F8F2FF]/90 hover:cursor-pointer hover:border-[1.5px] hover:border-[#4C2480]/50 items-center gap-4 rounded-lg"
+        >
           <PlayIcon fill="#9747FF" />
           Continue
         </Button>

@@ -43,7 +43,11 @@ export const useGetCombinedChallenges = () => {
           completion_percentage:
             Math.round((currentStep / moduleCount) * 100) || 0,
         },
-        repository_id: userRepo?.id || "",
+        repository: {
+          id: userRepo?.id || "",
+          repo_url: userRepo?.repo_url || "",
+          soft_serve_url: userRepo?.soft_serve_url || "",
+        },
       };
     });
   }, [challenges, userRepos]);

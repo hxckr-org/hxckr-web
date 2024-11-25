@@ -16,7 +16,7 @@ type ChallengeWithProgress = Challenge & {
     current_step: number;
     completion_percentage: number;
   };
-  repository_id: string;
+  repository: Pick<Repository, "id" | "repo_url" | "soft_serve_url">;
 };
 
 type Progress = {
