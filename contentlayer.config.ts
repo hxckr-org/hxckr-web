@@ -40,6 +40,7 @@ export const Course = defineDocumentType(() => ({
     timeEstimate: { type: "number" },
     prerequisites: { type: "list", of: { type: "string" } },
     starterCode: { type: "json" },
+    module: { type: "number" },
   },
   computedFields: {
     url: {

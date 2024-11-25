@@ -14,7 +14,7 @@ export const validateClientEnv = () => {
   if (!coreBaseUrl || !websocketUrl) {
     console.error('Environment variables missing:', { 
       NEXT_PUBLIC_APP_CORE_BASE_URL: coreBaseUrl ? '✓' : '✗',
-      NEXT_PUBLIC_APP_WEBSOCKET_URL: websocketUrl ? '✓' : '✗'
+      NEXT_PUBLIC_APP_WEBSOCKET_URL: websocketUrl ? '✓' : '✗',
     });
     return false;
   }

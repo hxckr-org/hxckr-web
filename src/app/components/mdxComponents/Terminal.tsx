@@ -1,11 +1,14 @@
 "use client";
 
+import { usePathname, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
+
+import { useStore } from "@/contexts/store";
+import { getChallengeDocument, sluggify } from "@/helpers";
 import { useGetUserRepositories } from "@/hooks/useGetRepo";
 import { CommandIcon } from "@/public/assets/icons/command-icon";
-import { ChallengeWithProgress, Repository } from "@/types";
+import { Repository } from "@/types";
 import { CopyIcon } from "@radix-ui/react-icons";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
 
 export const Terminal = ({
   children,
@@ -16,42 +19,25 @@ export const Terminal = ({
 }) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const router = useRouter();
+  const { allRepositories } = useStore();
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams(searchParams);
+
   const repo_id = urlParams.get("rid");
-  const challenge = JSON.parse(
-    window.localStorage.getItem("challenge") || "{}"
-  ) as ChallengeWithProgress;
+  const url = pathname.split("/challenges")[1];
+  const challengeDocument = getChallengeDocument({ url });
+  const repository = allRepositories.find(
+    (repo) =>
+      sluggify(repo.challenge.title) ===
+      sluggify(challengeDocument?.title as string)
+  );
 
   const { data } = useGetUserRepositories({
-    id: repo_id || challenge.repository_id,
+    id: repo_id || repository?.id,
   });
   const repo = data as Repository;
-  const updatedChallenge: ChallengeWithProgress = {
-    ...challenge,
-    progress: {
-      ...challenge.progress,
-      current_step: repo?.progress.progress_details.current_step || 0,
-      status: repo?.progress.status,
-      completion_percentage:
-        Math.round(
-          (repo?.progress.progress_details.current_step /
-            challenge.module_count) *
-            100
-        ) || 0,
-    },
-    repository_id: repo?.id,
-  };
-  useEffect(() => {
-    window.localStorage.setItem("challenge", JSON.stringify(updatedChallenge));
-    if (!repo_id && updatedChallenge.repository_id) {
-      urlParams.set("rid", updatedChallenge.repository_id);
-      router.push(pathname + "?" + urlParams.toString());
-    }
-  }, [updatedChallenge]);
-
   const repoName = (repo?.soft_serve_url?.split("/").pop() || "").replace(
     ".git",
     ""

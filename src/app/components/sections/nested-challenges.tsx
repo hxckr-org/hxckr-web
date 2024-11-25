@@ -1,11 +1,17 @@
 "use client";
 
+import { Course } from "contentlayer/generated";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MDXLayoutRenderer } from "pliny/mdx-components.js";
 import React, { useEffect, useState } from "react";
 
+import { mdxComponents } from "@/app/components/mdxComponents";
 import Button from "@/app/components/primitives/button";
+import { LoadingSpinner } from "@/app/components/primitives/loading-spinner";
+import SelectDropdown from "@/app/components/primitives/select-dropdown";
+import { useStore } from "@/contexts/store";
+import { getChallengeDocument, sluggify } from "@/helpers";
 import useGetChallengeAttempts from "@/hooks/useGetChallengeAttempts";
 import { useGetUserRepositories } from "@/hooks/useGetRepo";
 import { PadlockIcon } from "@/public/assets/icons/padlock";
@@ -13,7 +19,6 @@ import { RoundedCheckIcon } from "@/public/assets/icons/rounded-check-icon";
 import {
   ChallengeAttempt,
   ChallengePeriod,
-  ChallengeWithProgress,
   Period,
   Repository,
   Status,
@@ -24,11 +29,6 @@ import {
   CaretRightIcon,
 } from "@radix-ui/react-icons";
 
-import { Course } from "../../../../.contentlayer/generated/types";
-import { mdxComponents } from "../mdxComponents";
-import { LoadingSpinner } from "../primitives/loading-spinner";
-import SelectDropdown from "../primitives/select-dropdown";
-
 const NestedChallenges = ({
   challenge,
   challengeModules,
@@ -36,58 +36,59 @@ const NestedChallenges = ({
   challenge: Course;
   challengeModules: Course[];
 }) => {
+  const { allRepositories, userChallenge, addRepository } = useStore();
   const searchParams = useSearchParams();
+  const rid = searchParams.get("rid");
   const urlParams = new URLSearchParams(searchParams);
-  const [isActive, setIsActive] = useState(false);
-  const [challengeDetails, setChallengeDetails] =
-    useState<ChallengeWithProgress>({} as ChallengeWithProgress);
+
   const [period, setPeriod] = useState<ChallengePeriod>(Period.AllTime);
 
-  const repo_id = searchParams.get("rid") || challengeDetails.repository_id;
-  const {
-    data: repo,
-    isLoading,
-    error,
-  } = useGetUserRepositories({ id: repo_id });
+  const challengeDocument = getChallengeDocument({ title: challenge.title });
+  const repository = allRepositories.find(
+    (repo) =>
+      sluggify(repo?.challenge?.title) ===
+      sluggify(challengeDocument?.title as string)
+  );
+
+  const repo_id = searchParams.get("rid") || repository?.id;
+  const { data: repo, isLoading } = useGetUserRepositories({ id: repo_id });
+  const repoDetails = repo as Repository;
+
   const { data: attempts, isLoading: attemptsLoading } =
     useGetChallengeAttempts({
-      challenge_id: challengeDetails.id,
+      challenge_id: userChallenge?.id || "",
       period,
     });
 
-  const repoDetails = repo as Repository;
   const hasStarted =
     repoDetails?.progress?.status === Status.InProgress ||
     repoDetails?.progress?.status === Status.Completed ||
     repoDetails?.progress?.progress_details.current_step > 0;
 
-  useEffect(() => {
-    const storedChallenge = window.localStorage.getItem("challenge");
-    if (storedChallenge) {
-      setChallengeDetails(JSON.parse(storedChallenge));
-    }
-  }, []);
-
   const hasUserStarted = urlParams.get("started") === "true" || hasStarted;
+
+  useEffect(() => {
+    if (rid && repoDetails) {
+      addRepository(repoDetails);
+    }
+  }, [rid, repoDetails, addRepository]);
 
   return (
     <div className="flex h-full">
       <ContentSideBar
         userStarted={hasUserStarted}
-        isActive={isActive}
         challenge={challenge}
         challengeModules={challengeModules}
+        repoDetails={repoDetails}
       />
       {/* content */}
       {hasUserStarted ? (
         <StagesContentSection
-          isLoading={isLoading}
           challenge={challenge}
           attempts={attempts}
           attemptsLoading={attemptsLoading}
           period={period}
           setPeriod={setPeriod}
-          repoDetails={repoDetails}
         />
       ) : (
         <IntroductionContentSection
@@ -104,26 +105,44 @@ const NestedChallenges = ({
 };
 
 const ContentListItem = ({
-  isActive,
   text,
   url,
+  repoDetails,
+  module,
 }: {
-  isActive: boolean;
   text: string;
   url: string;
+  repoDetails: Repository;
+  module: number;
 }) => {
+  const currentStep = repoDetails?.progress?.progress_details.current_step + 1; // +1 because the first step is the introduction
+  const [isActive, setIsActive] = useState(currentStep === module);
+
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams(searchParams);
+  const pathname = usePathname();
+  const currentUrlModule = pathname
+    .split("/challenges")[1]
+    .split("/")[2]
+    .split("-")[1];
+
+  useEffect(() => {
+    setIsActive(parseInt(text) === parseInt(currentUrlModule));
+  }, [text, module, currentUrlModule]);
 
   return (
     <Link
       href={`/challenges${url + "?" + urlParams.toString()}`}
       className={`${
-        isActive ? "border border-purple-secondary bg-purple-quaternary" : ""
+        isActive
+          ? "border border-purple-secondary bg-purple-quaternary"
+          : "hover:bg-purple-quaternary/90 border border-transparent hover:border-purple-secondary"
       } flex gap-2 items-center p-3 rounded`}
     >
       {isActive ? (
         <ArrowRightIcon className="h-5 w-5 text-purple-primary" />
+      ) : module < currentStep ? (
+        <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
       ) : (
         <PadlockIcon />
       )}
@@ -339,7 +358,7 @@ const AttemptsBoard = ({
                   <span className="text-purple-primary">
                     {attempt.total_score}
                   </span>
-                  /{attempt.module_count}
+                  /{attempt.module_count + 1}
                 </p>
                 <div className="border h-3 w-full overflow-hidden rounded-full bg-[#F8F2FF]">
                   <div
@@ -348,7 +367,7 @@ const AttemptsBoard = ({
                       width: `${Math.min(
                         100,
                         (attempt.total_score * 100) /
-                          Math.max(1, attempt.module_count)
+                          Math.max(1, attempt.module_count + 1)
                       )}%`,
                     }}
                   />
@@ -372,14 +391,14 @@ const AttemptsBoard = ({
 
 const ContentSideBar = ({
   userStarted,
-  isActive,
   challenge,
   challengeModules,
+  repoDetails,
 }: {
   userStarted: boolean;
-  isActive: boolean;
   challenge: Course;
   challengeModules: Course[];
+  repoDetails: Repository;
 }) => {
   return (
     <div
@@ -406,10 +425,11 @@ const ContentSideBar = ({
 
         {challengeModules.map((module, index) => (
           <ContentListItem
-            isActive={isActive}
             text={`${index + 1}`}
             key={module.url}
             url={module.url}
+            repoDetails={repoDetails}
+            module={module.module!}
           />
         ))}
       </div>
@@ -418,25 +438,18 @@ const ContentSideBar = ({
 };
 
 const StagesContentSection = ({
-  isLoading,
   challenge,
   attempts,
   attemptsLoading,
   period,
   setPeriod,
-  repoDetails,
 }: {
-  isLoading: boolean;
   challenge: Course;
   attempts: ChallengeAttempt[];
   attemptsLoading: boolean;
   period: ChallengePeriod;
   setPeriod: React.Dispatch<React.SetStateAction<ChallengePeriod>>;
-  repoDetails: Repository;
 }) => {
-  const currentStep = repoDetails?.progress?.progress_details.current_step;
-  const challengeModules = challenge.body;
-  console.log({ currentStep, challengeModules });
   return (
     <div className="flex flex-col p-6 pb-6 w-full">
       <NavigationBlock />
@@ -454,9 +467,7 @@ const StagesContentSection = ({
       {/* body section */}
       <div className="flex justify-between w-full h-full flex-1 gap-6 overflow-scroll">
         {/* left */}
-        <section
-          className={`flex flex-col overflow-scroll rounded-b-lg `}
-        >
+        <section className={`flex flex-col overflow-scroll rounded-b-lg `}>
           <MDXLayoutRenderer
             code={challenge.body.code}
             components={mdxComponents}
