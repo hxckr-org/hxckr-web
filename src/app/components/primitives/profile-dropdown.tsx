@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import Avatar from "./avatar";
 import { signOut } from "next-auth/react";
+import { useStore } from "@/contexts/store";
 
 interface ProfileDropdownProps {
   name: string;
@@ -27,6 +28,8 @@ export default function ProfileDropdown({
   avatar,
   teamBadge,
 }: ProfileDropdownProps) {
+  const { clearUserChallenge, clearAllRepositories, clearWebsocketEvents } =
+    useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
 
@@ -134,7 +137,12 @@ export default function ProfileDropdown({
           </div>
           <div className="border-t border-gray-100">
             <button
-              onClick={() => signOut()}
+              onClick={() => {
+                signOut();
+                clearUserChallenge();
+                clearAllRepositories();
+                clearWebsocketEvents();
+              }}
               className="flex w-full items-center px-4 py-4 text-left text-sm text-gray-700 hover:bg-gray-50"
             >
               <LogoutIcon className="mr-3 h-4 w-4 text-gray-400" />
