@@ -4,7 +4,7 @@ const LearningObjectives = ({ title, children }: { title: string; children: Reac
   const objectives = React.Children.toArray(children);
 
   return (
-    <div className='pt-[34px] flex flex-col gap-2'>
+    <div className='flex flex-col gap-2'>
       <p className='font-p22mackinac italic font-medium text-base capitalize w-fit'>{title}</p>
 
       <div className='ml-4'>
