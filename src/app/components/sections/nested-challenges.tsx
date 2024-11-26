@@ -274,6 +274,7 @@ const IntroductionContentSection = ({
 
           <AttemptsBoard
             attempts={attempts}
+            challenge={challenge}
             attemptsLoading={attemptsLoading}
             period={period}
             setPeriod={setPeriod}
@@ -286,11 +287,13 @@ const IntroductionContentSection = ({
 
 const AttemptsBoard = ({
   attempts,
+  challenge,
   attemptsLoading,
   period,
   setPeriod,
 }: {
   attempts: ChallengeAttempt[];
+  challenge: Course;
   attemptsLoading: boolean;
   period: ChallengePeriod;
   setPeriod: React.Dispatch<React.SetStateAction<ChallengePeriod>>;
@@ -340,41 +343,49 @@ const AttemptsBoard = ({
         </div>
 
         {attempts?.length > 0 ? (
-          attempts?.map((attempt, index) => (
-            <div
-              key={index}
-              className={`items-center my-2 justify-between gap-1 w-full ${
-                attemptsLoading ? "hidden" : "flex"
-              }`}
-            >
-              <div className="flex items-center gap-x-2 font-light text-sm w-1/2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white text-sm font-semibold">
-                  {attempt.username.charAt(0)}
+          attempts?.map((attempt, index) => {
+            // if the challenge is the introduction, then the total score is the number of modules completed
+            // otherwise, the total score is the number of modules completed (progress in the db) + 1
+            const totalScore =
+              challenge?.module === 1 &&
+              attempt.total_score === challenge?.module
+                ? attempt.total_score
+                : attempt.total_score + 1;
+            const totalModules = attempt.module_count + 1;
+
+            return (
+              <div
+                key={index}
+                className={`items-center my-2 justify-between gap-1 w-full ${
+                  attemptsLoading ? "hidden" : "flex"
+                }`}
+              >
+                <div className="flex items-center gap-x-2 font-light text-sm w-1/2">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white text-sm font-semibold">
+                    {attempt.username.charAt(0)}
+                  </div>
+                  <p>{attempt.username}</p>
                 </div>
-                <p>{attempt.username}</p>
-              </div>
-              <div className="flex items-center font-normal text-sm gap-x-2 w-1/3">
-                <p>
-                  <span className="text-purple-primary">
-                    {attempt.total_score}
-                  </span>
-                  /{attempt.module_count + 1}
-                </p>
-                <div className="border h-3 w-full overflow-hidden rounded-full bg-[#F8F2FF]">
-                  <div
-                    className="h-full rounded-full bg-[#7762FF] transition-all duration-500"
-                    style={{
-                      width: `${Math.min(
-                        100,
-                        (attempt.total_score * 100) /
-                          Math.max(1, attempt.module_count + 1)
-                      )}%`,
-                    }}
-                  />
+                <div className="flex items-center font-normal text-sm gap-x-2 w-1/3">
+                  <p>
+                    <span className="text-purple-primary">{totalScore}</span>/
+                    {totalModules}
+                  </p>
+                  <div className="border h-3 w-full overflow-hidden rounded-full bg-[#F8F2FF]">
+                    <div
+                      className="h-full rounded-full bg-[#7762FF] transition-all duration-500"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          (totalScore * 100) / Math.max(1, totalModules)
+                        )}%`,
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div
             className={`flex justify-center items-center h-full text-black font-light text-center ${
@@ -475,6 +486,7 @@ const StagesContentSection = ({
         </section>
 
         <AttemptsBoard
+          challenge={challenge}
           attempts={attempts}
           attemptsLoading={attemptsLoading}
           period={period}

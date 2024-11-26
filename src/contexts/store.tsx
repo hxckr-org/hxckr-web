@@ -3,18 +3,31 @@
 import { create } from "zustand";
 
 import { getLocalStorage } from "@/helpers";
-import { ChallengeWithProgress, Repository } from "@/types";
+import { ChallengeWithProgress, Repository, PushEvent, TestEvent } from "@/types";
+
+interface WebSocketEvents {
+  pushEvents: PushEvent[];
+  testEvents: TestEvent[];
+}
 
 interface StoreState {
   userChallenge: ChallengeWithProgress | null;
   allRepositories: Repository[];
+  websocketEvents: WebSocketEvents;
   setUserChallenge: (challenge: ChallengeWithProgress | null) => void;
   addRepository: (repo: Repository) => void;
+  addWebsocketEvent: (event: PushEvent | TestEvent) => void;
+  clearWebsocketEvents: () => void;
 }
 
 export const useStore = create<StoreState>((set) => ({
   userChallenge: JSON.parse(getLocalStorage("userChallenge", "null")),
   allRepositories: JSON.parse(getLocalStorage("allRepositories", "[]")),
+  websocketEvents: JSON.parse(getLocalStorage("websocketEvents", JSON.stringify({ 
+    pushEvents: [], 
+    testEvents: [] 
+  }))),
+
   setUserChallenge: (challenge) =>
     set(() => {
       if (typeof window !== "undefined") {
@@ -25,23 +38,45 @@ export const useStore = create<StoreState>((set) => ({
       }
       return { userChallenge: challenge };
     }),
+
   addRepository: (repo) =>
     set((state) => {
       if (typeof window !== "undefined") {
         const existingRepos = JSON.parse(
           localStorage.getItem("allRepositories") || "[]"
         );
-        // Check if repo already exists
-        if (
-          !existingRepos.some(
-            (existingRepo: Repository) => existingRepo?.id === repo?.id
-          )
-        ) {
+        if (!existingRepos.some((existingRepo: Repository) => existingRepo?.id === repo?.id)) {
           const newRepos = [...existingRepos, repo];
           localStorage.setItem("allRepositories", JSON.stringify(newRepos));
           return { allRepositories: newRepos };
         }
       }
       return state;
+    }),
+
+  addWebsocketEvent: (event) =>
+    set((state) => {
+      const newState = { ...state.websocketEvents };
+      
+      if (event.event_type === "push") {
+        newState.pushEvents = [...newState.pushEvents, event as PushEvent];
+      } else if (event.event_type === "test") {
+        newState.testEvents = [...newState.testEvents, event as TestEvent];
+      }
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("websocketEvents", JSON.stringify(newState));
+      }
+      
+      return { websocketEvents: newState };
+    }),
+
+  clearWebsocketEvents: () =>
+    set(() => {
+      const emptyEvents = { pushEvents: [], testEvents: [] };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("websocketEvents", JSON.stringify(emptyEvents));
+      }
+      return { websocketEvents: emptyEvents };
     }),
 }));
