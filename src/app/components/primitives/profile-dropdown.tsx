@@ -11,6 +11,7 @@ import {
 } from "@/public/assets/icons";
 import Link from "next/link";
 import Avatar from "./avatar";
+import { signOut } from "next-auth/react";
 
 interface ProfileDropdownProps {
   name: string;
@@ -132,7 +133,10 @@ export default function ProfileDropdown({
             </Link>
           </div>
           <div className="border-t border-gray-100">
-            <button className="flex w-full items-center px-4 py-4 text-left text-sm text-gray-700 hover:bg-gray-50">
+            <button
+              onClick={() => signOut()}
+              className="flex w-full items-center px-4 py-4 text-left text-sm text-gray-700 hover:bg-gray-50"
+            >
               <LogoutIcon className="mr-3 h-4 w-4 text-gray-400" />
               <span>Log out</span>
             </button>

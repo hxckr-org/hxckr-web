@@ -11,8 +11,8 @@ export const GitPushText = ({ content }: { content: string }) => {
   const { websocketEvents, addWebsocketEvent, allRepositories } = useStore();
 
   const currentRepo = allRepositories.find((repo) => {
-    const pushEvents = websocketEvents.pushEvents.filter((event) => {
-      return event.repoUrl === repo.soft_serve_url;
+    const pushEvents = websocketEvents?.pushEvents?.filter((event) => {
+      return event?.repoUrl === repo?.soft_serve_url;
     });
     return pushEvents.length > 0;
   });
