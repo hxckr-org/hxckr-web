@@ -9,9 +9,11 @@ import { ChevronRightIcon } from "@/public/assets/icons";
 export const GitPushButton = ({
   title,
   link,
+  moduleNumber,
 }: {
   title: string;
   link: string;
+  moduleNumber: number;
 }) => {
   const { websocketEvents, allRepositories } = useStore();
   const pathname = usePathname();
@@ -22,13 +24,13 @@ export const GitPushButton = ({
   const newPathname = pathname.replace("/module-2/instructions", link);
   const newUrl = newPathname + `?rid=${rid}&started=${started}`;
 
-  const currentRepo = allRepositories.find((repo) => {
-    const pushEvents = websocketEvents.pushEvents.filter(
-      (event) => event.repoUrl === repo.soft_serve_url
-    );
-    return pushEvents.length > 0;
-  });
-  const hasPushEvent = currentRepo ? true : false;
+  const currentPushEvent = websocketEvents?.pushEvents?.[moduleNumber];
+  
+  const currentRepo = currentPushEvent 
+    ? allRepositories.find((repo) => repo.soft_serve_url === currentPushEvent.repoUrl)
+    : null;
+
+  const hasPushEvent = Boolean(currentRepo && currentPushEvent);
 
   return (
     <Link

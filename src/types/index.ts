@@ -87,12 +87,25 @@ type PushEvent = {
   commitSha: string;
 };
 
+type TestEventProgress = {
+  id: string;
+  user_id: string;
+  challenge_id: string;
+  status: string;
+  progress_details: {
+    current_step: number;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
 type TestEvent = {
   event_type: (typeof EventType)[keyof typeof EventType];
   repoUrl: string;
   commitSha: string;
   success: boolean;
   output: string;
+  progress?: TestEventProgress;
 };
 
 type ChallengeMode = "functional_test" | "project";
@@ -114,6 +127,7 @@ export type {
   ChallengeAttempt,
   PushEvent,
   TestEvent,
+  TestEventProgress,
 };
 
 export { Status, Period, EventType };
