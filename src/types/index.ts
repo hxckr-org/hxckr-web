@@ -75,6 +75,26 @@ const Period = {
   AllTime: "AllTime",
 } as const;
 
+const EventType = {
+  Push: "push",
+  Test: "test",
+} as const;
+
+type PushEvent = {
+  event_type: (typeof EventType)[keyof typeof EventType];
+  repoUrl: string;
+  branch: string;
+  commitSha: string;
+};
+
+type TestEvent = {
+  event_type: (typeof EventType)[keyof typeof EventType];
+  repoUrl: string;
+  commitSha: string;
+  success: boolean;
+  output: string;
+};
+
 type ChallengeMode = "functional_test" | "project";
 type ChallengeDifficulty = "easy" | "medium" | "hard";
 type ChallengeStatus = (typeof Status)[keyof typeof Status];
@@ -92,6 +112,8 @@ export type {
   CreateRepoResponse,
   ChallengePeriod,
   ChallengeAttempt,
+  PushEvent,
+  TestEvent,
 };
 
-export { Status, Period };
+export { Status, Period, EventType };
