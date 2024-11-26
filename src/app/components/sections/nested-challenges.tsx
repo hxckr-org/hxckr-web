@@ -56,7 +56,7 @@ const NestedChallenges = ({
 
   const { data: attempts, isLoading: attemptsLoading } =
     useGetChallengeAttempts({
-      challenge_id: userChallenge?.id || "",
+      challenge_id: userChallenge?.id || repoDetails?.challenge_id,
       period,
     });
 
@@ -109,11 +109,13 @@ const ContentListItem = ({
   url,
   repoDetails,
   module,
+  challenge,
 }: {
   text: string;
   url: string;
   repoDetails: Repository;
   module: number;
+  challenge: Course;
 }) => {
   const currentStep = repoDetails?.progress?.progress_details.current_step + 1; // +1 because the first step is the introduction
   const [isActive, setIsActive] = useState(currentStep === module);
@@ -130,6 +132,23 @@ const ContentListItem = ({
     setIsActive(parseInt(text) === parseInt(currentUrlModule));
   }, [text, module, currentUrlModule]);
 
+  if (module > currentStep) {
+    return (
+      <div
+        className={`flex gap-2 items-center p-3 rounded border  ${
+          isActive
+            ? "bg-purple-quaternary border border-purple-secondary"
+            : "bg-white border-transparent"
+        }`}
+      >
+        <PadlockIcon />
+        <p className="text-sm leading-[22px] text-grey-secondary-text font-normal line-clamp-1">
+          {challenge?.action}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Link
       href={`/challenges${url + "?" + urlParams.toString()}`}
@@ -139,9 +158,9 @@ const ContentListItem = ({
           : "hover:bg-purple-quaternary/90 border border-transparent hover:border-purple-secondary"
       } flex gap-2 items-center p-3 rounded`}
     >
-      {isActive ? (
+      {isActive && currentStep === module ? (
         <ArrowRightIcon className="h-5 w-5 text-purple-primary" />
-      ) : module < currentStep ? (
+      ) : module <= currentStep ? (
         <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
       ) : (
         <PadlockIcon />
@@ -153,7 +172,7 @@ const ContentListItem = ({
             : "text-grey-secondary-text font-normal"
         } text-sm leading-[22px]  line-clamp-1`}
       >
-        Stage {text}
+        {challenge?.action}
       </p>
     </Link>
   );
@@ -430,7 +449,7 @@ const ContentSideBar = ({
         <section className="flex gap-2 items-center p-3">
           <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
           <p className="text-sm leading-[22px] text-grey-tertiary-text">
-            Introductions
+            Introduction
           </p>
         </section>
 
@@ -441,6 +460,7 @@ const ContentSideBar = ({
             url={module.url}
             repoDetails={repoDetails}
             module={module.module!}
+            challenge={module}
           />
         ))}
       </div>
