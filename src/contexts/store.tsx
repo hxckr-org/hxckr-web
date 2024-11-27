@@ -28,6 +28,7 @@ interface StoreState {
   clearWebsocketEvents: () => void;
   clearUserChallenge: () => void;
   clearAllRepositories: () => void;
+  clearTestEventsForModule: (moduleNumber: number) => void;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -131,5 +132,22 @@ export const useStore = create<StoreState>((set) => ({
         localStorage.setItem("websocketEvents", JSON.stringify(emptyEvents));
       }
       return { websocketEvents: emptyEvents };
+    }),
+
+  clearTestEventsForModule: (moduleNumber) =>
+    set((state) => {
+      const newState = {
+        pushEvents: { ...state.websocketEvents.pushEvents },
+        testEvents: { ...state.websocketEvents.testEvents },
+      };
+      
+      // Clear test events for the specific module
+      delete newState.testEvents[moduleNumber];
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("websocketEvents", JSON.stringify(newState));
+      }
+
+      return { websocketEvents: newState };
     }),
 }));

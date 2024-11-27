@@ -30,14 +30,15 @@ export const GitPushButton = ({
     ? allRepositories.find((repo) => repo.soft_serve_url === currentPushEvent.repoUrl)
     : null;
 
-  const hasPushEvent = Boolean(currentRepo && currentPushEvent);
+  const hasPushEvent = typeof window === 'undefined' 
+    ? false 
+    : Boolean(currentRepo && currentPushEvent);
 
   return (
     <Link
       href={newUrl}
-      className={`flex items-center justify-center bg-purple-primary text-white py-4 text-base rounded-none text-center ${
-        !hasPushEvent ? "opacity-50 cursor-not-allowed" : ""
-      }`}
+      data-disabled={!hasPushEvent}
+      className="flex items-center justify-center bg-purple-primary text-white py-4 text-base rounded-none text-center data-[disabled=true]:opacity-50 data-[disabled=true]:cursor-not-allowed"
     >
       {title}
       <ChevronRightIcon className="w-4 h-4" />
