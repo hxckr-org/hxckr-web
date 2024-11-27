@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
-import { Cross2Icon } from '@radix-ui/react-icons';
-import { Highlight, themes } from 'prism-react-renderer';
+import React, { useState } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { Highlight, themes } from "prism-react-renderer";
 
 interface TestOutputModalProps {
   isOpen: boolean;
@@ -32,16 +32,16 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
 
   // Extract test results and format them
   const formatOutput = (output: string) => {
-    const lines = output.split('\n');
-    let formattedOutput = '';
-    
-    lines.forEach(line => {
-      if (line.includes('(pass)')) {
-        formattedOutput += line.replace('(pass)', '✓') + '\n';
-      } else if (line.includes('(fail)')) {
-        formattedOutput += line.replace('(fail)', '✗') + '\n';
+    const lines = output.split("\n");
+    let formattedOutput = "";
+
+    lines.forEach((line) => {
+      if (line.includes("(pass)")) {
+        formattedOutput += line.replace("(pass)", "✓") + "\n";
+      } else if (line.includes("(fail)")) {
+        formattedOutput += line.replace("(fail)", "✗") + "\n";
       } else {
-        formattedOutput += line + '\n';
+        formattedOutput += line + "\n";
       }
     });
 
@@ -50,9 +50,9 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
 
   // Function to get test summary
   const getTestSummary = (output: string) => {
-    const lines = output.split('\n');
-    const passCount = lines.filter(line => line.includes('(pass)')).length;
-    const failCount = lines.filter(line => line.includes('(fail)')).length;
+    const lines = output.split("\n");
+    const passCount = lines.filter((line) => line.includes("(pass)")).length;
+    const failCount = lines.filter((line) => line.includes("(fail)")).length;
     return { passCount, failCount };
   };
 
@@ -79,32 +79,35 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
     fixed transition-all duration-300 ease-in-out
     bg-[#1C1D21] text-white overflow-hidden data-[state=open]:animate-contentShow z-[101]
     rounded-lg
-    ${isMaximized 
-      ? 'left-0 top-0 w-screen h-screen rounded-none' 
-      : isMinimized
-        ? 'right-4 bottom-4 w-[480px] h-12 rounded-t-lg shadow-lg hover:shadow-xl' 
-        : 'left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[60vw] max-h-[85vh]'
+    ${
+      isMaximized
+        ? "left-0 top-0 w-screen h-screen rounded-none"
+        : isMinimized
+        ? "right-4 bottom-4 w-[480px] h-12 rounded-t-lg shadow-lg hover:shadow-xl"
+        : "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[60vw] max-h-[85vh]"
     }
   `;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
-        <Dialog.Overlay 
+        <Dialog.Overlay
           className={`fixed inset-0 bg-black/30 data-[state=open]:animate-overlayShow z-[100] ${
-            isMinimized ? 'hidden' : ''
-          }`} 
+            isMinimized ? "hidden" : ""
+          }`}
         />
         <Dialog.Content className={modalContentClass}>
           {/* Terminal header */}
-          <div 
+          <div
             className={`flex items-center px-4 py-2 bg-[#2D2E33] border-b border-gray-600 ${
-              isMinimized ? 'cursor-pointer hover:bg-[#383940] transition-colors' : ''
+              isMinimized
+                ? "cursor-pointer hover:bg-[#383940] transition-colors"
+                : ""
             }`}
             onClick={isMinimized ? handleRestore : undefined}
           >
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onClose();
@@ -149,16 +152,27 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
 
           {/* Terminal content */}
           {!isMinimized && (
-            <div className={`p-6 font-mono text-sm overflow-y-auto ${
-              isMaximized ? 'h-[calc(100vh-3rem)]' : 'max-h-[calc(85vh-4rem)]'
-            }`}>
+            <div
+              className={`p-6 font-mono text-sm overflow-y-auto ${
+                isMaximized ? "h-[calc(100vh-3rem)]" : "max-h-[calc(85vh-4rem)]"
+              }`}
+            >
               <Highlight
                 theme={themes.nightOwl}
                 code={formatOutput(output)}
                 language="typescript"
               >
-                {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                  <pre className={className} style={{ ...style, background: 'transparent' }}>
+                {({
+                  className,
+                  style,
+                  tokens,
+                  getLineProps,
+                  getTokenProps,
+                }) => (
+                  <pre
+                    className={className}
+                    style={{ ...style, background: "transparent" }}
+                  >
                     {tokens.map((line, i) => (
                       <div key={i} {...getLineProps({ line })}>
                         {line.map((token, key) => (
@@ -177,4 +191,4 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
   );
 };
 
-export default TestOutputModal; 
+export default TestOutputModal;

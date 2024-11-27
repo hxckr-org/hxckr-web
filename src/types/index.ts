@@ -101,17 +101,22 @@ type TestEventProgress = {
 
 type TestEvent = {
   event_type: (typeof EventType)[keyof typeof EventType];
-  repoUrl: string;
   commitSha: string;
+  repoUrl: string;
   success: boolean;
   output: string;
-  progress?: TestEventProgress;
+  progress: Progress;
 };
 
 type ChallengeMode = "functional_test" | "project";
 type ChallengeDifficulty = "easy" | "medium" | "hard";
 type ChallengeStatus = (typeof Status)[keyof typeof Status];
 type ChallengePeriod = (typeof Period)[keyof typeof Period];
+
+interface WebSocketEvents {
+  pushEvents: Record<string, PushEvent>;
+  testEvents: Record<string, TestEvent[]>;
+}
 
 export type {
   Challenge,
@@ -128,6 +133,7 @@ export type {
   PushEvent,
   TestEvent,
   TestEventProgress,
+  WebSocketEvents,
 };
 
 export { Status, Period, EventType };

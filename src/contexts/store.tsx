@@ -8,6 +8,7 @@ import {
   Repository,
   PushEvent,
   TestEvent,
+  EventType,
 } from "@/types";
 
 interface WebSocketEvents {
@@ -88,41 +89,30 @@ export const useStore = create<StoreState>((set) => ({
 
   addWebsocketEvent: (event, moduleNumber) =>
     set((state) => {
-      const newState: WebSocketEvents = {
-        pushEvents: { ...state.websocketEvents.pushEvents },
-        testEvents: { ...state.websocketEvents.testEvents },
-      };
+      try {
+        const newState: WebSocketEvents = {
+          pushEvents: { ...state.websocketEvents.pushEvents },
+          testEvents: { ...state.websocketEvents.testEvents },
+        };
 
-      if (event.event_type === "push") {
-        newState.pushEvents[moduleNumber] = event as PushEvent;
-      } else if (event.event_type === "test") {
-        if (!newState.testEvents[moduleNumber]) {
-          newState.testEvents[moduleNumber] = [];
+        if (event.event_type === EventType.Push) {
+          newState.pushEvents[moduleNumber] = event as PushEvent;
+        } else if (event.event_type === EventType.Test) {
+          if (!newState.testEvents[moduleNumber]) {
+            newState.testEvents[moduleNumber] = [];
+          }
+          newState.testEvents[moduleNumber] = [event as TestEvent];
         }
 
-        if (Array.isArray(event)) {
-          const [testEvent, progressEvent] = event;
-          const combinedEvent: TestEvent = {
-            ...testEvent,
-            progress: progressEvent,
-          };
-          newState.testEvents[moduleNumber] = [
-            ...newState.testEvents[moduleNumber],
-            combinedEvent,
-          ];
-        } else {
-          newState.testEvents[moduleNumber] = [
-            ...newState.testEvents[moduleNumber],
-            event as TestEvent,
-          ];
+        if (typeof window !== "undefined") {
+          localStorage.setItem("websocketEvents", JSON.stringify(newState));
         }
-      }
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("websocketEvents", JSON.stringify(newState));
+        return { websocketEvents: newState };
+      } catch (error) {
+        console.error("Error in addWebsocketEvent:", error);
+        return state;
       }
-
-      return { websocketEvents: newState };
     }),
 
   clearWebsocketEvents: () =>
@@ -136,18 +126,27 @@ export const useStore = create<StoreState>((set) => ({
 
   clearTestEventsForModule: (moduleNumber) =>
     set((state) => {
-      const newState = {
-        pushEvents: { ...state.websocketEvents.pushEvents },
-        testEvents: { ...state.websocketEvents.testEvents },
-      };
-      
-      // Clear test events for the specific module
-      delete newState.testEvents[moduleNumber];
+      try {
+        const newState = {
+          pushEvents: { ...state.websocketEvents.pushEvents },
+          testEvents: { ...state.websocketEvents.testEvents },
+        };
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("websocketEvents", JSON.stringify(newState));
+        delete newState.testEvents[moduleNumber];
+
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.setItem("websocketEvents", JSON.stringify(newState));
+            console.log("Cleared test events for module:", moduleNumber);
+          } catch (error) {
+            console.error("Error saving to localStorage:", error);
+          }
+        }
+
+        return { websocketEvents: newState };
+      } catch (error) {
+        console.error("Error in clearTestEventsForModule:", error);
+        return state;
       }
-
-      return { websocketEvents: newState };
     }),
 }));
