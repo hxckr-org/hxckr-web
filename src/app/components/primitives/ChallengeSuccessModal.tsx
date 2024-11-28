@@ -3,6 +3,7 @@ import React from "react";
 
 import { RoundedCheckIcon } from "@/public/assets/icons/rounded-check-icon";
 import * as Dialog from "@radix-ui/react-dialog";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 interface ChallengeSuccessModalProps {
   isOpen: boolean;
@@ -48,6 +49,15 @@ const ChallengeSuccessModal = ({
               </Link>
             </div>
           </div>
+          <Dialog.Close asChild>
+            <button
+              className="border border-grey-border absolute right-2.5 top-2.5 inline-flex size-[25px] appearance-none items-center justify-center rounded-full text-grey-tertiary-text hover:bg-grey-border focus:shadow-[0_0_0_2px] focus:shadow-grey-border focus:outline-none"
+              aria-label="Close"
+              onClick={onClose}
+            >
+              <Cross2Icon />
+            </button>
+          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

@@ -12,7 +12,7 @@ import { CopyIcon } from "@radix-ui/react-icons";
 
 export const Terminal = ({
   children,
-  language_specific_install_command = "npm install",
+  language_specific_install_command = "bun install",
 }: {
   children: React.ReactNode;
   language_specific_install_command?: string;
@@ -33,6 +33,21 @@ export const Terminal = ({
       sluggify(repo.challenge.title) ===
       sluggify(challengeDocument?.title as string)
   );
+  const language =
+    urlParams.get("language")?.toLowerCase() || repository?.language;
+
+  const getLanguageSpecificInstallCommand = () => {
+    switch (language) {
+      case "typescript":
+        return "bun install";
+      case "python":
+        return "pip install -r requirements.txt";
+      case "rust":
+        return "cargo build && cargo run";
+      default:
+        return "npm install";
+    }
+  };
 
   const { data } = useGetUserRepositories({
     id: repo_id || repository?.id,
@@ -55,7 +70,7 @@ export const Terminal = ({
             .replace(/\$REPO_NAME/g, repoName)
             .replace(
               /\$LANGUAGE_SPECIFIC_INSTALL_COMMAND/g,
-              language_specific_install_command || ""
+              getLanguageSpecificInstallCommand() || ""
             );
         }
         // If it's a React element, try to replace content in its children
@@ -68,7 +83,7 @@ export const Terminal = ({
                     .replace(/\$REPO_NAME/g, repoName)
                     .replace(
                       /\$LANGUAGE_SPECIFIC_INSTALL_COMMAND/g,
-                      language_specific_install_command || ""
+                      getLanguageSpecificInstallCommand() || ""
                     )
                 : child.props.children,
           });
