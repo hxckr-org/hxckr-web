@@ -116,8 +116,8 @@ export const Terminal = ({
         </section>
       </div>
 
-      <div className="p-3 text-xs leading-[24px] font-medium tracking-[8%]">
-        <code className="text-xs leading-[24px] font-medium tracking-[8%]">
+      <div className="p-3 leading-[24px] font-medium tracking-[8%]">
+        <code className="text-xs leading-[24px] font-medium tracking-[8%] break-words">
           {content}
         </code>
       </div>

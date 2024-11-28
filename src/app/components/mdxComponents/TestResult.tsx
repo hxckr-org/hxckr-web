@@ -1,13 +1,14 @@
 import confetti from "canvas-confetti";
-import React, { useEffect, useState } from "react";
-
-import { useStore } from "@/contexts/store";
-import { useAuthenticatedWebSocket } from "@/hooks/useAuthenticatedSocket";
-import EyeIcon from "@/public/assets/icons/eye-icon";
-import { EventType } from "@/types";
+import { usePathname } from "next/navigation";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import ChallengeSuccessModal from "@/app/components/primitives/ChallengeSuccessModal";
 import TestOutputModal from "@/app/components/primitives/TestOutputModal";
+import { useStore } from "@/contexts/store";
+import { getChallengeDocument, sluggify } from "@/helpers";
+import { useAuthenticatedWebSocket } from "@/hooks/useAuthenticatedSocket";
+import EyeIcon from "@/public/assets/icons/eye-icon";
+import { EventType } from "@/types";
 
 type TestResultStatus = "success" | "not started" | "failed" | "running";
 
@@ -23,8 +24,19 @@ const TestResult = ({
   children: React.ReactNode;
 }) => {
   const { messages, isConnected } = useAuthenticatedWebSocket();
-  const { websocketEvents, addWebsocketEvent, clearTestEventsForModule } =
-    useStore();
+  const {
+    allRepositories,
+    websocketEvents,
+    addWebsocketEvent,
+    clearTestEventsForModule,
+    updateRepositoryProgress,
+    updateChallengeProgress,
+  } = useStore();
+  const pathname = usePathname();
+
+  const challengeUrl = pathname.split("/challenges")[1];
+  const document = getChallengeDocument({ url: challengeUrl });
+
   const [testResultStatus, setTestResultStatus] = useState<TestResultStatus>(
     initialStatus as TestResultStatus
   );
@@ -33,7 +45,15 @@ const TestResult = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const currentPushEvent = websocketEvents?.pushEvents?.[moduleNumber];
-  const currentTestEvents = websocketEvents?.testEvents?.[moduleNumber] || [];
+  const currentRepository = allRepositories.find(
+    (repo) =>
+      sluggify(repo?.challenge.title) === sluggify(document?.title || "") ||
+      repo.soft_serve_url === currentPushEvent?.repoUrl
+  );
+  const currentTestEvents = useMemo(
+    () => websocketEvents?.testEvents?.[moduleNumber] || [],
+    [moduleNumber, websocketEvents?.testEvents]
+  );
   const latestTestEvent = currentTestEvents[currentTestEvents.length - 1];
 
   // Determine if tests are running by checking if we have a push event
@@ -43,26 +63,7 @@ const TestResult = ({
     (!latestTestEvent ||
       latestTestEvent.commitSha !== currentPushEvent.commitSha);
 
-  useEffect(() => {
-    if (messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
-      try {
-        const eventData = JSON.parse(lastMessage.data);
-
-        if (eventData.event_type === EventType.Push) {
-          clearTestEventsForModule(moduleNumber);
-          setTestOutput("");
-          addWebsocketEvent(eventData, moduleNumber);
-        } else if (eventData.event_type === EventType.Test) {
-          addWebsocketEvent(eventData, moduleNumber);
-        }
-      } catch (error) {
-        console.error("Error parsing websocket message:", error);
-      }
-    }
-  }, [messages, addWebsocketEvent, clearTestEventsForModule, moduleNumber]);
-
-  const triggerConfetti = () => {
+  const triggerConfetti = useCallback(() => {
     // Create a sequence of confetti bursts across the screen
     const defaults = {
       spread: 360,
@@ -107,31 +108,76 @@ const TestResult = ({
         zIndex: 9999,
       });
     }, 1000);
-  };
+  }, []);
 
-  // Update status based on running state and test events
   useEffect(() => {
+    if (latestTestEvent && messages.length < 1) {
+      setTestResultStatus(latestTestEvent.success ? "success" : "failed");
+      setTestOutput(latestTestEvent.output);
+    }
+  }, [latestTestEvent, messages]);
+
+  useEffect(() => {
+    const currentStep =
+      currentRepository?.progress.progress_details.current_step || 0;
+    if (moduleNumber < currentStep + 1) {
+      setTestResultStatus("success");
+      return;
+    }
+
     if (isTestRunning) {
       setTestResultStatus("running");
-    } else if (latestTestEvent) {
-      // Check success based on the test event data
-      const isSuccess =
-        latestTestEvent.success &&
-        latestTestEvent.progress.status === "completed";
-      setTestResultStatus(isSuccess ? "success" : "failed");
-      setTestOutput(latestTestEvent.output);
-
-      // If tests passed successfully (array format with success true)
-      if (isSuccess) {
-        triggerConfetti();
-        setTimeout(() => {
-          setShowSuccessModal(true);
-        }, 1000);
-      }
-    } else {
-      setTestResultStatus(initialStatus as TestResultStatus);
     }
-  }, [isTestRunning, latestTestEvent, initialStatus, currentPushEvent]);
+
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      try {
+        const eventData = JSON.parse(lastMessage.data);
+
+        if (eventData.event_type === EventType.Push) {
+          clearTestEventsForModule(moduleNumber);
+          setTestOutput("");
+          addWebsocketEvent(eventData, moduleNumber);
+        } else if (eventData.event_type === EventType.Test) {
+          addWebsocketEvent(eventData, moduleNumber);
+
+          // Handle test completion here
+          const isSuccess = eventData.success;
+          setTestResultStatus(isSuccess ? "success" : "failed");
+          setTestOutput(eventData.output);
+
+          if (isSuccess) {
+            updateRepositoryProgress({
+              challengeId: eventData.progress.challenge_id,
+              currentStep: eventData.progress.progress_details.current_step,
+              status: eventData.progress.status,
+            });
+            updateChallengeProgress({
+              challengeId: eventData.progress.challenge_id,
+              currentStep: eventData.progress.progress_details.current_step,
+              status: eventData.progress.status,
+            });
+            if (eventData.progress.status === "completed") {
+              setShowSuccessModal(true);
+              triggerConfetti();
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing websocket message:", error);
+      }
+    }
+  }, [
+    messages,
+    isTestRunning,
+    addWebsocketEvent,
+    clearTestEventsForModule,
+    moduleNumber,
+    updateRepositoryProgress,
+    updateChallengeProgress,
+    triggerConfetti,
+    currentRepository?.progress.progress_details.current_step,
+  ]);
 
   const statusStateColors: Record<TestResultStatus, string> = {
     success: `text-[#28A745] bg-[#EFFBF1] border-[#CEF3D4]`,
@@ -169,7 +215,13 @@ const TestResult = ({
           </p>
         );
       case "success":
+        if (!testOutput) {
+          return "You passed this stage!";
+        }
       case "failed":
+        if (!testOutput) {
+          return "Your tests failed. Please cross-check your code and try again.";
+        }
         return children;
       default:
         return children;
@@ -194,7 +246,7 @@ const TestResult = ({
           <div className="bg-white text-sm leading-[24px] tracking-[8%] font-mediu font-light rounded-b-lg">
             {getContent()}
           </div>
-          {testOutput && (
+          {testOutput && testOutput.length > 0 && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center gap-2 py-3 px-4 rounded-full bg-[#EDEBFF] border border-purple-secondary w-fit"

@@ -1,12 +1,12 @@
 "use client";
 
-import { allDocuments } from "contentlayer/generated";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import Button from "@/app/components/primitives/button";
+import { LoadingSpinner } from "@/app/components/primitives/loading-spinner";
 import { Pagination } from "@/app/components/primitives/pagination";
 import { ProgressBar } from "@/app/components/primitives/progress-bar";
 import { useStore } from "@/contexts/store";
@@ -17,57 +17,38 @@ import {
   ChevronRightIcon,
   PlayIcon,
 } from "@/public/assets/icons";
-import { Repository, RepositoryResponse, Status } from "@/types";
-
-import { LoadingSpinner } from "../primitives/loading-spinner";
+import { Repository, RepositoryResponse } from "@/types";
 
 export const RecentChallenges = () => {
-  const { addRepository } = useStore();
+  const { addRepositories } = useStore();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  const { data: inProgressData, isLoading: isLoadingInProgress } =
-    useGetUserRepositories({
-      status: Status.InProgress,
-      page: currentPage,
-      per_page: 5,
-    });
+  const { data, isLoading: isLoadingInProgress } = useGetUserRepositories({
+    page: currentPage,
+    per_page: 10,
+  });
 
-  const { data: notStartedData, isLoading: isLoadingNotStarted } =
-    useGetUserRepositories(
-      {
-        status: Status.NotStarted,
-        page: currentPage,
-        per_page: 5,
-      },
-      {
-        enabled: true,
-      }
-    );
-
-  const data =
-    (inProgressData as RepositoryResponse)?.data?.length > 0
-      ? inProgressData
-      : notStartedData;
-
-  const isLoading = isLoadingInProgress || isLoadingNotStarted;
+  const isLoading = isLoadingInProgress;
   const response = data as RepositoryResponse;
   const [isSeeAllVisible, setIsSeeAllVisible] = useState(false);
 
+  const repositories = useMemo(() => {
+    return response?.data || [];
+  }, [response]);
+
   useEffect(() => {
-    if (response?.data) {
-      response?.data.forEach((repo) => {
-        addRepository(repo);
-      });
+    if (repositories.length > 0) {
+      addRepositories(repositories);
     }
-  }, [response?.data, addRepository]);
+  }, [response]);
 
   return (
     <div className="relative h-full">
       <Header
         isSeeAllVisible={isSeeAllVisible}
         setIsSeeAllVisible={setIsSeeAllVisible}
-        challengesCount={isLoading ? 0 : response?.data.length || 0}
+        challengesCount={isLoading ? 0 : repositories.length || 0}
       />
       {isLoading ? (
         <div className="flex items-center justify-center h-1/2">
@@ -75,7 +56,7 @@ export const RecentChallenges = () => {
         </div>
       ) : (
         <ChallengeBody
-          recentChallenges={response?.data || []}
+          recentChallenges={repositories}
           isSeeAllVisible={isSeeAllVisible}
         />
       )}
@@ -166,16 +147,18 @@ const ChallengeBody = ({
       }`}
     >
       {recentChallengeCount > 0 ? (
-        recentChallenges.map((challenge) => (
-          <RecentChallengeCard
-            key={challenge.id}
-            isSeeAllVisible={isSeeAllVisible}
-            title={challenge.challenge.title}
-            repoId={challenge.id}
-            moduleCount={challenge.challenge.module_count}
-            currentStep={challenge.progress.progress_details.current_step}
-          />
-        ))
+        recentChallenges.map((challenge) => {
+          return (
+            <RecentChallengeCard
+              key={challenge.id}
+              isSeeAllVisible={isSeeAllVisible}
+              title={challenge.challenge.title}
+              repoId={challenge.id}
+              moduleCount={challenge.challenge.module_count}
+              currentStep={challenge.progress.progress_details.current_step + 1}
+            />
+          );
+        })
       ) : (
         <div className="flex flex-col items-center pt-10 h-full gap-4">
           <Image
@@ -216,7 +199,10 @@ const RecentChallengeCard = ({
   const challengeDocument = getChallengeDocument({ title });
 
   const moduleCountPlusOne = moduleCount + 1; // +1 because the first step is the introduction
-  const currentModule = `module-${currentStep + 1}`; // +1 because the first step is the introduction
+  const currentModule =
+    moduleCount === currentStep
+      ? `module-${moduleCount}`
+      : `module-${currentStep + 1}`; // +1 because the first step is the introduction
   const challengeKey = `${challengeDocument?.url.replace(
     "/instructions",
     `/${currentModule}`
@@ -255,16 +241,29 @@ const RecentChallengeCard = ({
         />
         <span className="text-sm text-[#5A5A5A] font-extralight">{`${currentStep}/${moduleCountPlusOne} stages done`}</span>
       </div>
-      <div className="flex items-center gap-4 absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div
+        className={`flex items-center gap-4 absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
+          currentStep === moduleCountPlusOne ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <Button
           onClick={() => {
             router.push(challengeUrl);
           }}
-          className="bg-[#F8F2FF] text-[#4C2480] text-base px-7 py-4 hover:bg-[#F8F2FF]/90 hover:cursor-pointer hover:border-[1.5px] hover:border-[#4C2480]/50 items-center gap-4 rounded-lg"
+          className={`bg-[#F8F2FF] text-[#4C2480] text-base px-7 py-4 hover:bg-[#F8F2FF]/90 hover:cursor-pointer hover:border-[1.5px] hover:border-[#4C2480]/50 items-center gap-4 rounded-lg ${
+            currentStep === moduleCountPlusOne ? "hidden" : "flex"
+          }`}
         >
           <PlayIcon fill="#9747FF" />
           Continue
         </Button>
+        <div
+          className={`rounded-full bg-green-primary/80 text-[#ffffff] text-base px-7 py-4 ${
+            currentStep === moduleCountPlusOne ? "flex" : "hidden"
+          }`}
+        >
+          Completed
+        </div>
       </div>
     </div>
   );

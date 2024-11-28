@@ -91,7 +91,7 @@ type TestEventProgress = {
   id: string;
   user_id: string;
   challenge_id: string;
-  status: string;
+  status: "completed" | "in_progress" | "not_started";
   progress_details: {
     current_step: number;
   };
@@ -105,7 +105,7 @@ type TestEvent = {
   repoUrl: string;
   success: boolean;
   output: string;
-  progress: Progress;
+  progress?: TestEventProgress;
 };
 
 type ChallengeMode = "functional_test" | "project";

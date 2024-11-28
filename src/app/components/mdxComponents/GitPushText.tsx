@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthenticatedWebSocket } from "@/hooks/useAuthenticatedSocket";
 import { EventType } from "@/types";
 import { useStore } from "@/contexts/store";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { getChallengeDocument, sluggify } from "@/helpers";
+import { usePathname } from "next/navigation";
 
 export const GitPushText = ({
   content,
@@ -13,14 +15,40 @@ export const GitPushText = ({
   content: string;
   moduleNumber: number;
 }) => {
+  const pathname = usePathname();
   const { messages, isConnected } = useAuthenticatedWebSocket();
   const { websocketEvents, addWebsocketEvent, allRepositories } = useStore();
+  const [displayText, setDisplayText] = useState(content);
 
   const currentPushEvent = websocketEvents?.pushEvents?.[moduleNumber];
 
-  const currentRepo = currentPushEvent 
-    ? allRepositories.find((repo) => repo.soft_serve_url === currentPushEvent.repoUrl)
-    : null;
+  const challengeUrl = pathname.split("/challenges")[1];
+  const document = getChallengeDocument({ url: challengeUrl });
+
+  const currentRepo = allRepositories.find(
+    (repo) =>
+      repo.soft_serve_url === currentPushEvent?.repoUrl ||
+      sluggify(repo?.challenge.title) === sluggify(document?.title || "")
+  );
+  const currentStep = currentRepo?.progress.progress_details.current_step || 0;
+
+  useEffect(() => {
+    if (currentPushEvent) {
+      setDisplayText(
+        `Success... new push detected on branch ${
+          currentPushEvent?.branch
+        } (${currentPushEvent?.commitSha.slice(0, 7)})`
+      );
+    } else if (
+      !currentPushEvent &&
+      currentRepo?.progress.progress_details.current_step &&
+      currentRepo?.progress.progress_details.current_step > moduleNumber
+    ) {
+      setDisplayText(`Success... git repository created and cloned`);
+    } else {
+      setDisplayText(content);
+    }
+  }, [currentPushEvent, currentRepo, moduleNumber, content]);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -36,25 +64,22 @@ export const GitPushText = ({
     }
   }, [messages, addWebsocketEvent, moduleNumber]);
 
-  const isRelevantPushEvent = Boolean(currentRepo && currentPushEvent);
-
   return (
     <div className="flex flex-col items-center justify-center pb-3 bg-grey-card-border font-normal">
-      {isConnected && isRelevantPushEvent ? (
-        <div className="mt-4">
-          <p className="flex items-center gap-x-2 text-sm font-normal text-green-primary">
+      <div className="mt-4">
+        <p
+          className={`text-sm ${
+            isConnected && (currentPushEvent || currentStep > moduleNumber)
+              ? "flex items-center gap-x-2 text-green-primary"
+              : "text-grey-tertiary-text animate-pulse"
+          }`}
+        >
+          {isConnected && (currentPushEvent || currentStep > moduleNumber) && (
             <CheckCircledIcon className="w-5 h-5 text-green-primary" />
-            Success... new push detected on branch {currentPushEvent?.branch} (
-            {currentPushEvent?.commitSha.slice(0, 7)})
-          </p>
-        </div>
-      ) : (
-        <div className="mt-4">
-          <p className="text-base text-grey-tertiary-text animate-pulse">
-            {content}
-          </p>
-        </div>
-      )}
+          )}
+          {displayText}
+        </p>
+      </div>
     </div>
   );
 };

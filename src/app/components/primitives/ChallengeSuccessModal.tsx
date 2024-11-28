@@ -19,7 +19,14 @@ const ChallengeSuccessModal = ({
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/30 data-[state=open]:animate-overlayShow z-[100]" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[600px] bg-white rounded-2xl p-10 text-center data-[state=open]:animate-contentShow z-[101]">
+        <Dialog.Title className="sr-only">Challenge Success</Dialog.Title>
+        <Dialog.Description className="sr-only">
+          Challenge Success
+        </Dialog.Description>
+        <Dialog.Content
+          className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[600px] bg-white rounded-2xl p-10 text-center data-[state=open]:animate-contentShow z-[101]"
+          aria-describedby="challenge-success"
+        >
           <div className="flex flex-col items-center gap-6">
             <div className="w-20 h-20 rounded-full bg-green-primary flex items-center justify-center">
               <RoundedCheckIcon className="w-10 h-10 text-white" />

@@ -43,7 +43,7 @@ const NestedChallenges = ({
 
   const [period, setPeriod] = useState<ChallengePeriod>(Period.AllTime);
 
-  const challengeDocument = getChallengeDocument({ title: challenge.title });
+  const challengeDocument = getChallengeDocument({ title: challenge?.title });
   const repository = allRepositories.find(
     (repo) =>
       sluggify(repo?.challenge?.title) ===
@@ -104,6 +104,59 @@ const NestedChallenges = ({
   );
 };
 
+const ContentSideBar = ({
+  userStarted,
+  challenge,
+  challengeModules,
+  repoDetails,
+}: {
+  userStarted: boolean;
+  challenge: Course;
+  challengeModules: Course[];
+  repoDetails: Repository;
+}) => {
+  const sortedModules = [...challengeModules].sort(
+    (a, b) => (a.module || 0) - (b.module || 0)
+  );
+
+  return (
+    <div
+      className={`bg-white text-black h-full min-w-[266px] px-5 py-8 border-r border-r-grey-accent flex-col ${
+        userStarted ? "flex-1" : "hidden"
+      }`}
+    >
+      <div className="py-2 border-b border-b-grey-accent">
+        <p className="text-black text-xl leading-[30px] font-semibold capitalize">
+          {challenge?.title}
+        </p>
+        <p className="text-xs leading-[18px] text-grey-secondary-text line-clamp-2">
+          {challenge?.description}
+        </p>
+      </div>
+
+      <div className="pt-3 flex flex-col gap-3 flex-1">
+        <section className="flex gap-2 items-center p-3">
+          <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
+          <p className="text-sm leading-[22px] text-grey-tertiary-text">
+            Introduction
+          </p>
+        </section>
+
+        {sortedModules.map((module, index) => (
+          <ContentListItem
+            key={module.url}
+            text={module.module?.toString() || (index + 1).toString()}
+            url={module.url}
+            repoDetails={repoDetails}
+            module={module.module!}
+            challenge={module}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const ContentListItem = ({
   text,
   url,
@@ -117,8 +170,7 @@ const ContentListItem = ({
   module: number;
   challenge: Course;
 }) => {
-  const currentStep = repoDetails?.progress?.progress_details.current_step + 1; // +1 because the first step is the introduction
-  const [isActive, setIsActive] = useState(currentStep === module);
+  const currentStep = repoDetails?.progress?.progress_details.current_step + 1;
 
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams(searchParams);
@@ -128,11 +180,14 @@ const ContentListItem = ({
     .split("/")[2]
     .split("-")[1];
 
-  useEffect(() => {
-    setIsActive(parseInt(text) === parseInt(currentUrlModule));
-  }, [text, module, currentUrlModule]);
+  const [isActive, setIsActive] = useState(false);
 
-  if (module > currentStep) {
+  useEffect(() => {
+    setIsActive(module === parseInt(currentUrlModule));
+  }, [module, currentUrlModule]);
+
+  // Lock modules that are ahead of current progress
+  if (module > currentStep && repoDetails?.progress?.status !== "completed") {
     return (
       <div
         className={`flex gap-2 items-center p-3 rounded border  ${
@@ -158,9 +213,9 @@ const ContentListItem = ({
           : "hover:bg-purple-quaternary/90 border border-transparent hover:border-purple-secondary"
       } flex gap-2 items-center p-3 rounded`}
     >
-      {isActive && currentStep === module ? (
+      {isActive && module === currentStep ? (
         <ArrowRightIcon className="h-5 w-5 text-purple-primary" />
-      ) : module <= currentStep ? (
+      ) : module < currentStep ? (
         <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
       ) : (
         <PadlockIcon />
@@ -170,7 +225,7 @@ const ContentListItem = ({
           isActive
             ? "text-purple-primary font-medium"
             : "text-grey-secondary-text font-normal"
-        } text-sm leading-[22px]  line-clamp-1`}
+        } text-sm leading-[22px] line-clamp-1`}
       >
         {challenge?.action}
       </p>
@@ -419,55 +474,6 @@ const AttemptsBoard = ({
   );
 };
 
-const ContentSideBar = ({
-  userStarted,
-  challenge,
-  challengeModules,
-  repoDetails,
-}: {
-  userStarted: boolean;
-  challenge: Course;
-  challengeModules: Course[];
-  repoDetails: Repository;
-}) => {
-  return (
-    <div
-      className={`bg-white text-black h-full min-w-[266px] px-5 py-8 border-r border-r-grey-accent flex-col ${
-        userStarted ? "flex-1" : "hidden"
-      }`}
-    >
-      <div className="py-2 border-b border-b-grey-accent">
-        <p className="text-black text-xl leading-[30px] font-semibold capitalize">
-          {challenge.title}
-        </p>
-        <p className="text-xs leading-[18px] text-grey-secondary-text line-clamp-2">
-          {challenge.description}
-        </p>
-      </div>
-
-      <div className="pt-3 flex flex-col gap-3 flex-1">
-        <section className="flex gap-2 items-center p-3">
-          <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
-          <p className="text-sm leading-[22px] text-grey-tertiary-text">
-            Introduction
-          </p>
-        </section>
-
-        {challengeModules.map((module, index) => (
-          <ContentListItem
-            text={`${index + 1}`}
-            key={module.url}
-            url={module.url}
-            repoDetails={repoDetails}
-            module={module.module!}
-            challenge={module}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
 const StagesContentSection = ({
   challenge,
   attempts,
@@ -487,10 +493,10 @@ const StagesContentSection = ({
       <div className="flex justify-between pt-4 pb-6">
         <section className="flex flex-col gap-1">
           <p className="text-black text-2xl leading-[36px]">
-            {challenge.title}
+            {challenge?.title}
           </p>
           <p className="text-grey-secondary-text font-light">
-            {challenge.action}
+            {challenge?.action}
           </p>
         </section>
       </div>
@@ -500,7 +506,7 @@ const StagesContentSection = ({
         {/* left */}
         <section className={`flex flex-col overflow-scroll rounded-b-lg `}>
           <MDXLayoutRenderer
-            code={challenge.body.code}
+            code={challenge?.body?.code}
             components={mdxComponents}
           />
         </section>

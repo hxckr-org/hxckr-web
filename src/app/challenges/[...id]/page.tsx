@@ -26,7 +26,7 @@ export default async function page({ params }: { params: { id: string[] } }) {
     }
 
     // Get all module challenges
-    const modulesChallenges = courses.filter((doc) => doc.slugAsParams.includes(challengeSlugs[0]) && doc.slugAsParams.length > 2);
+    const modulesChallenges = courses.filter((doc) => doc.slugAsParams.includes(challengeSlugs?.[0] || "") && doc.slugAsParams.length > 2);
 
     return {
       baseChallenge: baseChallenge.length > 0 ? [baseChallenge[0]] : [],

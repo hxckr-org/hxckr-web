@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Button from "@/app/components/primitives/button";
 import { ChallengeCard } from "@/app/components/primitives/challenge-card";
@@ -8,10 +8,33 @@ import { LoadingSpinner } from "@/app/components/primitives/loading-spinner";
 import { SearchBar } from "@/app/components/primitives/search-bar";
 import { useGetCombinedChallenges } from "@/hooks/useGetCombinedChallenges";
 import { FunnelIcon } from "@/public/assets/icons";
+import { useStore } from "@/contexts/store";
+import { useGetUserRepositories } from "@/hooks/useGetRepo";
+import { Repository, RepositoryResponse } from "@/types";
 
 export function ChallengesUI() {
   const [searchQuery, setSearchQuery] = useState("");
+  const { addRepositories } = useStore();
   const { challenges, isLoading } = useGetCombinedChallenges();
+  const { data: repositories } = useGetUserRepositories({
+    page: 1,
+    per_page: 10,
+  });
+
+  const inProgressAndCompletedRepositories = useMemo(() => {
+    const repositoriesData = repositories as RepositoryResponse;
+    return repositoriesData?.data?.filter(
+      (repo: Repository) =>
+        repo.progress.status === "in_progress" ||
+        repo.progress.status === "completed"
+    ) || [];
+  }, [repositories]);
+
+  useEffect(() => {
+    if (inProgressAndCompletedRepositories?.length > 0) {
+      addRepositories(inProgressAndCompletedRepositories);
+    }
+  }, [repositories]);
 
   const filteredChallenges = useMemo(() => {
     return challenges.filter((challenge) =>

@@ -13,24 +13,20 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
-  // Function to minimize the modal
   const handleMinimize = () => {
     setIsMinimized(true);
     setIsMaximized(false);
   };
 
-  // Function to maximize/restore the modal
   const handleMaximize = () => {
     setIsMaximized(!isMaximized);
     setIsMinimized(false);
   };
 
-  // Function to restore from minimized state
   const handleRestore = () => {
     setIsMinimized(false);
   };
 
-  // Extract test results and format them
   const formatOutput = (output: string) => {
     const lines = output.split("\n");
     let formattedOutput = "";
@@ -48,7 +44,6 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
     return formattedOutput;
   };
 
-  // Function to get test summary
   const getTestSummary = (output: string) => {
     const lines = output.split("\n");
     const passCount = lines.filter((line) => line.includes("(pass)")).length;
@@ -56,7 +51,6 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
     return { passCount, failCount };
   };
 
-  // Function to get condensed output for minimized view
   const getCondensedOutput = (output: string) => {
     const { passCount, failCount } = getTestSummary(output);
     return (
@@ -96,8 +90,14 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
             isMinimized ? "hidden" : ""
           }`}
         />
-        <Dialog.Content className={modalContentClass}>
-          {/* Terminal header */}
+        <Dialog.Title className="sr-only">Test Results</Dialog.Title>
+        <Dialog.Description className="sr-only">
+          Test Results
+        </Dialog.Description>
+        <Dialog.Content
+          className={modalContentClass}
+          aria-describedby="test-results"
+        >
           <div
             className={`flex items-center px-4 py-2 bg-[#2D2E33] border-b border-gray-600 ${
               isMinimized
