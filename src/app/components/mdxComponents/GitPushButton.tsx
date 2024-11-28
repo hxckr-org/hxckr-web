@@ -9,9 +9,11 @@ import { ChevronRightIcon } from "@/public/assets/icons";
 export const GitPushButton = ({
   title,
   link,
+  moduleNumber,
 }: {
   title: string;
   link: string;
+  moduleNumber: number;
 }) => {
   const { websocketEvents, allRepositories } = useStore();
   const pathname = usePathname();
@@ -22,20 +24,21 @@ export const GitPushButton = ({
   const newPathname = pathname.replace("/module-2/instructions", link);
   const newUrl = newPathname + `?rid=${rid}&started=${started}`;
 
-  const currentRepo = allRepositories.find((repo) => {
-    const pushEvents = websocketEvents.pushEvents.filter(
-      (event) => event.repoUrl === repo.soft_serve_url
-    );
-    return pushEvents.length > 0;
-  });
-  const hasPushEvent = currentRepo ? true : false;
+  const currentPushEvent = websocketEvents?.pushEvents?.[moduleNumber];
+  
+  const currentRepo = currentPushEvent 
+    ? allRepositories.find((repo) => repo.soft_serve_url === currentPushEvent.repoUrl)
+    : null;
+
+  const hasPushEvent = typeof window === 'undefined' 
+    ? false 
+    : Boolean(currentRepo && currentPushEvent);
 
   return (
     <Link
       href={newUrl}
-      className={`flex items-center justify-center bg-purple-primary text-white py-4 text-base rounded-none text-center ${
-        !hasPushEvent ? "opacity-50 cursor-not-allowed" : ""
-      }`}
+      data-disabled={!hasPushEvent}
+      className="flex items-center justify-center bg-purple-primary text-white py-4 text-base rounded-none text-center data-[disabled=true]:opacity-50 data-[disabled=true]:cursor-not-allowed"
     >
       {title}
       <ChevronRightIcon className="w-4 h-4" />

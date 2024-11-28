@@ -87,18 +87,36 @@ type PushEvent = {
   commitSha: string;
 };
 
+type TestEventProgress = {
+  id: string;
+  user_id: string;
+  challenge_id: string;
+  status: "completed" | "in_progress" | "not_started";
+  progress_details: {
+    current_step: number;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
 type TestEvent = {
   event_type: (typeof EventType)[keyof typeof EventType];
-  repoUrl: string;
   commitSha: string;
+  repoUrl: string;
   success: boolean;
   output: string;
+  progress?: TestEventProgress;
 };
 
 type ChallengeMode = "functional_test" | "project";
 type ChallengeDifficulty = "easy" | "medium" | "hard";
 type ChallengeStatus = (typeof Status)[keyof typeof Status];
 type ChallengePeriod = (typeof Period)[keyof typeof Period];
+
+interface WebSocketEvents {
+  pushEvents: Record<string, PushEvent>;
+  testEvents: Record<string, TestEvent[]>;
+}
 
 export type {
   Challenge,
@@ -114,6 +132,8 @@ export type {
   ChallengeAttempt,
   PushEvent,
   TestEvent,
+  TestEventProgress,
+  WebSocketEvents,
 };
 
 export { Status, Period, EventType };

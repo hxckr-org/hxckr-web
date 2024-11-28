@@ -26,7 +26,10 @@ export const ChallengeCard = ({
     repository?.progress.progress_details.current_step &&
     repository?.progress.progress_details.current_step > 0
   ) {
-    const moduleCount = repository?.progress.progress_details.current_step + 1; // +1 because the first step is the introduction
+    const moduleCount =
+      repository?.progress.status === "completed"
+        ? repository?.progress.progress_details.current_step
+        : repository?.progress.progress_details.current_step + 1; // +1 because the first step is the introduction
     const currentModule = `module-${moduleCount}`;
     const challengeKeyWithModule = challengeKey?.replace(
       "/instructions",
@@ -36,6 +39,10 @@ export const ChallengeCard = ({
       repository?.id || ""
     }&started=true`;
   }
+
+  const currentStep =
+    repository?.progress?.progress_details?.current_step ??
+    challenge.progress.current_step;
 
   return (
     <div className="flex flex-col justify-between overflow-hidden rounded-lg min-w-[357px] max-w-[400px] h-[470px] border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -67,16 +74,16 @@ export const ChallengeCard = ({
           <div className="mb-2 flex items-center justify-between text-sm text-gray-600">
             <span className="text-[#888888] text-sm font-light">
               <span className="text-black">
-                {challenge.progress.current_step}/
+                {(repository?.progress?.progress_details?.current_step ?? -1) +
+                  1 || challenge.progress.current_step}
+                /
               </span>
-              {challenge.module_count} tasks
+              {challenge.module_count + 1} tasks
             </span>
             <span className="text-[#888888] text-sm font-light">
               {Math.min(
-                100,
                 Math.round(
-                  (challenge.progress.current_step * 100) /
-                    Math.max(1, challenge.module_count)
+                  (currentStep * 100) / Math.max(1, challenge.module_count)
                 )
               )}
               % Done
@@ -88,8 +95,7 @@ export const ChallengeCard = ({
               style={{
                 width: `${Math.min(
                   100,
-                  (challenge.progress.current_step * 100) /
-                    Math.max(1, challenge.module_count)
+                  (currentStep * 100) / Math.max(1, challenge.module_count)
                 )}%`,
               }}
             />
@@ -102,8 +108,10 @@ export const ChallengeCard = ({
           }}
           className="bottom-0 mt-4 flex w-full items-center justify-center gap-2 font-semibold text-[#4C2480] rounded-full bg-[#F8F2FF] px-4 py-3 border border-[#DAC2FF] transition-colors group hover:bg-[#4C2480]/20"
         >
-          {challenge.progress.status.toLowerCase() === "inprogress"
+          {challenge.progress.status === "in_progress"
             ? "Continue"
+            : currentStep === challenge.module_count
+            ? "Completed"
             : "Start"}
           <ArrowLeftIcon
             className="h-4 w-4 rotate-180 group-hover:translate-x-1 transition-transform duration-300"

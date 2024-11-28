@@ -1,14 +1,12 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 import Button from "@/app/components/primitives/button";
 import { useStore } from "@/contexts/store";
 import { getChallengeDocument } from "@/helpers";
 import useCreateRepo from "@/hooks/useCreateRepo";
-import { Repository } from "@/types";
-import { useGetUserRepositories } from "@/hooks/useGetRepo";
 
 const MdxButton = ({ title, link }: { title: string; link: string }) => {
   const searchParams = useSearchParams();
@@ -77,11 +75,23 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("rid", repository?.id);
       urlParams.set("started", "true");
+      urlParams.set("language", language || "");
+      urlParams.set("proficiency", proficiency || "");
+      urlParams.set("frequency", frequency || "");
 
       const newPath = `${pathname}?${urlParams.toString()}`;
       router.replace(newPath);
     }
-  }, [pathname, rid, router, searchParams, repository?.id]);
+  }, [
+    pathname,
+    rid,
+    router,
+    searchParams,
+    repository?.id,
+    language,
+    proficiency,
+    frequency,
+  ]);
 
   return (
     <div className="flex items-end justify-end w-full pb-6 mt-8">
@@ -100,6 +110,9 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
               const urlParams = new URLSearchParams();
               urlParams.set("rid", repository?.id);
               urlParams.set("started", "true");
+              urlParams.set("language", language || "");
+              urlParams.set("proficiency", proficiency || "");
+              urlParams.set("frequency", frequency || "");
 
               const newLink =
                 newLinkArray.join("/") + "?" + urlParams.toString();

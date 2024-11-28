@@ -23,7 +23,7 @@ const fetchUserRepositories = async ({
   per_page = 5,
   page = 1,
   repo_url,
-  status = Status.NotStarted,
+  status,
   id,
   softServeUrl,
 }: QueryParams) => {

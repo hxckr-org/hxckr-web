@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
+import { useStore } from "@/contexts/store";
 import {
   BellOutlineIcon,
   BellSolidIcon,
@@ -43,8 +44,7 @@ const NavItem = ({
       <button
         onClick={onClick}
         className={`flex items-center mx-6 my-8 px-6 py-4 text-gray-600 transition-colors hover:bg-purple-quinary hover:text-purple-primary ${
-          isOpen &&
-          "hover:rounded-r-full hover:border-r-4 hover:border-purple-primary gap-3"
+          isOpen && "hover:rounded-r-full gap-3"
         }
       ${
         isActive && isOpen
@@ -61,8 +61,7 @@ const NavItem = ({
     <Link
       href={href}
       className={`flex items-center mx-6 my-8 px-6 py-4 text-gray-600 transition-colors hover:bg-purple-quinary hover:text-purple-primary ${
-        isOpen &&
-        "hover:rounded-r-full hover:border-r-4 hover:border-purple-primary gap-3"
+        isOpen && "hover:rounded-r-full gap-3"
       } ${
         isActive && isOpen
           ? "bg-purple-quinary text-purple-primary border-r-4 border-purple-primary rounded-r-full"
@@ -90,10 +89,14 @@ export default function Sidebar({
 }) {
   const searchParams = useSearchParams();
   const started = searchParams.get("started");
+  const { clearUserChallenge, clearAllRepositories, clearWebsocketEvents } =
+    useStore();
+
   useEffect(() => {
     if (started) {
       setIsOpen(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started]);
 
   const navItems = [
@@ -205,7 +208,12 @@ export default function Sidebar({
             icon={<LogoutIcon />}
             label={isOpen ? "Log Out" : ""}
             isOpen={isOpen}
-            onClick={() => signOut()}
+            onClick={() => {
+              signOut();
+              clearUserChallenge();
+              clearAllRepositories();
+              clearWebsocketEvents();
+            }}
           />
         </div>
       </aside>
