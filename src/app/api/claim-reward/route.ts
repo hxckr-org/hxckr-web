@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { GraphQLClient, gql } from "graphql-request";
+import { headers } from "next/headers";
 
 type PaymentStatus = 'ALREADY_PAID' | 'FAILURE' | 'PENDING' | 'SUCCESS';
 
@@ -7,7 +8,48 @@ enum PaymentStatusCode {
   SUCCESS = 200,
   PENDING = 202,
   ALREADY_PAID = 409,
-  FAILURE = 500
+  FAILURE = 500,
+  BAD_REQUEST = 400,
+  TOO_MANY_REQUESTS = 429
+}
+
+// Simple in-memory store for rate limiting
+// In production, use Redis or similar for distributed systems
+const rateLimitStore = new Map<string, { count: number; timestamp: number }>();
+const RATE_LIMIT_WINDOW = 3600000; // 1 hour in milliseconds
+const MAX_REQUESTS_PER_WINDOW = 3; // Max 3 claims per hour
+
+const isValidLightningAddress = (address: string): boolean => {
+  // Basic validation - should contain @ and no spaces
+  return address.includes('@') && !address.includes(' ') && address.length < 100;
+};
+
+const getRateLimitKey = (ip: string, lnAddress: string): string => {
+  return `${ip}:${lnAddress}`;
+};
+
+const isRateLimited = (key: string): boolean => {
+  const now = Date.now();
+  const record = rateLimitStore.get(key);
+
+  if (!record) {
+    rateLimitStore.set(key, { count: 1, timestamp: now });
+    return false;
+  }
+
+  if (now - record.timestamp > RATE_LIMIT_WINDOW) {
+    // Reset if window has passed
+    rateLimitStore.set(key, { count: 1, timestamp: now });
+    return false;
+  }
+
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+
+  record.count += 1;
+  rateLimitStore.set(key, record);
+  return false;
 }
 
 const getStatusCode = (status: PaymentStatus): PaymentStatusCode => {
@@ -57,22 +99,62 @@ const SEND_PAYMENT_MUTATION = gql`
   }
 `;
 
-const WALLET_ID = "bbb1a6bb-ad98-4070-9c8e-c697b631afc9";
-const REWARD_AMOUNT = 10; // sats reward amount
+const WALLET_ID = process.env.BLINK_WALLET_ID;
+const REWARD_AMOUNT = process.env.REWARD_IN_SATS;
 
 export async function POST(request: Request) {
   try {
+    // Validate environment variables
+    if (!process.env.BLINK_API_TOKEN) {
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: PaymentStatusCode.FAILURE }
+      );
+    }
+
+    if (!WALLET_ID || !REWARD_AMOUNT) {
+      return NextResponse.json(
+        { error: "Reward configuration error" },
+        { status: PaymentStatusCode.FAILURE }
+      );
+    }
+
+    // Get IP address for rate limiting
+    const headersList = headers();
+    const forwardedFor = headersList.get('x-forwarded-for');
+    const ip = forwardedFor ? forwardedFor.split(',')[0] : 'unknown';
+
     const { lnAddress } = await request.json();
 
-    if (!process.env.BLINK_API_TOKEN) {
-      throw new Error("BLINK_API_TOKEN environment variable is not set");
+    // Validate input
+    if (!lnAddress || typeof lnAddress !== 'string') {
+      return NextResponse.json(
+        { error: "Please enter a valid Lightning address" },
+        { status: PaymentStatusCode.BAD_REQUEST }
+      );
+    }
+
+    if (!isValidLightningAddress(lnAddress)) {
+      return NextResponse.json(
+        { error: "Please enter a valid Lightning address (e.g., you@wallet.com)" },
+        { status: PaymentStatusCode.BAD_REQUEST }
+      );
+    }
+
+    // Check rate limit
+    const rateLimitKey = getRateLimitKey(ip, lnAddress);
+    if (isRateLimited(rateLimitKey)) {
+      return NextResponse.json(
+        { error: "Too many reward claims. Please try again in an hour." },
+        { status: PaymentStatusCode.TOO_MANY_REQUESTS }
+      );
     }
 
     // Call the Blink GraphQL API
     const response = await client.request<LnAddressPaymentSendResponse>(SEND_PAYMENT_MUTATION, {
       input: {
         walletId: WALLET_ID,
-        amount: REWARD_AMOUNT,
+        amount: parseInt(REWARD_AMOUNT, 10),
         lnAddress,
       },
     });
@@ -82,13 +164,19 @@ export async function POST(request: Request) {
     // Handle any errors first
     const firstError = errors[0];
     if (firstError) {
-      throw new Error(`Payment failed: ${firstError.message}`);
+      return NextResponse.json(
+        { error: `Payment failed: ${firstError.message}` },
+        { status: PaymentStatusCode.FAILURE }
+      );
     }
 
     const statusCode = getStatusCode(status);
     
     if (status === 'FAILURE') {
-      throw new Error('Payment failed');
+      return NextResponse.json(
+        { error: "Payment failed. Please try again." },
+        { status: PaymentStatusCode.FAILURE }
+      );
     }
 
     return NextResponse.json({ 
@@ -101,8 +189,8 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error processing reward payment:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to process reward payment" },
-      { status: 500 }
+      { error: "An unexpected error occurred. Please try again later." },
+      { status: PaymentStatusCode.FAILURE }
     );
   }
 }
