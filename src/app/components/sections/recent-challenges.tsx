@@ -197,6 +197,7 @@ const RecentChallengeCard = ({
 }) => {
   const router = useRouter();
   const challengeDocument = getChallengeDocument({ title });
+  const thumbnail = challengeDocument?.thumbnail;
 
   const moduleCountPlusOne = moduleCount + 1; // +1 because the first step is the introduction
   const currentModule =
@@ -221,13 +222,14 @@ const RecentChallengeCard = ({
           : "border-b-[1px] border-grey-border"
       }`}
     >
-      <div className="flex items-center gap-4 rounded-lg w-[136px] h-[100px] border">
+      <div className="flex items-center gap-4 rounded-xl w-[136px] h-[100px] border overflow-hidden">
         <Image
-          src="/assets/images/jig-block.webp"
-          alt="Recent challenges"
+          src={thumbnail || "/assets/images/jig-block.webp"}
+          alt={`${title} thumbnail`}
           width={100}
           height={100}
           className="w-full h-full"
+          priority
         />
       </div>
       <div className="flex flex-col items-left justify-between gap-y-3">

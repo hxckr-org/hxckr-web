@@ -15,7 +15,9 @@ export const ChallengeCard = ({
 }) => {
   const { allRepositories, setUserChallenge } = useStore();
 
-  const challengeKey = getChallengeDocument({ title: challenge.title })?.url;
+  const document = getChallengeDocument({ title: challenge.title });
+  const challengeKey = document?.url;
+  const thumbnail = document?.thumbnail;
 
   const repository = allRepositories.find(
     (repo) => repo.challenge_id === challenge.id
@@ -48,7 +50,7 @@ export const ChallengeCard = ({
     <div className="flex flex-col justify-between overflow-hidden rounded-lg min-w-[357px] max-w-[400px] h-[470px] border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       <div className="relative px-4 pt-4">
         <Image
-          src={"/assets/images/jig-block.webp"}
+          src={thumbnail || "/assets/images/jig-block.webp"}
           alt={challenge.title}
           width={400}
           height={200}
