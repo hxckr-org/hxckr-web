@@ -436,6 +436,7 @@ const AttemptsBoard = ({
                     {attempt.username.charAt(0)}
                   </div>
                   <p>{attempt.username}</p>
+                  <code className="text-sm text-[#5A5A5A] font-extralight">{`(${attempt.language})`}</code>
                 </div>
                 <div className="flex items-center font-normal text-sm gap-x-2 w-1/3">
                   <p>
