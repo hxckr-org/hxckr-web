@@ -41,6 +41,7 @@ export const Course = defineDocumentType(() => ({
     prerequisites: { type: "list", of: { type: "string" } },
     starterCode: { type: "json" },
     module: { type: "number" },
+    thumbnail: { type: "string" },
   },
   computedFields: {
     url: {

@@ -14,6 +14,11 @@ const nextConfig = {
         port: "",
         protocol: "https",
       },
+      {
+        hostname: "github.com",
+        port: "",
+        protocol: "https",
+      },
     ],
   },
   reactStrictMode: true,
