@@ -156,6 +156,7 @@ const ChallengeBody = ({
               repoId={challenge.id}
               moduleCount={challenge.challenge.module_count}
               currentStep={challenge.progress.progress_details.current_step + 1}
+              language={challenge.language}
             />
           );
         })
@@ -188,12 +189,14 @@ const RecentChallengeCard = ({
   currentStep,
   repoId,
   isSeeAllVisible,
+  language,
 }: {
   title: string;
   moduleCount: number;
   currentStep: number;
   repoId: string;
   isSeeAllVisible: boolean;
+  language: string;
 }) => {
   const router = useRouter();
   const challengeDocument = getChallengeDocument({ title });
@@ -232,10 +235,11 @@ const RecentChallengeCard = ({
           priority
         />
       </div>
-      <div className="flex flex-col items-left justify-between gap-y-3">
+      <div className="flex flex-col items-left justify-between gap-y-2">
         <h4 className="text-xl text-[#313233] font-semibold capitalize">
           {title}
         </h4>
+        <code className="text-sm text-[#5A5A5A] font-extralight">{`(${language})`}</code>
         <ProgressBar
           value={currentStep}
           max={moduleCountPlusOne}

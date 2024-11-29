@@ -61,6 +61,7 @@ type ChallengeAttempt = {
   username: string;
   total_score: number;
   module_count: number;
+  language: string;
 };
 
 const Status = {

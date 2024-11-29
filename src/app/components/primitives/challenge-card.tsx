@@ -54,7 +54,7 @@ export const ChallengeCard = ({
           alt={challenge.title}
           width={400}
           height={200}
-          className="h-48 w-full object-cover rounded-lg border"
+          className="w-full h-full object-cover rounded-lg border"
           priority
         />
         <span
