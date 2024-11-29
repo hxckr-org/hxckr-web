@@ -2,7 +2,7 @@ type Challenge = {
   id: string;
   title: string;
   description: string;
-  repo_url: string;
+  repo_urls: Record<string, string>;
   difficulty: string;
   module_count: number;
   mode: ChallengeMode;
@@ -34,6 +34,7 @@ type Repository = {
   user_id: string;
   challenge_id: string;
   repo_url: string;
+  language: string;
   soft_serve_url: string;
   created_at: string;
   updated_at: string;

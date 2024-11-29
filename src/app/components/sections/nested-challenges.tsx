@@ -145,7 +145,6 @@ const ContentSideBar = ({
         {sortedModules.map((module, index) => (
           <ContentListItem
             key={module.url}
-            text={module.module?.toString() || (index + 1).toString()}
             url={module.url}
             repoDetails={repoDetails}
             module={module.module!}
@@ -158,13 +157,11 @@ const ContentSideBar = ({
 };
 
 const ContentListItem = ({
-  text,
   url,
   repoDetails,
   module,
   challenge,
 }: {
-  text: string;
   url: string;
   repoDetails: Repository;
   module: number;
@@ -322,7 +319,7 @@ const IntroductionContentSection = ({
             </Link>
           </div>
 
-          <section>
+          <section className="flex gap-2">
             {challenge.languages?.map((lang) => (
               <p
                 key={lang}

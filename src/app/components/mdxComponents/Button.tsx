@@ -21,14 +21,14 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
     (repo) => repo?.challenge?.title === document?.title
   );
 
-  const language = searchParams.get("language");
+  const language = searchParams.get("language")?.toLowerCase();
   const proficiency = searchParams.get("proficiency");
   const frequency = searchParams.get("frequency");
   const rid = searchParams.get("rid");
 
   const languageMatch = Object.entries(document?.starterCode || {})
     .filter(([key, _value]) => {
-      return key.toLowerCase() === language?.toLowerCase();
+      return key.toLowerCase() === language;
     })
     .map(([_key, value]) => value);
   const currentRouteArray = pathname.split("/");
@@ -42,6 +42,7 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
 
   const { mutateAsync: createRepo, isPending: isCreatingRepo } = useCreateRepo({
     repo_url: languageMatch[0] as string,
+    language: language || "",
     callback: async (repoData) => {
       if (currentModule && nextModule) {
         const newLinkArray = currentRouteArray.map((item) => {
@@ -53,6 +54,9 @@ const MdxButton = ({ title, link }: { title: string; link: string }) => {
         const urlParams = new URLSearchParams();
         urlParams.set("rid", repoData.id || "");
         urlParams.set("started", "true");
+        urlParams.set("language", language || "");
+        urlParams.set("proficiency", proficiency || "");
+        urlParams.set("frequency", frequency || "");
         const newLink = newLinkArray.join("/") + "?" + urlParams.toString();
         router.push(newLink);
       }

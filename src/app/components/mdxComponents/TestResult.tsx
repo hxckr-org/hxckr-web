@@ -114,6 +114,9 @@ const TestResult = ({
     if (latestTestEvent && messages.length < 1) {
       setTestResultStatus(latestTestEvent.success ? "success" : "failed");
       setTestOutput(latestTestEvent.output);
+      if (currentRepository?.progress.status === "completed") {
+        setShowSuccessModal(true);
+      }
     }
   }, [latestTestEvent, messages]);
 

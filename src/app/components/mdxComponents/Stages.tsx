@@ -58,7 +58,7 @@ const Stage = ({
         </section>
       </div>
 
-      {open && <div className='text-sm font-light'>{children}</div>}
+      {open && <div className='text-sm font-light pt-2 ml-8'>{children}</div>}
     </button>
   );
 };

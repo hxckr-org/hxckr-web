@@ -30,13 +30,52 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
   const formatOutput = (output: string) => {
     const lines = output.split("\n");
     let formattedOutput = "";
+    let isCapturingPythonOutput = false;
 
     lines.forEach((line) => {
-      if (line.includes("(pass)")) {
-        formattedOutput += line.replace("(pass)", "✓") + "\n";
-      } else if (line.includes("(fail)")) {
-        formattedOutput += line.replace("(fail)", "✗") + "\n";
-      } else {
+      // Skip Python output capture headers/footers
+      if (line.includes("Captured stdout") || line.includes("===")) {
+        isCapturingPythonOutput = line.includes("Captured stdout");
+        formattedOutput += line + "\n";
+        return;
+      }
+
+      // Handle Python test summary lines
+      if (line.match(/(\d+) passed in \d+\.\d+s/)) {
+        const [passed] = line.match(/\d+/g) || [];
+        formattedOutput += `${passed} (pass) 0 (fail)\n`;
+        return;
+      }
+      if (line.match(/(\d+) failed, (\d+) passed in/)) {
+        const [failed, passed] = line.match(/\d+/g) || [];
+        formattedOutput += `${passed} (pass) ${failed} (fail)\n`;
+        return;
+      }
+
+      // Handle individual Python test results
+      if (line.includes("FAILED") || line.includes("PASSED")) {
+        const status = line.includes("FAILED") ? "(fail)" : "(pass)";
+        // Extract test name, handling both formats
+        let testName = line.split("::")[1]?.split(" -")[0]?.trim();
+        if (!testName) {
+          // Handle the format where test name comes first
+          testName = line.split("PASSED")[0]?.split("FAILED")[0]?.trim();
+        }
+        if (testName) {
+          // Remove percentage indicators if present
+          testName = testName.replace(/\[\s*\d+%\s*\]/g, "").trim();
+          formattedOutput += `${testName} ${status}\n`;
+        } else {
+          formattedOutput += line + "\n";
+        }
+        return;
+      }
+
+      // Handle captured output and other lines
+      if (
+        isCapturingPythonOutput ||
+        (!line.trim().startsWith("===") && line.trim())
+      ) {
         formattedOutput += line + "\n";
       }
     });
@@ -46,8 +85,41 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
 
   const getTestSummary = (output: string) => {
     const lines = output.split("\n");
-    const passCount = lines.filter((line) => line.includes("(pass)")).length;
-    const failCount = lines.filter((line) => line.includes("(fail)")).length;
+    let passCount = 0;
+    let failCount = 0;
+    let foundSummary = false;
+
+    // First try to find the summary line
+    for (const line of lines) {
+      // Python style summary line - all passed
+      const allPassedMatch = line.match(/(\d+) passed in \d+\.\d+s/);
+      if (allPassedMatch) {
+        passCount = parseInt(allPassedMatch[1]);
+        failCount = 0;
+        foundSummary = true;
+        break;
+      }
+
+      // Python style summary line - mixed results
+      const mixedResultsMatch = line.match(/(\d+) failed, (\d+) passed in/);
+      if (mixedResultsMatch) {
+        failCount = parseInt(mixedResultsMatch[1]);
+        passCount = parseInt(mixedResultsMatch[2]);
+        foundSummary = true;
+        break;
+      }
+    }
+
+    // If no summary line found, count individual test results
+    if (!foundSummary) {
+      for (const line of lines) {
+        if (line.includes("PASSED")) passCount++;
+        if (line.includes("FAILED")) failCount++;
+        if (line.includes("(pass)")) passCount++;
+        if (line.includes("(fail)")) failCount++;
+      }
+    }
+
     return { passCount, failCount };
   };
 
@@ -64,6 +136,9 @@ const TestOutputModal = ({ isOpen, onClose, output }: TestOutputModalProps) => {
           <span className="text-[#FF5F57] flex items-center gap-1">
             <span className="text-xs">✗</span> {failCount} failing
           </span>
+        )}
+        {passCount === 0 && failCount === 0 && (
+          <span className="text-gray-400">No tests run</span>
         )}
       </div>
     );
