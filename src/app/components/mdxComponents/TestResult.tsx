@@ -112,6 +112,12 @@ const TestResult = ({
 
   useEffect(() => {
     if (latestTestEvent && messages.length < 1) {
+      if (
+        sluggify(currentRepository?.challenge?.title || "") !==
+        sluggify(document?.title || "")
+      ) {
+        return;
+      }
       setTestResultStatus(latestTestEvent.success ? "success" : "failed");
       setTestOutput(latestTestEvent.output);
       if (currentRepository?.progress.status === "completed") {
