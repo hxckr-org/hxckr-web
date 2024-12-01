@@ -22,6 +22,7 @@ import { Repository, RepositoryResponse } from "@/types";
 export const RecentChallenges = () => {
   const { addRepositories } = useStore();
   const searchParams = useSearchParams();
+  const seeAll = searchParams.get("all") === "true";
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const { data, isLoading: isLoadingInProgress } = useGetUserRepositories({
@@ -31,7 +32,7 @@ export const RecentChallenges = () => {
 
   const isLoading = isLoadingInProgress;
   const response = data as RepositoryResponse;
-  const [isSeeAllVisible, setIsSeeAllVisible] = useState(false);
+  const [isSeeAllVisible, setIsSeeAllVisible] = useState(seeAll);
 
   const repositories = useMemo(() => {
     return response?.data || [];
@@ -88,7 +89,7 @@ const Header = ({
         <Button
           onClick={() => {
             setIsSeeAllVisible(false);
-            router.replace("/dashboard");
+            router.replace("/dashboard?all=false");
           }}
           className="w-fit bg-transparent font-light text-base text-[#666666] hover:bg-transparent px-0"
         >
