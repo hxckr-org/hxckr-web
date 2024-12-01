@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { DashboardLayout } from "@/app/components/layout/dashboard";
-import Achievements from "@/app/components/primitives/ProfileAchievements";
-import ActivityCalendar from "@/app/components/primitives/ProfileActivityCalendar";
 import ProfileChallenges from "@/app/components/primitives/ProfileChallenges";
-import DeleteAccount from "@/app/components/primitives/ProfileDeleteAccount";
 import GitHubIntegration from "@/app/components/primitives/ProfileGithubIntegration";
 import PersonalInformation from "@/app/components/primitives/ProfilePersonalInformation";
 import { auth } from "@/auth";
@@ -24,13 +21,16 @@ export default async function ProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <PersonalInformation name={name} email={email} picture={picture} />
-            <ActivityCalendar />
+            {/* TODO: Uncomment this when we have the activity calendar feature */}
+            {/* <ActivityCalendar /> */}
             <ProfileChallenges />
-            <DeleteAccount />
+            {/* TODO: Uncomment this when we have the delete account feature */}
+            {/* <DeleteAccount /> */}
           </div>
           <div className="space-y-6">
             <GitHubIntegration />
-            <Achievements />
+            {/* TODO: Uncomment this when we have the achievements feature */}
+            {/* <Achievements /> */}
           </div>
         </div>
       </div>

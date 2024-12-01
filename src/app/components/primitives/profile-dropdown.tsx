@@ -76,7 +76,7 @@ export default function ProfileDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute -right-6 md:right-0 z-50 w-screen -top-1 px-2 md:top-auto md:mt-2 md:w-72 rounded-2xl bg-white shadow-lg md:ring-1 md:ring-black md:ring-opacity-5">
+        <div className="absolute -right-6 md:right-0 z-50 w-screen -top-1 px-2 md:top-auto md:mt-2 md:w-72 rounded-2xl bg-white shadow-lg md:ring-1 md:ring-black md:ring-opacity-5 overflow-hidden">
           <div className="flex justify-end md:hidden">
             <button
               className=" cursor-pointer hover:bg-gray-100 rounded-full p-2 border border-gray-200"
