@@ -120,6 +120,17 @@ interface WebSocketEvents {
   testEvents: Record<string, TestEvent[]>;
 }
 
+type Leaderboard = {
+  id: number;
+  user_id: string;
+  score: number;
+  expected_total_score: number;
+  github_username: string;
+  completed_challenge_count: number;
+  created_at: string;
+  updated_at: string;
+};
+
 export type {
   Challenge,
   ChallengeMode,
@@ -136,6 +147,7 @@ export type {
   TestEvent,
   TestEventProgress,
   WebSocketEvents,
+  Leaderboard,
 };
 
 export { Status, Period, EventType };

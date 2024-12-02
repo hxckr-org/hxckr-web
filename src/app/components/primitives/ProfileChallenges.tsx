@@ -59,7 +59,9 @@ const ProfileChallenges = () => {
                     title: repo.challenge.title,
                   });
                   const currentModule =
-                    repo.progress.progress_details.current_step + 1;
+                    repo?.progress.status !== "completed"
+                      ? repo.progress.progress_details.current_step + 1
+                      : repo.progress.progress_details.current_step;
                   const url = document?.url.replace("/instructions", "");
                   const challengeUrl = `/challenges${url}/module-${currentModule}/instructions?rid=${repo.id}&started=true`;
                   return (
@@ -89,15 +91,17 @@ const ProfileChallenges = () => {
                   });
                   const url = document?.url.replace("/instructions", "");
                   const currentModule =
-                    repo.progress.progress_details.current_step + 1;
-                  const challengeUrl = `/challenges${url}/module-${currentModule}?rid=${repo.id}&started=true`;
+                    repo?.progress.status !== "completed"
+                      ? repo.progress.progress_details.current_step + 1
+                      : repo.progress.progress_details.current_step;
+                  const challengeUrl = `/challenges${url}/module-${currentModule}/instructions?rid=${repo.id}&started=true`;
                   return (
                     <Link
                       href={challengeUrl}
                       key={repo.id}
                       className="flex items-center justify-between hover:underline hover:text-purple-primary"
                     >
-                      <li className="text-[#313233] capitalize list-disc list-inside">
+                      <li className="text-[#313233] capitalize list-disc list-inside hover:text-purple-primary">
                         {repo.challenge.title}
                       </li>
                     </Link>
