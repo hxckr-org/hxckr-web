@@ -100,7 +100,9 @@ export default function LeaderboardPage() {
                       alt="User avatar"
                       width={32}
                       height={32}
-                      className="rounded-full"
+                      className={`rounded-full ${
+                        isCurrentUser ? "block" : "hidden"
+                      }`}
                     />
                     <span>
                       <b>{leader?.github_username}</b>
