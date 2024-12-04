@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CaretDownIcon, CheckCircledIcon } from "@radix-ui/react-icons";
+import { CaretDownIcon, CheckCircledIcon, CaretUpIcon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export const Dropdown = ({
@@ -84,7 +84,11 @@ export const DropdownItem = ({
             </span>
           )}
         </section>
-        <CaretDownIcon className="w-6 h-6" />
+        {isOpen ? (
+          <CaretUpIcon className="w-6 h-6" />
+        ) : (
+          <CaretDownIcon className="w-6 h-6" />
+        )}
       </section>
 
       {isOpen && (
