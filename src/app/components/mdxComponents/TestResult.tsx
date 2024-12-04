@@ -113,11 +113,13 @@ const TestResult = ({
   useEffect(() => {
     const currentStep =
       currentRepository?.progress.progress_details.current_step || 0;
-    if (moduleNumber < currentStep + 1) {
+    if (moduleNumber <= currentStep + 1) {
       if (latestTestEvent && messages.length < 1) {
         if (
           sluggify(currentRepository?.challenge?.title || "") !==
-          sluggify(document?.title || "")
+            sluggify(document?.title || "") ||
+          sluggify(currentRepository?.soft_serve_url || "") !==
+            sluggify(currentPushEvent?.repoUrl || "")
         ) {
           return;
         }
