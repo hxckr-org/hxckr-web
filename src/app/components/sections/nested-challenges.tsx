@@ -28,6 +28,7 @@ import {
   ArrowRightIcon,
   CaretRightIcon,
 } from "@radix-ui/react-icons";
+import { CourseSuccess } from "./course-success";
 
 const NestedChallenges = ({
   challenge,
@@ -89,6 +90,7 @@ const NestedChallenges = ({
           attemptsLoading={attemptsLoading}
           period={period}
           setPeriod={setPeriod}
+          challengeModules={challengeModules}
         />
       ) : (
         <IntroductionContentSection
@@ -478,45 +480,64 @@ const StagesContentSection = ({
   attemptsLoading,
   period,
   setPeriod,
+  challengeModules,
 }: {
   challenge: Course;
   attempts: ChallengeAttempt[];
   attemptsLoading: boolean;
   period: ChallengePeriod;
   setPeriod: React.Dispatch<React.SetStateAction<ChallengePeriod>>;
+  challengeModules: Course[];
 }) => {
+  const { allRepositories } = useStore();
+  const repository = allRepositories.find(
+    (repo) => sluggify(repo?.challenge?.title) === sluggify(challenge.title)
+  );
+
+  const isCompleted = repository?.progress?.status === Status.Completed;
+  const moduleCount = challengeModules.length;
+
   return (
     <div className="flex flex-col p-6 pb-6 w-full">
       <NavigationBlock />
-      <div className="flex justify-between pt-4 pb-6">
-        <section className="flex flex-col gap-1">
-          <p className="text-black text-2xl leading-[36px]">
-            {challenge?.title}
-          </p>
-          <p className="text-grey-secondary-text font-light">
-            {challenge?.action}
-          </p>
-        </section>
-      </div>
-
-      {/* body section */}
-      <div className="flex justify-between w-full h-full flex-1 gap-6 overflow-scroll">
-        {/* left */}
-        <section className={`flex flex-col overflow-scroll rounded-b-lg `}>
-          <MDXLayoutRenderer
-            code={challenge?.body?.code}
-            components={mdxComponents}
-          />
-        </section>
-
-        <AttemptsBoard
-          challenge={challenge}
-          attempts={attempts}
-          attemptsLoading={attemptsLoading}
-          period={period}
-          setPeriod={setPeriod}
+      {isCompleted ? (
+        <CourseSuccess 
+          title={challenge.title} 
+          description={`You've mastered ${challenge.title}! Your completion of all ${moduleCount} stages demonstrates your growing expertise.`}
         />
-      </div>
+      ) : (
+        <>
+          <div className="flex justify-between pt-4 pb-6">
+            <section className="flex flex-col gap-1">
+              <p className="text-black text-2xl leading-[36px]">
+                {challenge?.title}
+              </p>
+              <p className="text-grey-secondary-text font-light">
+                {challenge?.action}
+              </p>
+            </section>
+          </div>
+
+          {/* body section */}
+          <div className="flex justify-between w-full h-full flex-1 gap-6 overflow-scroll">
+            {/* left */}
+            <section className="flex flex-col overflow-scroll rounded-b-lg">
+              <MDXLayoutRenderer
+                code={challenge?.body?.code}
+                components={mdxComponents}
+              />
+            </section>
+
+            <AttemptsBoard
+              challenge={challenge}
+              attempts={attempts}
+              attemptsLoading={attemptsLoading}
+              period={period}
+              setPeriod={setPeriod}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

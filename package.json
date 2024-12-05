@@ -21,6 +21,8 @@
     "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.1",
     "contentlayer2": "^0.5.3",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.2",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
     "next-contentlayer2": "^0.5.3",
@@ -31,6 +33,7 @@
     "react-use-websocket": "^3.0.0",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
+    "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
     "zustand": "^5.0.1"
   },
