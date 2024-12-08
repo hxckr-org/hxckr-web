@@ -15,7 +15,7 @@ interface OpenSourceSectionProps {
 export default function OpenSourceSection({
   title = "It's Free & Open Source.",
   description = "We believe in free education for all, and our open-source platform provides the resources to learn about Bitcoin, without any barriers.",
-  githubText = "GitHub",
+  githubText = "Log In",
   githubLink = "https://github.com/hxckr-org",
   discordText = "Join Our Discord",
   discordLink = "https://discord.com/channels/1189471179967315968/1275042830028505088",
@@ -33,12 +33,11 @@ export default function OpenSourceSection({
             </p>
             <div className="mt-6 md:mt-10 flex flex-col sm:flex-row items-center gap-4">
               <Link
-                href={githubLink}
-                className="w-full sm:w-auto bg-purple-primary text-white text-sm sm:text-base md:text-lg lg:text-xl px-6 md:px-9 py-4 md:py-5 hover:bg-purple-primary/90 flex items-center justify-center gap-2 rounded-full"
+                href='/signin'
+                className="w-full sm:w-auto bg-purple-primary text-white text-sm sm:text-base md:text-lg lg:text-xl px-6 md:px-9 py-4 md:py-5 hover:bg-purple-primary/90 flex items-center justify-center gap-2 rounded-full min-w-[255px]"
                 target="_blank"
               >
-                <GithubIcon />
-                <span>{githubText}</span>
+                {githubText}
               </Link>
               <Link
                 href={discordLink}

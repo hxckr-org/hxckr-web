@@ -16,7 +16,7 @@ export default function HeroSection({
   title = "Development at Your Own Pace.",
   description = "Learn, build, and grow with hands-on tasks and instant code reviews. Join our pioneer program for hands-on learning and personalised code feedback loops.",
   bannerText = "Technical Bitcoin Education For You",
-  signUpButtonText = "Sign up for updates",
+  signUpButtonText = "Log In",
   discordButtonText = "Join Our Discord",
 }: HeroSectionProps) {
   return (
@@ -35,10 +35,9 @@ export default function HeroSection({
           </div>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-4 text-black mt-4 z-50">
-          <SubscribeButton
-            signUpButtonText={signUpButtonText}
-            className="w-full sm:w-auto px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg text-white font-normal hover:bg-purple-primary/90"
-          />
+          <Link href='/signin'
+            className="bg-purple-primary flex items-center gap-2 rounded-full w-full sm:w-auto px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg text-white font-normal hover:bg-purple-primary/90 min-w-[255px] justify-center"
+          >{signUpButtonText}</Link>
           <Link
             className="w-full sm:w-auto bg-white text-purple-primary flex items-center justify-center gap-2 border border-grey-accent rounded-full px-6 sm:px-9 py-4 sm:py-5 text-base sm:text-lg font-normal hover:border-purple-primary"
             href="https://discord.com/channels/1189471179967315968/1275042830028505088"
