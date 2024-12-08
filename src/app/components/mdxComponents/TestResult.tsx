@@ -23,15 +23,9 @@ const TestResult = ({
   moduleNumber: number;
   children: React.ReactNode;
 }) => {
-  const { messages, isConnected } = useAuthenticatedWebSocket();
-  const {
-    allRepositories,
-    websocketEvents,
-    addWebsocketEvent,
-    clearTestEventsForModule,
-    updateRepositoryProgress,
-    updateChallengeProgress,
-  } = useStore();
+  const { isTestRunning, isConnected } =
+    useAuthenticatedWebSocket(moduleNumber);
+  const { allRepositories, websocketEvents } = useStore();
   const pathname = usePathname();
 
   const challengeUrl = pathname.split("/challenges")[1];
@@ -55,13 +49,6 @@ const TestResult = ({
     [moduleNumber, websocketEvents?.testEvents]
   );
   const latestTestEvent = currentTestEvents[currentTestEvents.length - 1];
-
-  // Determine if tests are running by checking if we have a push event
-  // without a corresponding test event (matching commitSha)
-  const isTestRunning =
-    currentPushEvent &&
-    (!latestTestEvent ||
-      latestTestEvent.commitSha !== currentPushEvent.commitSha);
 
   const triggerConfetti = useCallback(() => {
     // Create a sequence of confetti bursts across the screen
@@ -109,12 +96,16 @@ const TestResult = ({
       });
     }, 1000);
   }, []);
+  
+  if (isTestRunning) {
+    setTestResultStatus("running");
+  }
 
   useEffect(() => {
     const currentStep =
       currentRepository?.progress.progress_details.current_step || 0;
     if (moduleNumber <= currentStep + 1) {
-      if (latestTestEvent && messages.length < 1) {
+      if (latestTestEvent) {
         if (
           sluggify(currentRepository?.challenge?.title || "") !==
             sluggify(document?.title || "") ||
@@ -131,58 +122,29 @@ const TestResult = ({
       }
     }
 
-    if (isTestRunning) {
-      setTestResultStatus("running");
-    }
+    if (latestTestEvent && latestTestEvent.event_type === EventType.Test) {
+      // Handle test completion here
+      const isSuccess = latestTestEvent.success;
+      setTestResultStatus(isSuccess ? "success" : "failed");
 
-    if (messages.length > 0) {
-      const lastMessage = messages[messages.length - 1];
-      try {
-        const eventData = JSON.parse(lastMessage.data);
-
-        if (eventData.event_type === EventType.Push) {
-          clearTestEventsForModule(moduleNumber);
-          setTestOutput("");
-          addWebsocketEvent(eventData, moduleNumber);
-        } else if (eventData.event_type === EventType.Test) {
-          addWebsocketEvent(eventData, moduleNumber);
-
-          // Handle test completion here
-          const isSuccess = eventData.success;
-          setTestResultStatus(isSuccess ? "success" : "failed");
-          setTestOutput(eventData.output);
-
-          if (isSuccess) {
-            updateRepositoryProgress({
-              challengeId: eventData.progress.challenge_id,
-              currentStep: eventData.progress.progress_details.current_step,
-              status: eventData.progress.status,
-            });
-            updateChallengeProgress({
-              challengeId: eventData.progress.challenge_id,
-              currentStep: eventData.progress.progress_details.current_step,
-              status: eventData.progress.status,
-            });
-            if (eventData.progress.status === "completed") {
-              setShowSuccessModal(true);
-              triggerConfetti();
-            }
-          }
+      if (isSuccess) {
+        if (latestTestEvent?.progress?.status === "completed") {
+          setShowSuccessModal(true);
+          triggerConfetti();
         }
-      } catch (error) {
-        console.error("Error parsing websocket message:", error);
       }
     }
   }, [
-    messages,
     isTestRunning,
-    addWebsocketEvent,
-    clearTestEventsForModule,
     moduleNumber,
-    updateRepositoryProgress,
-    updateChallengeProgress,
     triggerConfetti,
+    latestTestEvent,
     currentRepository?.progress.progress_details.current_step,
+    currentRepository?.progress.status,
+    currentRepository?.challenge?.title,
+    currentRepository?.soft_serve_url,
+    document?.title,
+    currentPushEvent?.repoUrl,
   ]);
 
   const statusStateColors: Record<TestResultStatus, string> = {
