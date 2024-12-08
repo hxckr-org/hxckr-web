@@ -43,7 +43,11 @@ export const Terminal = ({
       case "python":
         return "pip install -r requirements.txt";
       case "rust":
-        return "cargo build && cargo run";
+        if(challengeDocument?.title.toLowerCase() === "Miniscript Policy Puzzle".toLowerCase()){
+          return "cargo build && cargo test";
+        } else {
+          return "cargo build && cargo run";
+        }
       default:
         return "npm install";
     }
