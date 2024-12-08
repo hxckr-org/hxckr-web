@@ -194,8 +194,8 @@ const ContentListItem = ({
             : "bg-white border-transparent"
         }`}
       >
-        <PadlockIcon />
-        <p className="text-sm leading-[22px] text-grey-secondary-text font-normal line-clamp-1">
+          <PadlockIcon className='w-5 h-5 min-w-5' />
+        <p className="text-sm leading-[22px] text-grey-secondary-text font-normal line-clamp-">
           {challenge?.action}
         </p>
       </div>
@@ -216,7 +216,7 @@ const ContentListItem = ({
       ) : module < currentStep ? (
         <RoundedCheckIcon className="h-6 w-6" fill="#28A745" />
       ) : (
-        <PadlockIcon />
+        <PadlockIcon className='w-5 h-5 min-w-5' />
       )}
       <p
         className={`${
