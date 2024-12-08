@@ -28,6 +28,7 @@ import {
   ArrowRightIcon,
   CaretRightIcon,
 } from "@radix-ui/react-icons";
+import Image from 'next/image';
 
 const NestedChallenges = ({
   challenge,
@@ -375,6 +376,13 @@ const AttemptsBoard = ({
     [Period.ThisMonth]: "This month",
     [Period.Today]: "Today",
   };
+
+const IconMap: Record<string, string> = {
+    "typescript": '/assets/images/typescript-icon.svg',
+    "python": '/assets/images/python-icon.svg',
+    "rust": '/assets/images/rust-icon.svg',
+  }
+
   return (
     <section className="border-[1.5px] border-grey-accent bg-white w-full max-w-[30%] rounded-lg overflow-hidden">
       <section className="flex justify-between items-center p-5 bg-grey-card-border rounded-t-lg">
@@ -432,11 +440,11 @@ const AttemptsBoard = ({
                 }`}
               >
                 <div className="flex items-center gap-x-2 font-light text-sm w-1/2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white text-sm font-semibold">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white text-sm font-semibold min-w-6">
                     {attempt.username.charAt(0)}
                   </div>
                   <p>{attempt.username}</p>
-                  <code className="text-sm text-[#5A5A5A] font-extralight">{`(${attempt.language})`}</code>
+                  <Image src={IconMap[attempt.language]} alt={attempt.language} width={16} height={16} />
                 </div>
                 <div className="flex items-center font-normal text-sm gap-x-2 w-1/3">
                   <p>
